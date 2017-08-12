@@ -57,9 +57,9 @@ class LoginUnwrapped extends React.Component{
       				 <div className="container">
         				 <br/>
         					 <br/>
-        					 <h1 className="header center indigo-text text-darken-4 frontpage">Bias Checker</h1>
+        					 <h1 className="header center indigo-text text-darken-4 frontpage">Curator</h1>
         					 <div className="row center frontpage">
-          						  <h5 className="header col s12 light indigo-text text-darken-4">Social network for newsies.</h5>
+          						  <h5 className="header col s12 light indigo-text text-darken-4">Socializing news analysis.</h5>
           						  <p id="accounts-available"></p>
                 					 <LoginButton login={this.login} successAction={() => { this.goToPage("registration") }} settings={this.state}/>
         					 </div>
@@ -87,11 +87,13 @@ class LoginUnwrapped extends React.Component{
                 <div className="col s12 m4">
                   <div className="icon-block">
                     <h2 className="center indigo-text"><i className="material-icons">group</i></h2>
-                    <h5 className="center">How it works...</h5>
+                    <h5 className="center">Of the people, by the people.</h5>
                       <p className="light">
-            In Bias Checker, we use a very simple metric.  It's proven to yield some quite interesting results.  We take the proportion
-            of biased words used in an article, to total length of the article.  Once we have that proportion, we bucket the results into
-            the range 1-10, 1 meaning "little or no bias", and 10 meaning "practically oozing bias".
+              Algorithms are capable of achieving some exception results real-time.  The nuance of interpersonal communication
+              and isn't something that computers are particularly good at. Wikipedia has shown us that when we all work as stewards
+              of facts, we can produce some amazingly accurate results. Curator applies the concept of socializing authority to 
+              the near real-time analysis of news.  Any one person can't possibly keep up in a post-truth landscape, but all of us
+              might have a chance!
                       </p>
                   </div>
                 </div>
@@ -100,9 +102,11 @@ class LoginUnwrapped extends React.Component{
                     <h2 className="center indigo-text"><i className="material-icons">settings</i></h2>
                     <h5 className="center">How do you use it?</h5>
                       <p className="light">
-            Use it however you like.  I like to add bias scores as comments on posts automatically or 
-            just check out how my favorite sites are stacking up to each other.  The more you use it, the
-            better it gets, so by all means, go bananas!<br/>Yes, bananas.<br/>With a monkey background...
+            Join Facebook. Then create a Curator account. Curator uses Facebook as the source of articles.  When you join, Curator will immediately start pulling
+            in data you post to your facebook feed. This data is added to the 'stream'.  Guardians (and you can be a Guardian for anyone's 
+            articles but your own) will then analyze different aspects of the article you shared (context, logic, truthfulness), and give you feedback on what that score is.  That 
+            feedback will be shared anonymously with all other users of the community.  Curious about an article? You can also bypass Facebook
+            and post your article directly within Curator.
                       </p>
                   </div>
                 </div>                
@@ -111,11 +115,6 @@ class LoginUnwrapped extends React.Component{
           </div>
 				  <div className="parallax-container valign-wrapper frontpage">
     				  <div className="section no-pad-bot">
-      					 <div className="container">
-        					 <div className="row center">
-          						  <h5 className="header col s12 indigo-text light">News is important, but knowing how biased your source is can tell you more.</h5>
-        					 </div>
-      					 </div>
                 <div className="parallax">
                   <img src={require('../images/background2.jpg')} alt="Unsplashed background img 2"></img>
                 </div>                 
