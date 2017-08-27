@@ -29,22 +29,24 @@ const ArticleCard = (props) => {
 	}
 
 	return (
-		<div className="card">
-			<div className="card-content">
-				<span className="card-title">{htmlDecode(article.title)}</span>
-				<p><span className="grey-text darken-5">LINK TO ARTICLE: </span><span><a className="grey-text" target="_blank" href={article.link}>{article.link}</a></span></p>
-				<p>{article.summary}</p>
-				<div>
-					<br/>
-					<BoxScore article={article} reviewArticle={reviewArticle}/>
+		<div className="s12 m6">
+			<div className="card">
+				<div className="card-content">
+					<span className="card-title">{htmlDecode(article.title)}</span>
+					<p><span className="grey-text darken-5">LINK TO ARTICLE: </span><span><a className="grey-text" target="_blank" href={article.link}>{article.link}</a></span></p>
+					<p>{article.summary}</p>
+					<div>
+						<br/>
+						<BoxScore article={article} reviewArticle={reviewArticle}/>
+					</div>
+					<div>
+						<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
+					</div>
 				</div>
-				<div>
-					<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
+				<div className="card-action">
+					<ShareLink fbappid={fbAppId} biasToken={biasToken} settings={props.settings}
+						article={article} createBookmark={props.createBookmark} />
 				</div>
-			</div>
-			<div className="card-action">
-				<ShareLink fbappid={fbAppId} biasToken={biasToken} settings={props.settings}
-					article={article} createBookmark={props.createBookmark} />
 			</div>
 		</div>
 	);

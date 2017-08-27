@@ -61,7 +61,7 @@ class LoginUnwrapped extends React.Component{
         					 <div className="row center frontpage">
           						  <h5 className="header col s12 light indigo-text text-darken-4">Socializing news analysis.</h5>
           						  <p id="accounts-available"></p>
-                					 <LoginButton login={this.login} successAction={() => { this.goToPage("registration") }} settings={this.state}/>
+                					 <LoginButton login={this.login} successAction={() => { this.goToPage("profile") }} settings={this.state}/>
         					 </div>
       					 </div>
     				  </div>

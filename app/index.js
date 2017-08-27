@@ -8,6 +8,7 @@ import PhilosopherRulerPage from './components/PhilosopherRulerPage'
 import ArticleReviewPage from './components/ArticleReviewPage'
 import StreamPage from './components/StreamPage'
 import AboutPage from './components/AboutPage'
+import ProfilePage from './components/ProfilePage'
 import TestPage from './components/TestPage'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import store from './store'
@@ -27,6 +28,7 @@ const App = () => (
     <Route exact path="/stream/:articleId" component={ArticleReviewPage} />
     <Route exact path="/stream" component={StreamPage} />
     <Route exact path="/about" component={AboutPage} />
+    <Route exact path="/profile" component={ProfilePage} />
   </Switch>
 )
 

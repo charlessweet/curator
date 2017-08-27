@@ -22,6 +22,7 @@ export const changePage = (fromPage, toPage, history) => {
 	switch(toPage){
 		case "articles": history.push("/articles")
 		case "stream": history.push("/stream")
+		case "profile": history.push("/profile")
 	}
 	return{
 		type: actionTypes.CHANGE_PAGE,

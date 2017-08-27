@@ -3,19 +3,22 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import Menu from '../controls/Menu'
+import Registration from '../controls/Registration'
+import {createBiasCheckerAccountFromFacebookAsync} from '../actions/index'
 
 class ProfilePageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
     this.settings = props.settings
     this.userInfo = props.userInfo
+    console.log(this.userInfo)
 	}
-  
 
 	render(){
       return (<div id="profile-page">
         <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
         <br/> <br/>
+        <Registration createAccount={this.props.createBiasCheckerAccountFromFB}/>
       </div>
       )
   }
@@ -23,6 +26,7 @@ class ProfilePageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    createBiasCheckerAccountFromFB: (settings, userInfo, email, password, guardian, history) => dispatch(createBiasCheckerAccountFromFacebookAsync(settings, userInfo, email, password, guardian, history))
   }
 }
 

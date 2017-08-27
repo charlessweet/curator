@@ -27,7 +27,7 @@ class Menu extends React.Component {
 		return( <div className="navbar-extended navbar-fixed">
 		  	<nav className="indigo darken-4">
 		  		<div className="nav-wrapper">
-			  		<a href="#" className="brand-logo left">Curator</a><br/><i>Socializing news analysis</i>
+			  		<a href="#" className="brand-logo left">Curator</a><br/>
 			  		{
 			  			(this.pageSearch !== undefined ? <div className="input-field right">
 					  			<input id="search" type="search" placeholder="keyword search" required onInput={this.handleSearchChange}></input>
