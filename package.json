@@ -1,12 +1,13 @@
 {
-  "name": "reactionary",
+  "name": "curator",
   "version": "1.0.0",
   "description": "React version of biaschecker.",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
-    "test": "mocha --compilers js:babel-core/register ./**/*.spec.js"
+    "test": "mocha --compilers js:babel-core/register ./**/*.spec.js",
+    "heroku-postbuild":"webpack -p --config ./webpack.prod.config.js --progress"
   },
   "keywords": [
     "biaschecker"
@@ -40,7 +41,8 @@
     "html-webpack-plugin": "^2.28.0",
     "image-webpack-loader": "^3.3.1",
     "mocha": "^3.4.1",
-    "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.4.5",
+    "webpack-merge": "^4.1.0"
   }
 }
