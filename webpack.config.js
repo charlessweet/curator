@@ -43,6 +43,9 @@ module.exports = {
   			} 
 		]
 	},
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
 	output: {
 		filename: 'transformed.js',
 		path:__dirname + '/build'
