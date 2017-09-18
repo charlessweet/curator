@@ -8,7 +8,7 @@ import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {loadStreamAsync, reviewArticle} from '../actions/index'
 import StoreObserver from '../services/StoreObserver'
-import StreamInfo from '../controls/Stream/Streaminfo.js'
+import StreamInfo from '../controls/Stream/Streaminfo'
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){
