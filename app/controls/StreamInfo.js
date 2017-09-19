@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import BoxElement from 'BoxScore/BoxElement'
+import BoxElement from './BoxScore/BoxElement'
 import {Link} from 'react-router-dom'
 
 const StreamInfo = (props) => {
