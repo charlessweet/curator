@@ -7,7 +7,7 @@ import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {loadStreamAsync, reviewArticle} from '../actions/index'
-import StreamInfo from '../controls/Stream/Streaminfo'
+import StreamInfo from '../controls/StreamCore/Streaminfo'
 import StoreObserver from '../services/StoreObserver'
 
 class StreamPageUnwrapped extends React.Component{
