@@ -31,4 +31,5 @@ const StreamInfo = (props) => {
             </div>
         </div>)
 }
+
 export default StreamInfo;

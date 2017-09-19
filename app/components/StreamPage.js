@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import StreamInfo from '../controls/Streaminfo'
+import StoreObserver from '../services/StoreObserver'
 import store from '../store'
 import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
+import {connect} from 'react-redux';
+import { withRouter } from 'react-router-dom'
 import {loadStreamAsync, reviewArticle} from '../actions/index'
-import StreamInfo from '../controls/Streaminfo'
-import StoreObserver from '../services/StoreObserver'
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){
