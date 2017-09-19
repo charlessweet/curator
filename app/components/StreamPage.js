@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import StreamInfo from '../controls/Streaminfo'
+import StreamInfo from '../controls/StreamInfo'
 import StoreObserver from '../services/StoreObserver'
 import store from '../store'
 import Menu from '../controls/Menu'
