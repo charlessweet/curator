@@ -7,7 +7,7 @@
     "build": "webpack",
     "start": "webpack-dev-server",
     "test": "mocha --compilers js:babel-core/register ./**/*.spec.js",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
+    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress --color --watch --display-error-details"
   },
   "keywords": [
     "biaschecker"
