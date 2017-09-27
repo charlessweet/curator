@@ -1,8 +1,12 @@
+import Settings from '../model/Settings'
 export default class BiasCheckerService{
 	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret){
 		this.biasServiceUrl = biasServiceUrl;
 		this.biasServiceSecret = biasServiceSecret;
 		this.biasServiceAppId = biasServiceAppId;
+
+		var settings = new Settings()
+		this.biasServiceUrl = settings.biasServiceUrl
 	}
 	callBiasChecker(relativeUrl, method, data){
 		var url  = this.biasServiceUrl + relativeUrl;
