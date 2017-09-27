@@ -1,4 +1,5 @@
 var HTMLWebpackPlugin = require('html-webpack-plugin');
+var webpack = require('webpack')
 var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 	template:__dirname + '/app/index.html',
 	filename: 'index.html',
@@ -51,7 +52,7 @@ module.exports = {
 		path:__dirname + '/build'
 	},
 	plugins: [HTMLWebpackPluginConfig,
-        new DefinePlugin({
+        new webpack.DefinePlugin({
             BIAS_SERVER_URL: (process.env.BIAS_SERVER_URL || "http://localhost:3000"),
             FB_APP_ID: (process.env.FB_APP_ID || "382449245425765"),
             BC_APP_ID: (process.env.BC_APP_ID || "0909367047e24c43956ae4511cb28f00"),
