@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 const StreamInfo = (props) => {
         let userInfo = props.userInfo
         let guardianBlurbStyle = { "display":"none"}
-        if(userInfo.roles.filter((x) => x=='guardian') !== undefined){
+        if(userInfo.roles !== undefined && userInfo.roles.filter((x) => x=='guardian') !== undefined){
             guardianBlurbStyle.display = "block"
         }
         return (<div className="container">
