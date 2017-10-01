@@ -13,7 +13,7 @@ export default class ArticleList{
 		let art = articles[0];
 		//this is a little weird.  i use the same constructor for an array of formal Articles as an array of objects from the 
 		//server.  eventually, I'll want to change this, but this works for now.
-		console.log("ArticleList constructor", this.articles)
+		console.log("ArticleList constructor", articles)
 		if(art === undefined || art.biasScore !== undefined){
 			this.articles = articles.map((a) => new Article(a.id, a.title, a.description, a.link, a.keywords, 0, a.biasScore, 0, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore));
 		}else{
