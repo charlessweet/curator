@@ -15,7 +15,7 @@ class StreamPageUnwrapped extends React.Component{
 		super(props);
     this.settings = props.settings
     this.userInfo = props.userInfo
-    if(this.userInfo.roles.filter((x) => x=='guardian') !== undefined){
+    if(this.userInfo.roles !== undefined && this.userInfo.roles.filter((x) => x=='guardian') !== undefined){
       this.reviewArticle = props.reviewArticle //make available for downstream components
     }    
 	}
