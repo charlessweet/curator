@@ -45,8 +45,6 @@ class Menu extends React.Component {
 						<li className={"tab " + (this.activeMenu == "articles" ? "active" : "")}><Link title="Review articles I have analyzed" to="/articles"><i className="active large material-icons">list</i></Link></li>
 						<li className={"tab " + (this.activeMenu == "profile" ? "active" : "")}><Link title="View or edit my profile" to="/profile"><i className="large material-icons">perm_identity</i></Link></li>
 						<li style={this.rulerStyle} className={"tab " + (this.activeMenu == "ruler" ? "active" : "")}><Link title="Approve permissions for other users" to="/ruler"><i className="large material-icons">supervisor_account</i></Link></li>
-						<li className={"tab " + (this.activeMenu == "about" ? "active" : "")}><Link title="Learn about what makes BiasChecker different" to="/about"><i className="large material-icons">info</i></Link></li>
-						<li className={"tab " + (this.activeMenu == "test" ? "active" : "")}><Link title="TESTING" to="/test"><i className="large material-icons">warning</i></Link></li>
 					</ul>
 					: <div/>)
 		  		}
