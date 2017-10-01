@@ -12,7 +12,8 @@ export default class BiasCheckerService{
 		var url  = this.biasServiceUrl + relativeUrl;
 		var req = {
 			method: method,
-			headers: {"origin":"https://curator.biaschecker.org","X-BIASCHECKER-API-KEY":this.biasServiceSecret, "X-BIASCHECKER-APP-ID":this.biasServiceAppId, 'Content-Type': 'application/json'}
+			mode: "cors",
+			headers: {"X-BIASCHECKER-API-KEY":this.biasServiceSecret, "X-BIASCHECKER-APP-ID":this.biasServiceAppId, 'Content-Type': 'application/json'}
 		};
 		if(data !== undefined){
 			req.body = JSON.stringify(data);
