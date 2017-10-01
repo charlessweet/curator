@@ -13,7 +13,7 @@ class Menu extends React.Component {
 		this.rulerStyle = {
 			display: (this.userInfo.roles ===  undefined || this.userInfo.roles.find((x) => { return x === "philosopher-ruler"}) === undefined ? "none" : "block")
 		}
-		this.pageSearch = props.pageSearch
+		this.pageSearch = undefined;//props.pageSearch
 		this.handleSearchChange = this.handleSearchChange.bind(this)
 	}
 
