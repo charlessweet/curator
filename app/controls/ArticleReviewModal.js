@@ -9,7 +9,7 @@ import Critique from '../model/Critique'
 class ArticleReviewModal extends React.Component{
 	constructor(props){
 		super(props);
-		console.log(props)
+//		console.log(props)
 	    this.settings = props.settings
     	this.userInfo = props.userInfo
     	this.articleId = props.articleId

@@ -65,7 +65,7 @@ export default class BiasCheckerService{
 		let relativeUrl = "/members/promotions/pending?biasToken=" + biasToken;
 		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(rows){
-			console.log("BiasCheckerService_loadMembersForApproval",rows);
+//			console.log("BiasCheckerService_loadMembersForApproval",rows);
 			return rows;
 		})
 	}
@@ -86,7 +86,7 @@ export default class BiasCheckerService{
 		let body = {}
 		body.selfLabel = label
 		body.linkToValidate = link
-		console.log(body)
+//		console.log(body)
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
 			return result

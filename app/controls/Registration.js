@@ -19,7 +19,7 @@ class Registration extends React.Component{
 	}
 
 	handleInputChange(event){
-		console.log("clicked")
+//		console.log("clicked")
 		const target = event.target;
 		const value = target.type === 'checkbox' ? target.checked : target.value;
 		const name = target.name;
@@ -61,7 +61,7 @@ class Registration extends React.Component{
 		}else{
 			this.action = this.updateMembership
 		}
-		console.log(this.state)
+//		console.log(this.state)
 	}
 
 	validate(){
@@ -73,7 +73,7 @@ class Registration extends React.Component{
 	}
 
 	render(){
-		console.log(this.state)
+//		console.log(this.state)
 		return 	<div className="container">
 				<h4>{(this.state.isMember ? "Update My Curator Membership" : "Add a Curator Membership for FREE")}</h4>
 				{(this.state.isMember ? 

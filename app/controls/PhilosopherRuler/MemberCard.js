@@ -12,7 +12,7 @@ const MemberCard = (props) => {
 	}
 	let member = props.member;
 	let approveAction = props.approve;
-	console.log("MemberCard", member, approveAction);
+//	console.log("MemberCard", member, approveAction);
 	return (
 		<div className="card">
 			<div className="card-content">

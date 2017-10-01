@@ -11,7 +11,7 @@ class ProfilePageUnwrapped extends React.Component{
 		super(props);
     this.settings = props.settings
     this.userInfo = props.userInfo
-    console.log(this.userInfo)
+    //console.log(this.userInfo)
 	}
 
 	render(){
