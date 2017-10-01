@@ -44,8 +44,10 @@ class Registration extends React.Component{
 		if(this.hasMounted === undefined){
 	    	let state = store.getState();
 			this.setState({["isMember"]:state.identity.userInfo.memberId !== undefined})
-			this.setState({["isGuardian"]:state.identity.userInfo.roles.filter((x) => x === "guardian") !== undefined })
-			this.setState({["guardian"]:state.identity.userInfo.roles.filter((x) => x === "guardian") !== undefined })
+			if(state.identity.userInfo.roles !== undefined){
+				this.setState({["isGuardian"]:state.identity.userInfo.roles.filter((x) => x === "guardian") !== undefined })
+				this.setState({["guardian"]:state.identity.userInfo.roles.filter((x) => x === "guardian") !== undefined })				
+			}
 			if(state.identity.userInfo.email !== undefined){
 				this.setState({["email"]:state.identity.userInfo.email})			
 			}
