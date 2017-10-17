@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import {Modal, Button, Icon} from 'react-materialize'
-import {critiqueArticleAsync} from '../actions/index'
+import {critiqueArticleAsync} from '../actions/actions'
 import Critique from '../model/Critique'
 
 class ArticleReviewModal extends React.Component{

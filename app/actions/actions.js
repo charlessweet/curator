@@ -2,14 +2,6 @@ import actionTypes from "../actionTypes"
 import {pageTypes} from "../actionTypes"
 import BiasCheckerService from "../services/BiasCheckerService"
 
-export const addArticle = (articleLink) =>{
-	return {
-		type: actionTypes.ADD_ARTICLE,
-		id: 1,
-		link: articleLink
-	};
-};
-
 export const indicatePageWasLoaded = (page) => {
 	return{
 		type: actionTypes.SET_PAGE,
@@ -20,9 +12,9 @@ export const indicatePageWasLoaded = (page) => {
 
 export const changePage = (fromPage, toPage, history) => {
 	switch(toPage){
-		case "articles": history.push("/articles")
-		case "stream": history.push("/stream")
-		case "profile": history.push("/profile")
+		case "articles": history.push("/articles"); break;
+		case "stream": history.push("/stream"); break;
+		case "profile": history.push("/profile"); break;
 	}
 	return{
 		type: actionTypes.CHANGE_PAGE,
@@ -32,7 +24,7 @@ export const changePage = (fromPage, toPage, history) => {
 	}
 }
 
-const login = (biasToken, facebookToken, history) =>{
+const login = (biasToken, facebookToken) =>{
 	return {
 		type: actionTypes.LOGIN,
 		id: 2,
@@ -46,13 +38,13 @@ const login = (biasToken, facebookToken, history) =>{
 	};
 }
 
-export const loginAsync = (settings, facebookToken, history) =>{
+export const loginAsync = (settings, facebookToken) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch) {
 		return biasCheckerService.exchangeToken(facebookToken, "FB")
 		.then((biasToken)=>{
-			dispatch(login(biasToken, facebookToken, history));
+			dispatch(login(biasToken, facebookToken));
 		})
 		.catch((error) => {
 			console.log("loginAsync", error);

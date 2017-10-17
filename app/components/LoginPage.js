@@ -4,7 +4,7 @@ import LoginButton from '../controls/LoginButton'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import {indicatePageWasLoaded, loginAsync, changePage} from '../actions/index'
+import {indicatePageWasLoaded, loginAsync, changePage} from '../actions/actions'
 import store from '../store'
 import StoreObserver from '../services/StoreObserver'
 
@@ -61,7 +61,7 @@ class LoginUnwrapped extends React.Component{
         					 <div className="row center frontpage">
           						  <h5 className="header col s12 light indigo-text text-darken-4">Socializing news analysis.</h5>
           						  <p id="accounts-available"></p>
-                					 <LoginButton login={this.login} successAction={() => { this.goToPage("profile") }} settings={this.state}/>
+                					 <LoginButton login={this.login} successAction={() => { this.goToPage("stream") }} settings={this.state}/>
         					 </div>
       					 </div>
     				  </div>

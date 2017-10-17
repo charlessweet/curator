@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import store from '../store'
 import Menu from '../controls/Menu'
 import MemberCardList from '../controls/PhilosopherRuler/MemberCardList'
-import {loadMembersForApprovalAsync, addRoleAsync} from '../actions/index'
+import {loadMembersForApprovalAsync, addRoleAsync} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 
 class PhilosopherRulerPageUnwrapped extends React.Component{

@@ -6,7 +6,7 @@ import store from '../store'
 import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
-import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync} from '../actions/index'
+import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 
 class ArticlePageUnwrapped extends React.Component{

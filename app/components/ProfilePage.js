@@ -4,14 +4,13 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import Menu from '../controls/Menu'
 import Registration from '../controls/Registration'
-import {createBiasCheckerAccountFromFacebookAsync} from '../actions/index'
+import {createBiasCheckerAccountFromFacebookAsync} from '../actions/actions'
 
 class ProfilePageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
     this.settings = props.settings
     this.userInfo = props.userInfo
-    //console.log(this.userInfo)
 	}
 
 	render(){

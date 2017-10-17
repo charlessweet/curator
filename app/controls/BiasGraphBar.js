@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import FacebookLogin from 'react-facebook-login'
 import {withRouter, browserHistory} from 'react-router'
-import {searchByKeyword} from '../actions/index'
+import {searchByKeyword} from '../actions/actions'
 
 class LoginButton extends React.Component{
 	constructor(props){

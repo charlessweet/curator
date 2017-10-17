@@ -8,7 +8,7 @@ import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import {loadStreamAsync, reviewArticle} from '../actions/index'
+import {loadStreamAsync, reviewArticle} from '../actions/actions'
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){

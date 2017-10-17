@@ -7,7 +7,7 @@ import store from '../store'
 import StoreObserver from '../services/StoreObserver'
 import ArticleReviewModal from '../controls/ArticleReviewModal'
 import {Modal} from 'react-materialize'
-import {critiqueArticleAsync} from '../actions/index'
+import {critiqueArticleAsync} from '../actions/actions'
 
 class ArticleReviewPageUnwrapped extends React.Component{
 	constructor(props){
