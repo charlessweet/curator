@@ -4,6 +4,7 @@ import BiasGraph from './BiasGraph';
 import TruthLink from './TruthLink';
 import ShareLink from './ShareLink';
 import BoxScore from './BoxScore/BoxScore'
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 const ArticleCard = (props) => {
 	const article = props.article;
@@ -27,28 +28,30 @@ const ArticleCard = (props) => {
 	}else{
 		keywords = "No keywords assigned."
 	}
+	const getShareLink = ()=> { return [<ShareLink key='shareLink' fbappid={fbAppId} 
+		biasToken={biasToken} settings={props.settings} article={article} 
+		createBookmark={props.createBookmark} />] }
 
 	return (
-		<div className="s12 m6">
-			<div className="card">
-				<div className="card-content">
-					<span className="card-title">{htmlDecode(article.title)}</span>
-					<p><span className="grey-text darken-5">LINK TO ARTICLE: </span><span><a className="grey-text" target="_blank" href={article.link}>{article.link}</a></span></p>
-					<p>{article.summary}</p>
-					<div>
-						<br/>
-						<BoxScore article={article} reviewArticle={reviewArticle}/>
-					</div>
-					<div>
-						<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
-					</div>
+		<Card>
+			<CardHeader
+				title={htmlDecode(article.title).substring(0,50)}
+				actAsExpander={true}
+      			showExpandableButton={true}
+			/>
+			<CardText expandable={true}>
+				<p>{article.summary}</p>
+				<p><span><a className="grey-text" target="_blank" href={article.link}>Link to Article</a></span></p>
+				<div>
+					<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
 				</div>
-				<div className="card-action">
-					<ShareLink fbappid={fbAppId} biasToken={biasToken} settings={props.settings}
-						article={article} createBookmark={props.createBookmark} />
+			</CardText>
+			<CardText>
+				<div>
+					<BoxScore article={article} reviewArticle={reviewArticle}/>
 				</div>
-			</div>
-		</div>
+			</CardText>
+		</Card>
 	);
 };
 export default ArticleCard;

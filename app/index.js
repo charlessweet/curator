@@ -11,6 +11,7 @@ import ProfilePage from './components/ProfilePage'
 import TestPage from './components/TestPage'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import store from './store'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const Blank = () => (
 	<div>
@@ -33,7 +34,9 @@ const App = () => (
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>
-		<App />
+    <MuiThemeProvider>
+		  <App />
+    </MuiThemeProvider>
 	</BrowserRouter>
 </Provider>
 	,document.getElementById('appDiv'));

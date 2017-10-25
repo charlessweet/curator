@@ -52,11 +52,12 @@ const BoxElement = (props) => {
 		"backgroundColor":"green"
 	}
 	let elementStyle = {
-		"width": "100px",
-  		"height": "100px",
+		"width": "90px",
+  		"height": "90px",
   		"fontStyle": "verdana",
   		"textAlign":"center",
-  		"padding": "20px 0px 0px 0px",
+  		"padding": "10px 0px 0px 0px",
+  		"margin": "3px",
   		"borderRadius":"3px"
 	}
 	let weightStyle = {
