@@ -39,7 +39,7 @@ const ArticleCard = (props) => {
 				actAsExpander={true}
       			showExpandableButton={true}
 			/>
-			<CardText expandable={true}>
+			<CardText expandable={true}> 
 				<p>{article.summary}</p>
 				<p><span><a className="grey-text" target="_blank" href={article.link}>Link to Article</a></span></p>
 				<div>

@@ -1,6 +1,7 @@
 import actionTypes from "../actionTypes"
 import {pageTypes} from "../actionTypes"
 import BiasCheckerService from "../services/BiasCheckerService"
+import Settings from "../model/Settings"
 
 export const indicatePageWasLoaded = (page) => {
 	return{
@@ -12,9 +13,15 @@ export const indicatePageWasLoaded = (page) => {
 
 export const changePage = (fromPage, toPage, history) => {
 	switch(toPage){
-		case "articles": history.push("/articles"); break;
-		case "stream": history.push("/stream"); break;
-		case "profile": history.push("/profile"); break;
+		case "articles": 
+			history.push("/articles")
+			break
+		case "stream": 
+			history.push("/stream")
+			break
+		case "profile": 
+			history.push("/profile")
+			break
 	}
 	return{
 		type: actionTypes.CHANGE_PAGE,
@@ -25,11 +32,12 @@ export const changePage = (fromPage, toPage, history) => {
 }
 
 const login = (biasToken, facebookToken) =>{
+	localStorage.setItem(new Settings().biasCheckerJwtKey, biasToken.jwt)
 	return {
 		type: actionTypes.LOGIN,
 		id: 2,
 		facebookUserId: facebookToken.userID,
-		userName: facebookToken.name,
+		userName: biasToken.name,
 		picture: facebookToken.picture,
 		biasToken: biasToken.biasAccessToken,
 		userId: biasToken.userId,
@@ -40,7 +48,7 @@ const login = (biasToken, facebookToken) =>{
 
 export const loginAsync = (settings, facebookToken) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
 	return function(dispatch) {
 		return biasCheckerService.exchangeToken(facebookToken, "FB")
 		.then((biasToken)=>{

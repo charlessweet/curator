@@ -1,19 +1,22 @@
-import Settings from '../model/Settings'
+import Settings from "../model/Settings"
 export default class BiasCheckerService{
 	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret){
 		this.biasServiceUrl = biasServiceUrl;
 		this.biasServiceSecret = biasServiceSecret;
 		this.biasServiceAppId = biasServiceAppId;
-
-		var settings = new Settings()
-		this.biasServiceUrl = settings.biasServiceUrl
+		this.biasCheckerJwtKey = localStorage.getItem(new Settings().biasCheckerJwtKey)
 	}
 	callBiasChecker(relativeUrl, method, data){
 		var url  = this.biasServiceUrl + relativeUrl;
 		var req = {
 			method: method,
 			mode: "cors",
-			headers: {"X-BIASCHECKER-API-KEY":this.biasServiceSecret, "X-BIASCHECKER-APP-ID":this.biasServiceAppId, 'Content-Type': 'application/json'}
+			headers: {
+				"X-BIASCHECKER-API-KEY":this.biasServiceSecret, 
+				"X-BIASCHECKER-APP-ID":this.biasServiceAppId, 
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + this.biasCheckerJwtKey
+			}
 		};
 		if(data !== undefined){
 			req.body = JSON.stringify(data);
