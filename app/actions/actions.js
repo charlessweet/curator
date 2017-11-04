@@ -1,5 +1,5 @@
 import actionTypes from "../actionTypes"
-import {pageTypes} from "../actionTypes"
+import pageTypes from "../pageTypes"
 import BiasCheckerService from "../services/BiasCheckerService"
 import Settings from "../model/Settings"
 
@@ -11,18 +11,17 @@ export const indicatePageWasLoaded = (page) => {
 	}	
 }
 
+/**
+ * Changes the active component from the current component (specified as fromPage) to the target
+ * component (specified as toPage). Aslong as toPage is from pageTypes.js, then this function will
+ * transition properly.
+ *
+ * @param fromPage From the pageTypes enum (pageTypes.js) which indicates the 'from'  component.
+ * @param toPage From the pageTypes enum (pageTypes.js) which indicates the 'to' component.
+ * @param history Object used to navigate from one page to another (accessible in props usually).
+ */
 export const changePage = (fromPage, toPage, history) => {
-	switch(toPage){
-		case "articles": 
-			history.push("/articles")
-			break
-		case "stream": 
-			history.push("/stream")
-			break
-		case "profile": 
-			history.push("/profile")
-			break
-	}
+	history.push(toPage)
 	return{
 		type: actionTypes.CHANGE_PAGE,
 		id: 6,
@@ -31,10 +30,10 @@ export const changePage = (fromPage, toPage, history) => {
 	}
 }
 
-const login = (biasToken, facebookToken) =>{
+const loginFacebook = (biasToken, facebookToken) =>{
 	localStorage.setItem(new Settings().biasCheckerJwtKey, biasToken.jwt)
 	return {
-		type: actionTypes.LOGIN,
+		type: actionTypes.LOGIN_FACEBOOK,
 		id: 2,
 		facebookUserId: facebookToken.userID,
 		userName: biasToken.name,
@@ -46,7 +45,7 @@ const login = (biasToken, facebookToken) =>{
 	};
 }
 
-export const loginAsync = (settings, facebookToken) =>{
+export const loginFacebookAsync = (settings, facebookToken) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
 	return function(dispatch) {
@@ -55,7 +54,34 @@ export const loginAsync = (settings, facebookToken) =>{
 			dispatch(login(biasToken, facebookToken));
 		})
 		.catch((error) => {
-			console.log("loginAsync", error);
+			console.log("loginFacebookAsync", error);
+		});
+	}
+};
+
+const loginBasic = (biasToken, targetComponent, history) =>{
+	localStorage.setItem(new Settings().biasCheckerJwtKey, biasToken.jwt)
+	return {
+		type: actionTypes.LOGIN,
+		id: 15,
+		userName: biasToken.name,
+		userId: biasToken.userId,
+		memberId: biasToken.memberId,
+		roles: biasToken.roles,
+		biasToken: biasToken.biasToken
+	};
+}
+
+export const loginBasicAsync = (settings, username, password, targetComponent, history) =>{
+	//log user in to biaschecker and retrieve biasToken, keep details
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
+	return function(dispatch) {
+		return biasCheckerService.authenticateBasic(username, password)
+		.then((biasToken)=>{
+			dispatch(loginBasic(biasToken));
+		})
+		.catch((error) => {
+			console.log("loginBasicAsync", error);
 		});
 	}
 };

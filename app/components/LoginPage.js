@@ -8,6 +8,9 @@ import {indicatePageWasLoaded, loginAsync, changePage} from '../actions/actions'
 import store from '../store'
 import StoreObserver from '../services/StoreObserver'
 import Paper from 'material-ui/Paper'
+import Login from '../controls/Login'
+import AppBar from 'material-ui/AppBar'
+import pageTypes from '../pageTypes'
 
 class LoginUnwrapped extends React.Component{
 	constructor(props){
@@ -60,14 +63,24 @@ class LoginUnwrapped extends React.Component{
   }
 
   render(){
+    let titleStyle = {
+      "fontFamily":"'Cairo', sans serif",
+      "fontSize" : "2em",
+      "fontWeight" : "bolder"
+    }
+
+    let subTitleStyle = {
+      "fontSize" : "0.9em",
+      "paddingTop" : "1.3em",
+      "display" : "block"
+    }
     return (
       <div>
+        <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
         <div>
-          <center>
-            <h1 className="header center indigo-text text-darken-4 frontpage">Curator</h1>
-            <h5 className="header col s12 light indigo-text text-darken-4">Socializing news analysis.</h5>
-            <LoginButton login={this.login} successAction={() => { this.goToPage("stream") }} settings={this.state}/>
-          </center>
+          <AppBar iconElementLeft={<span style={titleStyle}>Curator</span>}
+            iconElementRight={<span style={subTitleStyle}>Socializing news analysis</span>} />
+          <Login target={pageTypes.STREAM}/>
         </div>      
         <br/>
         <br/>    

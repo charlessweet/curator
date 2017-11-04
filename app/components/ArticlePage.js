@@ -44,6 +44,7 @@ class ArticlePageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
+    console.log(state)
     if(state.identity.userInfo !== undefined && state.articles.length == 0 && self.hasLoaded === undefined){
       self.props.loadArticles(self.settings, state.identity.userInfo);
       self.hasLoaded = true;  

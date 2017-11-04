@@ -4,9 +4,9 @@ export default class BiasCheckerService{
 		this.biasServiceUrl = biasServiceUrl;
 		this.biasServiceSecret = biasServiceSecret;
 		this.biasServiceAppId = biasServiceAppId;
-		this.biasCheckerJwtKey = localStorage.getItem(new Settings().biasCheckerJwtKey)
+		this.biasCheckerJwt = localStorage.getItem(new Settings().biasCheckerJwtKey)
 	}
-	callBiasChecker(relativeUrl, method, data){
+	callBiasChecker(relativeUrl, method, data, basicAuth){
 		var url  = this.biasServiceUrl + relativeUrl;
 		var req = {
 			method: method,
@@ -15,9 +15,13 @@ export default class BiasCheckerService{
 				"X-BIASCHECKER-API-KEY":this.biasServiceSecret, 
 				"X-BIASCHECKER-APP-ID":this.biasServiceAppId, 
 				"Content-Type": "application/json",
-				"Authorization": "Bearer " + this.biasCheckerJwtKey
+				"Authorization": "Bearer " + this.biasCheckerJwt
 			}
 		};
+		if(basicAuth !== undefined){
+			req.headers["Authorization"] = basicAuth
+		}
+
 		if(data !== undefined){
 			req.body = JSON.stringify(data);
 		}
@@ -29,13 +33,28 @@ export default class BiasCheckerService{
 			throw "BiasChecker service call failed for " + relativeUrl + ".  Error was: " + err;
 		})
 	}
-	exchangeToken(fbAuthToken, tokenType){
-		return this.callBiasChecker("/tokens/exchange/facebook", "POST", fbAuthToken)
+
+	authenticateFacebook(fbAuthToken, tokenType){
+		return this.callBiasChecker("/authenticate/facebook", "POST", fbAuthToken)
 			.then(function(res){
 				return res;
 		})
 	}
 	
+	makeBasicAuth(user, password) {
+		var tok = user + ':' + password;
+		var hash = btoa(tok);
+		return "Basic " + hash;
+	}
+
+	authenticateBasic(username, password){
+		let basicAuth = this.makeBasicAuth(username, password)
+		return this.callBiasChecker("/authenticate/basic", "POST", undefined, basicAuth)
+			.then(function(res){
+				return res;
+		})
+	}
+
 	loadArticles(facebookUserId, biasToken){
 		var relativeUrl = "/users/facebook/" + facebookUserId + "/articles?biasToken=" + biasToken;
 		return this.callBiasChecker(relativeUrl, "GET")
