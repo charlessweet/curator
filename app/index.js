@@ -13,6 +13,7 @@ import CreateAccountPage from './components/CreateAccountPage'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import store from './store'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Auth from './model/Auth'
 
 const Blank = () => (
 	<div>
@@ -20,19 +21,28 @@ const Blank = () => (
 	</div>
 );
 
+/**
+ * If a user is logged in, then displays 'component', othrwise,
+ * displays the login page.
+ * @param The component we originally desired to show.
+ */
+const n2 = (component) => {
+    return (Auth.isLoggedIn() ? component : LoginPage)
+}
+
 const App = () => (
   <Switch>
     <Route exact path="/" component={LoginPage} />
-    <Route exact path="/ruler" component={PhilosopherRulerPage} />
-    <Route exact path="/articles" component={ArticlePage} />
-    <Route exact path="/stream/:articleId" component={ArticleReviewPage} />
-    <Route exact path="/stream" component={StreamPage} />
-    <Route exact path="/about" component={AboutPage} />
-    <Route exact path="/profile" component={ProfilePage} />
+    <Route exact path="/ruler" component={n2(PhilosopherRulerPage)} />
+    <Route exact path="/articles" component={n2(ArticlePage)} />
+    <Route exact path="/stream/:articleId" component={n2(ArticleReviewPage)} />
+    <Route exact path="/stream" component={n2(StreamPage)} />
+    <Route exact path="/about" component={n2(AboutPage)} />
+    <Route exact path="/profile" component={n2(ProfilePage)} />
     <Route exact path="/create" component={CreateAccountPage} />
   </Switch>
 )
-
+console.log("auth", Auth.isLoggedIn())
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>

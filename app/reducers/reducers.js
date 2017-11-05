@@ -55,8 +55,7 @@ const settings = (state = settingInitial, action) => {
 const identity = (state = {}, action) => {
   switch(action.type){
     case actionTypes.LOGIN:
-      let userIdentity = new UserIdentity(action.userId, action.userName, action.picture, action.biasToken, 
-        action.facebookUserId, action.memberId, action.roles, action.jwt);
+      let userIdentity = new UserIdentity(action.userId, action.userName, action.memberId, action.roles);
       const newState = Object.assign({}, state, {
         userInfo: userIdentity
       })

@@ -2,6 +2,7 @@ import actionTypes from "../actionTypes"
 import pageTypes from "../pageTypes"
 import BiasCheckerService from "../services/BiasCheckerService"
 import Settings from "../model/Settings"
+import Auth from '../model/Auth'
 
 export const indicatePageWasLoaded = (page) => {
 	return{
@@ -30,28 +31,13 @@ export const changePage = (fromPage, toPage, history) => {
 	}
 }
 
-const loginFacebook = (biasToken, facebookToken) =>{
-	localStorage.setItem(new Settings().biasCheckerJwtKey, biasToken.jwt)
-	return {
-		type: actionTypes.LOGIN_FACEBOOK,
-		id: 2,
-		facebookUserId: facebookToken.userID,
-		userName: biasToken.name,
-		picture: facebookToken.picture,
-		biasToken: biasToken.biasAccessToken,
-		userId: biasToken.userId,
-		memberId: biasToken.memberId,
-		roles: biasToken.roles
-	};
-}
-
 export const loginFacebookAsync = (settings, facebookToken) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
 	return function(dispatch) {
 		return biasCheckerService.exchangeToken(facebookToken, "FB")
 		.then((biasToken)=>{
-			dispatch(login(biasToken, facebookToken));
+			dispatch(loginJwt(biasToken));
 		})
 		.catch((error) => {
 			console.log("loginFacebookAsync", error);
@@ -59,32 +45,34 @@ export const loginFacebookAsync = (settings, facebookToken) =>{
 	}
 };
 
-const loginBasic = (biasToken, targetComponent, history) =>{
-	localStorage.setItem(new Settings().biasCheckerJwtKey, biasToken.jwt)
-	return {
-		type: actionTypes.LOGIN,
-		id: 15,
-		userName: biasToken.name,
-		userId: biasToken.userId,
-		memberId: biasToken.memberId,
-		roles: biasToken.roles,
-		biasToken: biasToken.biasToken
-	};
-}
-
 export const loginBasicAsync = (settings, username, password, targetComponent, history) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
 	return function(dispatch) {
 		return biasCheckerService.authenticateBasic(username, password)
 		.then((biasToken)=>{
-			dispatch(loginBasic(biasToken));
+			dispatch(loginJwt(biasToken));
 		})
 		.catch((error) => {
 			console.log("loginBasicAsync", error);
 		});
 	}
 };
+
+const loginJwt = (jwt) =>{
+	//sync jwt in browser with current jwt
+	localStorage.setItem(new Settings().biasCheckerJwtKey, jwt)
+	let jwtd = Auth.decodeJwt(jwt)
+	console.log("loginJwt", jwtd)
+	return {
+		type: actionTypes.LOGIN,
+		id: 15,
+		userName: jwtd.name,
+		userId: jwtd.userId,
+		memberId: jwtd.memberId,
+		roles: jwtd.scope
+	};
+}
 
 const loadArticles = (articles) => {
 	return {
