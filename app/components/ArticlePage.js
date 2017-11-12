@@ -6,19 +6,30 @@ import store from '../store'
 import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
-import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync} from '../actions/actions'
+import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, loginJwt} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
+import Auth from '../model/Auth'
 
 class ArticlePageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
+    if(props.userInfo === undefined){
+      props.loginJwt(Auth.getJwt())
+    }    
     this.settings = props.settings
     this.analyzeArticle = props.analyzeArticle
     this.searchForArticle = props.searchForArticle
+    this.changePage = props.changePage
+    this.history = props.history
 	}
   
   selectState(superState){
-    return { articles:superState.articleList.articles, identity: superState.identity, bookmark:superState.articleList.bookmark };
+    return { 
+      articles:superState.articleList.articles, 
+      identity: superState.identity, 
+      bookmark:superState.articleList.bookmark,
+      error: superState.failure.error
+    };
   }
 
   compareState(subStateA, subStateB){
@@ -31,7 +42,8 @@ class ArticlePageUnwrapped extends React.Component{
   }
 
   componentWillMount(){
-    this.setState(this.selectState(store.getState()));
+    let localState = this.selectState(store.getState())
+    this.loadComponent(this, localState)    
   }
 
   componentDidMount(){
@@ -44,7 +56,11 @@ class ArticlePageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
-    console.log(state)
+    if(state.error !== undefined){
+      if(state.error.httpCode === 401){
+        self.changePage("article", "", self.history)
+      }
+    }
     if(state.identity.userInfo !== undefined && state.articles.length == 0 && self.hasLoaded === undefined){
       self.props.loadArticles(self.settings, state.identity.userInfo);
       self.hasLoaded = true;  
@@ -60,7 +76,6 @@ class ArticlePageUnwrapped extends React.Component{
   }
 
 	render(){
-
     if(this.state.articles.length == 0){
       return (<div id="bookmark-page">
         <Menu active="articles" settings={this.settings} userInfo={this.state.identity.userInfo} pageSearch={this.searchForArticle}/>
@@ -85,13 +100,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     loadArticles:(settings, userInfo) => dispatch(loadArticlesAsync(settings, userInfo)),
     createBookmark: (settings, article, userInfo) => dispatch(createBookmarkAsync(settings, article, userInfo)),
     analyzeArticle: (label, link, settings, userInfo) => dispatch(analyzeArticleAsync(label, link, settings, userInfo)),
-    searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo))
+    searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo)),
+    changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
+    loginJwt: (jwt) => dispatch(loginJwt(jwt))
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    settings: state.settings
+    settings: state.settings,
+    userInfo: state.identity.userInfo
   }
 }
 

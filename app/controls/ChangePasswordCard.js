@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 
-class Registration extends React.Component{
+class ChangePassword extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {};
@@ -73,46 +74,33 @@ class Registration extends React.Component{
 
 	render(){
 //		console.log(this.state)
-		return 	<div className="container">
-				<h4>{(this.state.isMember ? "Update My Curator Membership" : "Add a Curator Membership for FREE")}</h4>
-				{(this.state.isMember ? 
-				<p>
-				You may update your Member user name and password below.
-				</p>
-				:
-				<p>
-				We noticed you don't have a Curator account!  That's fine by us, but there are many benefits to having a Curator account
-				in addition to your Facebook login, including gaining access to the social network features of Curator. You also must be a BiasChecker
-				account holder to become a Guardian and rate articles (and users) for truthfulness of posts.
-				</p>
-				)}
-				<form className="col s12">
-					<div className="row">
-				        <div className="input-field col s12">
-				          <input name="email" type="email" required className="validate" onChange={this.handleInputChange}></input>
-				          <label htmlFor="email" data-error="Email address invalid.">Email (This will be your user name.)</label>
-				        </div>
-				    </div>
-				    <div className="row">
-				        <div className="input-field col s12">
-				          <input name="password" type="password" required className="validate" onChange={this.handleInputChange}></input>
-				          <label htmlFor="password">Password</label>
-				        </div>
-				    </div>
-				    <div className="row">
-				        <div className="input-field col">
-				          <input id="guardian" type="checkbox" onChange={this.handleInputChange} checked={this.state.guardian} value="guardian"></input>
-				          <label htmlFor="guardian">Guardian</label>
-				        </div>
-				    </div>
-				    <div className="row">
-				        <div className="input-field col s12 white-text">
-				          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{(this.state.isMember ? "Update Membership" : "Add Membership")}</button>&nbsp;&nbsp;
-				        </div>	  	
-				    </div>
-		  		</form>
-		  	</div>			
+		return  <Card>
+					<CardHeader
+						title={"Change my password"}
+					/>
+				<CardText>
+					<form className="col s12">
+					    <div className="row">
+					        <div className="input-field col s12">
+					          <input name="password" type="password" required className="validate" onChange={this.handleInputChange}></input>
+					          <label htmlFor="password">Password</label>
+					        </div>
+					    </div>
+					    <div className="row">
+					        <div className="input-field col s12">
+					          <input name="pwconfirm" type="password" required className="validate" onChange={this.handleInputChange}></input>
+					          <label htmlFor="pwconfirm">Confirm Password</label>
+					        </div>
+					    </div>
+					    <div className="row">
+					        <div className="input-field col s12 white-text">
+					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Save Changes"}</button>&nbsp;&nbsp;
+					        </div>	  	
+					    </div>
+			  		</form>
+		  		</CardText>
+		  	</Card>	
 	}
 }
 
-export default withRouter(Registration);
+export default withRouter(ChangePassword);

@@ -111,10 +111,20 @@ const page = (state = {"current":"LOGIN"}, action) => {
   }
 }
 
+const failure = (state = {}, action) => {
+  switch(action.type){
+    case actionTypes.FAILED:
+      let lstate = Object.assign({}, state, {"error": action.error})
+      return lstate
+    default:
+      return state
+  }
+}
 export default combineReducers({
   articleList, //note:  this prompts the creation of a reducer-specific state of the same name
   identity,
   settings,
   memberList,
-  page
+  page,
+  failure
 })

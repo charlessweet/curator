@@ -59,22 +59,28 @@ export const loginBasicAsync = (settings, username, password, targetComponent, h
 	}
 };
 
-const loginJwt = (jwt) =>{
+export const loginJwt = (jwt) =>{
 	//sync jwt in browser with current jwt
 	localStorage.setItem(new Settings().biasCheckerJwtKey, jwt)
 	let jwtd = Auth.decodeJwt(jwt)
-	console.log("loginJwt", jwtd)
-	return {
-		type: actionTypes.LOGIN,
-		id: 15,
-		userName: jwtd.name,
-		userId: jwtd.userId,
-		memberId: jwtd.memberId,
-		roles: jwtd.scope
-	};
+	if(jwtd !== null){
+		return {
+			type: actionTypes.LOGIN,
+			id: 15,
+			userName: jwtd.name,
+			userId: jwtd.userId,
+			memberId: jwtd.memberId,
+			roles: jwtd.scope
+		}		
+	}else{
+		return failCall({
+			message: "Invalid client-side JWT"
+		})
+	}
 }
 
 const loadArticles = (articles) => {
+	console.log("loadArticles", articles)
 	return {
 		type: actionTypes.SHOW_ARTICLES,
 		id: 7,
@@ -84,12 +90,14 @@ const loadArticles = (articles) => {
 
 export const loadArticlesAsync = (settings, userInfo) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
-	let userId = userInfo.facebookUserId;
-	let biasToken = userInfo.biasToken;
 	return function(dispatch){
-		return biasCheckerService.loadArticles(userId, biasToken)
-		.then((articles) =>{
-			dispatch(loadArticles(articles));
+		return biasCheckerService.loadArticles()
+		.then((data) =>{
+			if(!Array.isArray(data)){
+				dispatch(failCall(data))
+			}else{
+				dispatch(loadArticles(data))			
+			}
 		})
 		.catch((error) => {
 			console.log("loadArticlesAsync", error);
@@ -194,16 +202,29 @@ const analyzeArticle = (article) => {
 	}
 }
 
-export const analyzeArticleAsync = (label, link, settings, userInfo) => {
+const failCall = (error) => {
+	return {
+		type: actionTypes.FAILED,
+		id: 16,
+		error: error
+	}
+}
+
+export const analyzeArticleAsync = (label, link, settings, userInfo, history) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret)
 	let biasToken = userInfo.biasToken
 	return function(dispatch){
 		return biasCheckerService.analyzeArticle(label, link, userInfo.biasToken)
-		.then((article) => {
-			dispatch(analyzeArticle(article))
+		.then((data) => {
+			if(data.error !== undefined){
+				dispatch(failCall(data))
+			}else{
+				dispatch(analyzeArticle(data))				
+			}
 		})
 		.catch((error) => {
 			console.log("analyzeArticleAsync", error)
+			dispatch(failCall(error))
 		})
 	}
 }
@@ -250,8 +271,14 @@ export const loadStreamAsync = (settings, userInfo) => {
 	let biasToken = userInfo.biasToken;
 	return function(dispatch){
 		return biasCheckerService.loadStream(biasToken)
-		.then((articles) =>{
-			dispatch(loadStream(articles));
+		.then((data) =>{
+			console.log("loadStreamAsync_response", data)
+			if(!Array.isArray(data)){
+				console.log("loadStreamAsync_response failed")
+				dispatch(failCall(data))
+			}else{
+				dispatch(loadStream(data))			
+			}
 		})
 		.catch((error) => {
 			console.log("loadStreamAsync", error);

@@ -8,7 +8,7 @@ import MemberCardList from '../controls/PhilosopherRuler/MemberCardList'
 import {loadMembersForApprovalAsync, addRoleAsync} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 
-class PhilosopherRulerPageUnwrapped extends React.Component{
+class MemberManagementPageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
     this.settings = props.settings;
@@ -57,7 +57,17 @@ class PhilosopherRulerPageUnwrapped extends React.Component{
       return (
       <div id="philosopher-ruler-page">
         <Menu active={"ruler"} userInfo={state.identity}/>
-        <br/><br/><br/>
+        <br/><br/>
+        <div className="container">
+            <div className="card">
+                <div className="card-content">
+                    <span className="card-title">Member Management</span>
+                    <p>
+                    Approve or disapprove of user requests.
+                    </p>
+                </div>
+            </div>
+        </div>        
         <div className="container">
           <MemberCardList members={state.members.members} approve={this.addRole} settings={this.settings} userInfo={state.identity}/>
         </div>
@@ -79,4 +89,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PhilosopherRulerPageUnwrapped))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MemberManagementPageUnwrapped))

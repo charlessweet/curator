@@ -74,13 +74,18 @@ class LoginUnwrapped extends React.Component{
       "paddingTop" : "1.3em",
       "display" : "block"
     }
+
+    let barStyle = {
+      "backgroundColor": "#3F51B5",
+      "color": "white"
+    }
     return (
       <div>
         <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
         <div>
-          <AppBar iconElementLeft={<span style={titleStyle}>Curator</span>}
+          <AppBar iconElementLeft={<span style={titleStyle}>Curator</span>} style={barStyle}
             iconElementRight={<span style={subTitleStyle}>Socializing news analysis</span>} />
-          <Login target={pageTypes.STREAM}/>
+          <Login target={pageTypes.STREAM} style={barStyle}/>
         </div>      
         <br/>
         <br/>    

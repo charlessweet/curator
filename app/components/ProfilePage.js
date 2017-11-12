@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import Menu from '../controls/Menu'
-import Registration from '../controls/Registration'
+import ChangePasswordCard from '../controls/ChangePasswordCard'
 import {createBiasCheckerAccountFromFacebookAsync} from '../actions/actions'
+import ProfileInfo from '../controls/ProfileInfo'
 
 class ProfilePageUnwrapped extends React.Component{
 	constructor(props){
@@ -16,8 +17,11 @@ class ProfilePageUnwrapped extends React.Component{
 	render(){
       return (<div id="profile-page">
         <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
-        <br/> <br/>
-        <Registration createAccount={this.props.createBiasCheckerAccountFromFB}/>
+        <br/><br/>
+        <ProfileInfo userInfo={this.userInfo}/>
+        <div className="container">
+          <ChangePasswordCard createAccount={this.props.createBiasCheckerAccountFromFB}/>
+        </div>
       </div>
       )
   }

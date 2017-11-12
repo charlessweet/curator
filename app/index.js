@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import LoginPage from './components/LoginPage'
 import ArticlePage from './components/ArticlePage'
-import PhilosopherRulerPage from './components/PhilosopherRulerPage'
+import MemberManagementPage from './components/MemberManagementPage'
 import ArticleReviewPage from './components/ArticleReviewPage'
 import StreamPage from './components/StreamPage'
 import AboutPage from './components/AboutPage'
@@ -27,13 +27,14 @@ const Blank = () => (
  * @param The component we originally desired to show.
  */
 const n2 = (component) => {
-    return (Auth.isLoggedIn() ? component : LoginPage)
+    let redirectComponent = (props) => { window.location = '/' }
+    return (Auth.isLoggedIn() ? component : redirectComponent)
 }
 
 const App = () => (
   <Switch>
     <Route exact path="/" component={LoginPage} />
-    <Route exact path="/ruler" component={n2(PhilosopherRulerPage)} />
+    <Route exact path="/ruler" component={n2(MemberManagementPage)} />
     <Route exact path="/articles" component={n2(ArticlePage)} />
     <Route exact path="/stream/:articleId" component={n2(ArticleReviewPage)} />
     <Route exact path="/stream" component={n2(StreamPage)} />
@@ -42,7 +43,7 @@ const App = () => (
     <Route exact path="/create" component={CreateAccountPage} />
   </Switch>
 )
-console.log("auth", Auth.isLoggedIn())
+
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>

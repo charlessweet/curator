@@ -14,7 +14,7 @@ export default class ArticleList{
 		//this is a little weird.  i use the same constructor for an array of formal Articles as an array of objects from the 
 		//server.  eventually, I'll want to change this, but this works for now.
 		if(art === undefined || art.biasScore !== undefined){
-			this.articles = articles.map((a) => new Article(a.id, a.title, a.description, a.link, a.keywords, 0, a.biasScore, 0, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore));
+			this.articles = articles.map((a) => new Article(a.id, a.title, (a.description !== undefined && a.description.length > 0 ? a.description : a.data), a.link, a.keywords, 0, a.biasScore, 0, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore));
 		}else{
 			this.articles = articles.map((a) => new Article(a.id, a.title, a.summary, a.link, a.keywords, 0, a.algorithmScore, 0, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore));
 		}
@@ -39,6 +39,7 @@ export default class ArticleList{
 		if(this.articles.find((a) => a.id == article.id) === undefined){
 			this.articles.unshift(article)
 		}
+		console.log(this.articles)
 		return this;//so we can chain calls
 	}
 

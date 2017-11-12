@@ -8,21 +8,29 @@ import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import {loadStreamAsync, reviewArticle} from '../actions/actions'
+import {loadStreamAsync, reviewArticle, loginJwt, changePage} from '../actions/actions'
+import Auth from '../model/Auth'
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
+    if(props.userInfo === undefined){
+      props.loginJwt(Auth.getJwt())
+    }
     this.settings = props.settings
     this.userInfo = props.userInfo
-    console.log("StreamPageUnwrapped", this.userInfo)
-    if(this.userInfo.roles !== undefined && this.userInfo.roles.filter((x) => x=='guardian') !== undefined){
-      this.reviewArticle = props.reviewArticle //make available for downstream components
-    }    
+    this.reviewArticle = props.reviewArticle
+    this.changePage = props.changePage
+    this.history = props.history    
 	}
   
   selectState(superState){
-    return { articles:superState.articleList.stream, identity: superState.identity, bookmark:superState.articleList.bookmark };
+    return { 
+      articles:superState.articleList.stream, 
+      identity: superState.identity, 
+      bookmark:superState.articleList.bookmark,
+      error: superState.failure.error
+    }
   }
 
   compareState(subStateA, subStateB){
@@ -38,9 +46,8 @@ class StreamPageUnwrapped extends React.Component{
   }
 
   componentWillMount(){
-    let state = this.selectState(store.getState())
-    this.setState(state)
-    this.loadComponent(this, state)
+    let localState = this.selectState(store.getState())
+    this.loadComponent(this, localState)
   }
 
   componentDidMount(){
@@ -53,6 +60,11 @@ class StreamPageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
+    if(state.error !== undefined){
+      if(state.error.httpCode === 401){
+        self.changePage("stream", "", self.history)
+      }
+    }    
     if(state.identity.userInfo !== undefined && state.articles.articles.length == 0 && self.hasLoaded === undefined){
       self.props.loadStream(self.settings, state.identity.userInfo);
       self.hasLoaded = true;  
@@ -86,7 +98,9 @@ class StreamPageUnwrapped extends React.Component{
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadStream:(settings, userInfo) => dispatch(loadStreamAsync(settings, userInfo)),
-    reviewArticle: (article, history) => dispatch(reviewArticle(article, history))
+    reviewArticle: (article, history) => dispatch(reviewArticle(article, history)),
+    changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
+    loginJwt: (jwt) => dispatch(loginJwt(jwt))
   }
 }
 

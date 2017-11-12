@@ -1,10 +1,11 @@
 import Settings from "../model/Settings"
+import Auth from '../model/Auth'
+
 export default class BiasCheckerService{
 	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret){
 		this.biasServiceUrl = biasServiceUrl;
 		this.biasServiceSecret = biasServiceSecret;
 		this.biasServiceAppId = biasServiceAppId;
-		this.biasCheckerJwt = localStorage.getItem(new Settings().biasCheckerJwtKey)
 	}
 	callBiasChecker(relativeUrl, method, data, basicAuth){
 		var url  = this.biasServiceUrl + relativeUrl;
@@ -15,7 +16,7 @@ export default class BiasCheckerService{
 				"X-BIASCHECKER-API-KEY":this.biasServiceSecret, 
 				"X-BIASCHECKER-APP-ID":this.biasServiceAppId, 
 				"Content-Type": "application/json",
-				"Authorization": "Bearer " + this.biasCheckerJwt
+				"Authorization": "Bearer " + Auth.getJwt()
 			}
 		};
 		if(basicAuth !== undefined){
@@ -55,13 +56,13 @@ export default class BiasCheckerService{
 		})
 	}
 
-	loadArticles(facebookUserId, biasToken){
-		var relativeUrl = "/users/facebook/" + facebookUserId + "/articles?biasToken=" + biasToken;
+	loadArticles(memberId){
+		var relativeUrl = "/my/articles";
 		return this.callBiasChecker(relativeUrl, "GET")
 	}
 
 	loadStream(biasToken){
-		var relativeUrl = "/articles?biasToken=" + biasToken;
+		var relativeUrl = "/articles";
 		return this.callBiasChecker(relativeUrl, "GET")
 	}
 
@@ -104,11 +105,10 @@ export default class BiasCheckerService{
 	}
 
 	analyzeArticle(label, link, biasToken){
-		let relativeUrl = "/analyze?biasToken=" + biasToken;
+		let relativeUrl = "/analyze";
 		let body = {}
 		body.selfLabel = label
 		body.linkToValidate = link
-//		console.log(body)
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
 			return result

@@ -31,7 +31,6 @@ const ArticleCard = (props) => {
 	const getShareLink = ()=> { return [<ShareLink key='shareLink' fbappid={fbAppId} 
 		biasToken={biasToken} settings={props.settings} article={article} 
 		createBookmark={props.createBookmark} />] }
-
 	return (
 		<Card>
 			<CardHeader
@@ -40,7 +39,7 @@ const ArticleCard = (props) => {
       			showExpandableButton={true}
 			/>
 			<CardText expandable={true}> 
-				<p>{article.summary}</p>
+				<div style={{wordWrap: "break-word"}}>{article.summary}</div>
 				<p><span><a className="grey-text" target="_blank" href={article.link}>Link to Article</a></span></p>
 				<div>
 					<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
