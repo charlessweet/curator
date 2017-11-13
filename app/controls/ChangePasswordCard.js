@@ -4,6 +4,8 @@ import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
+import {changePasswordAsync} from '../actions/actions'
+import {connect} from 'react-redux'
 
 class ChangePassword extends React.Component{
 	constructor(props){
@@ -15,8 +17,9 @@ class ChangePassword extends React.Component{
 		this.history = props.history;
 		this.emailRegex = /^\S+@\S+\.\S+$/;
 		this.validation = {};
-		this.createMembership = props.createAccount
-		this.updateMembership = props.updateMembership
+		this.changePassword = props.changePassword
+		this.settings = props.settings
+		console.log("constructor",props)
 	}
 
 	handleInputChange(event){
@@ -28,11 +31,10 @@ class ChangePassword extends React.Component{
 
 	handleSubmit(event){
 		this.validation = this.validate();
-		if(!this.validation.email && !this.validation.password){
-			let storeState = store.getState();
-			this.action(storeState.settings, storeState.identity.userInfo, this.state.email, this.state.password, this.state.guardian, this.history);			
+		if(!this.validation.password){
+			this.changePassword(this.state.password,this.settings)
 		}else{
-			alert("The form is invalid.");
+			alert("The form is invalid.")
 		}
 	}
 
@@ -66,9 +68,8 @@ class ChangePassword extends React.Component{
 
 	validate(){
 		return {
-			email: this.state.email === undefined && !this.emailRegex.test(this.state.email),
-			password: this.state.password === undefined,
-			guardian: this.state.guardian === undefined
+			//both password must be equal and not undefined
+			password: this.state.password === undefined || this.state.password != this.state.pwconfirm
 		}
 	}
 
@@ -103,4 +104,16 @@ class ChangePassword extends React.Component{
 	}
 }
 
-export default withRouter(ChangePassword);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    changePassword: (newPassword,settings) => dispatch(changePasswordAsync(newPassword,settings))
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    settings:state.settings
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChangePassword));

@@ -104,6 +104,15 @@ export default class BiasCheckerService{
 		})
 	}
 
+	changePassword(newPassword){
+		let relativeUrl = "/my/password"
+		let body = { "password" : newPassword }
+		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result
+		})
+	}
+
 	analyzeArticle(label, link, biasToken){
 		let relativeUrl = "/analyze";
 		let body = {}

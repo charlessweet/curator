@@ -272,9 +272,7 @@ export const loadStreamAsync = (settings, userInfo) => {
 	return function(dispatch){
 		return biasCheckerService.loadStream(biasToken)
 		.then((data) =>{
-			console.log("loadStreamAsync_response", data)
 			if(!Array.isArray(data)){
-				console.log("loadStreamAsync_response failed")
 				dispatch(failCall(data))
 			}else{
 				dispatch(loadStream(data))			
@@ -312,6 +310,31 @@ export const critiqueArticleAsync = (articleId, critique, settings, userInfo) =>
 			critique.analysis, critique.errorType, biasToken)
 		.then((article) =>{
 			dispatch(critiqueArticle(article));
+		})
+		.catch((error) => {
+			console.log("critiqueArticleAsync", error);
+		})
+	}
+}
+
+const changePassword = (data) => {
+	return {
+		type: actionTypes.CHANGE_PASSWORD,
+		id:15,
+		result: data
+	}
+}
+
+export const changePasswordAsync = (newPassword, settings) => {
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	return function(dispatch){
+		return biasCheckerService.changePassword(newPassword)
+		.then((data) => {
+			if(data.error !== undefined){
+				dispatch(failCall(data))
+			}else{
+				dispatch(changePassword(data))
+			}
 		})
 		.catch((error) => {
 			console.log("critiqueArticleAsync", error);
