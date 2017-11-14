@@ -84,6 +84,16 @@ export default class BiasCheckerService{
 			return res.memberId;
 		})
 	}
+	createAccount(email, password){
+		let relativeUrl  = "/register"
+		let body = {}
+		body.email = email
+		body.password = password
+		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(res){
+			return res
+		})
+	}
 	loadMembersForApproval(biasToken){
 		let relativeUrl = "/members/promotions/pending?biasToken=" + biasToken;
 		return this.callBiasChecker(relativeUrl, "GET")

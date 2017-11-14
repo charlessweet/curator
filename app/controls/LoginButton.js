@@ -16,12 +16,16 @@ class LoginButton extends React.Component{
 		login(settings, facebookResponse, history);
 	}
 	render(){
+	    let barStyle = {
+	      "backgroundColor": "#3F51B5",
+	      "color": "white"
+	    }		
         return <FacebookLogin
 			appId={this.settings.fbAppId}
 			autoLoad={true}
 			fields="name,email,picture"
 			scope='user_posts,publish_actions,user_friends,user_status'
-          	cssClass='btn-large  waves-effect waves-light indigo lighten-1'
+          	style={barStyle}
         	callback={(response)=>{this.processFacebookLogin(response, this.settings, this.history, this.login)}}
 		/>		
 	}

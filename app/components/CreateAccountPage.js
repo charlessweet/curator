@@ -1,42 +1,121 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import LoginButton from '../controls/LoginButton'
+import CreateAccount from '../controls/CreateAccount'
+import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import Menu from '../controls/Menu'
+import { Link } from 'react-router-dom'
+import {indicatePageWasLoaded, loginAsync, changePage} from '../actions/actions'
 import store from '../store'
 import StoreObserver from '../services/StoreObserver'
-import ArticleReviewModal from '../controls/ArticleReviewModal'
-import {Modal} from 'react-materialize'
-import Article from '../model/Article'
+import Paper from 'material-ui/Paper'
+import Login from '../controls/Login'
+import AppBar from 'material-ui/AppBar'
+import pageTypes from '../pageTypes'
+import CreateAccountInfo from '../controls/CreateAccountInfo'
 
-class TestPageUnwrapped extends React.Component{
-	constructor(props){
-		super(props);
-	}
+class CreateAccountPageUnwrapped extends React.Component{
+  constructor(props){
+    super(props);
+    this.login = props.login;
+    this.history = props.history;
+    props.showLogin();
+    this.goToPage = props.goToPage;
 
-  componentWillMount(){
-    this.setState({  
-      article: new Article(42, "So Long and Thanks for all the Fish", "Everything you ever wanted to know about fishing nets.", "http://www.fishnet.com",
-        ["fish", "nets"], 0.012, 0.345, 0.567)
-    });
+    this.style = {
+      height: 500,
+      width: 300,
+      margin: 10,
+      padding: 10,
+      display: 'inline-block',
+
+    };
   }
 
-	render(){
-    console.log("TestPageUnwrapped_render", this.state)
-      return (<ArticleReviewModal articleId={this.state.article.id} />)
+  compareState(subStateA, subStateB){
+    let evaluated = subStateA.identity !== undefined
+      && subStateB.identity !== undefined
+      && subStateA.identity.biasToken == subStateB.identity.biasToken;
+    return evaluated
+  }
+
+  componentWillMount(){
+    this.setState(this.selectState(store.getState()));
+  }
+
+  componentDidMount(){
+    this.observer = new StoreObserver(this, store, this.selectState, this.navigate, this.compareState);
+  }
+
+  componentWillUnmount(){
+    this.observer.unsubscribe();
+  }
+  
+  selectState(superState){
+    return {"settings":superState.settings, "page":superState.page, identity: superState.identity.userInfo};
+  }
+  
+  navigate(self, state){
+    if(state.identity !== undefined){
+      self.goToPage("stream", self.history)
+
+      if(self.observer !== undefined)
+        self.observer.unsubscribe();
+    }
+  }
+
+  render(){
+    let titleStyle = {
+      "fontFamily":"'Cairo', sans serif",
+      "fontSize" : "2em",
+      "fontWeight" : "bolder"
+    }
+
+    let subTitleStyle = {
+      "fontSize" : "0.9em",
+      "paddingTop" : "1.3em",
+      "display" : "block"
+    }
+
+    let barStyle = {
+      "backgroundColor": "#3F51B5",
+      "color": "white"
+    }
+    return (
+      <div>
+        <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
+        <div>
+          <AppBar iconElementLeft={<span style={titleStyle}><a href="/" style={{"color":"white"}}>Curator</a></span>} style={barStyle}
+            iconElementRight={<span style={subTitleStyle}>Socializing news analysis</span>} />
+            <CreateAccountInfo />
+            <div className="container">
+              <CreateAccount />
+            </div>
+        </div>      
+      </div>
+    );
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  let currentPage = "login";
   return {
+    login:(settings,facebookData, history) => {
+      dispatch(loginAsync(settings, facebookData, history));
+    },
+    showLogin: () => {
+      dispatch(indicatePageWasLoaded(currentPage));
+    },
+    goToPage: (targetPage, history) => {
+      dispatch(changePage(currentPage, targetPage, history));
+    }
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    settings: state.settings,
-    userInfo:state.identity.userInfo
+    settings:state.settings
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TestPageUnwrapped))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateAccountPageUnwrapped))

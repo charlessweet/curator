@@ -20,7 +20,7 @@ class ProfilePageUnwrapped extends React.Component{
         <br/><br/>
         <ProfileInfo userInfo={this.userInfo}/>
         <div className="container">
-          <ChangePasswordCard createAccount={this.props.createBiasCheckerAccountFromFB}/>
+          <ChangePasswordCard/>
         </div>
       </div>
       )

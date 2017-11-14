@@ -61,6 +61,10 @@ class Login extends React.Component{
 	}
 
 	render(){
+	    let barStyle = {
+	      "backgroundColor": "#3F51B5",
+	      "color": "white"
+	    }		
 		return 	<div className="container">
 				<Paper zDepth={0}>
 					<br/><br/><br/>
@@ -68,12 +72,12 @@ class Login extends React.Component{
 					<TextField id="email" label="Email Address" hintText="Email Address" fullWidth={true}  onChange={this.handleInputChange}/><br/>
 					<TextField id="password" label="Password" type="Password" fullWidth={true} hintText="Password"  onChange={this.handleInputChange}/><br/>
 					<br/>
-					<RaisedButton label="Log In" fullWidth={true} primary={true} onClick={this.handleSubmit} /><br/><br/>
+					<RaisedButton label="Log In" style={barStyle} fullWidth={true} primary={true} onClick={this.handleSubmit} /><br/><br/>
 					<Divider />
 					<center>
 					<br/><br/>
 					<div>No account?</div>
-					<Link to="/login">Create an Account</Link>
+					<Link to="/create">Create an Account</Link>
 					</center>
 				</Paper>
 				<Divider />

@@ -341,3 +341,28 @@ export const changePasswordAsync = (newPassword, settings) => {
 		})
 	}
 }
+
+const createAccount = (data) =>{
+	return {
+		type:actionTypes.CREATE_MEMBER,
+		id: 17,
+		result:data
+	}
+}
+
+export const createAccountAsync = (settings, email, password, history) => {
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	return function(dispatch){
+		return biasCheckerService.createAccount(email, password)
+		.then((data) => {
+			if(data.error !== undefined){
+				dispatch(createAccount(data))
+			}else{
+				dispatch(failCall(data))
+			}
+		})
+		.catch((error) => {
+			dispatch(failCall(error))
+		})
+	}
+}
