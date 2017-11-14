@@ -11,7 +11,7 @@ class Menu extends React.Component {
 		this.activeMenu = props.active
 		this.showNav = (props.showNav === undefined ? true : props.showNav)
 		this.rulerStyle = {
-			display: (this.userInfo.roles ===  undefined || this.userInfo.roles.find((x) => { return x === "philosopher-ruler"}) === undefined ? "none" : "block")
+			display: (this.userInfo === undefined || this.userInfo.roles ===  undefined || this.userInfo.roles.find((x) => { return x === "philosopher-ruler"}) === undefined ? "none" : "block")
 		}
 		this.pageSearch = undefined;//props.pageSearch
 		this.handleSearchChange = this.handleSearchChange.bind(this)
