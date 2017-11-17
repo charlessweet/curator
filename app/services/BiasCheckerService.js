@@ -61,7 +61,7 @@ export default class BiasCheckerService{
 		return this.callBiasChecker(relativeUrl, "GET")
 	}
 
-	loadStream(biasToken){
+	loadStream(){
 		var relativeUrl = "/articles";
 		return this.callBiasChecker(relativeUrl, "GET")
 	}

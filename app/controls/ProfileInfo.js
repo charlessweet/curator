@@ -10,7 +10,7 @@ const ProfileInfo = (props) => {
                 <div className="card-content">
                     <span className="card-title">Member Profile</span>
                     <p>
-                    Hi! You're logged in as {props.userInfo.userName}. You can use this page to
+                    Hi! You can use this page to
                     update your configuration settings and options from this page.
                     </p>
                     <br/>

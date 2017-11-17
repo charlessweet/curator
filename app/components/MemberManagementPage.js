@@ -7,6 +7,8 @@ import Menu from '../controls/Menu'
 import MemberCardList from '../controls/PhilosopherRuler/MemberCardList'
 import {loadMembersForApprovalAsync, addRoleAsync} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
+import UserIdentity from '../model/UserIdentity'
+import Auth from '../model/Auth'
 
 class MemberManagementPageUnwrapped extends React.Component{
 	constructor(props){
@@ -14,10 +16,11 @@ class MemberManagementPageUnwrapped extends React.Component{
     this.settings = props.settings;
     this.history = props.history;
     this.addRole = props.addRole;
+    this.userInfo = new UserIdentity(Auth.getDecodedJwt())
   }
 
   selectState(superState){
-    return { members:superState.memberList.members, identity: superState.identity.userInfo };
+    return { members:superState.memberList.members };
   }
 
   compareState(subStateA, subStateB){
@@ -46,9 +49,9 @@ class MemberManagementPageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
-    if(self.state.identity !== undefined && self.hasLoaded === undefined && state.members.length == 0){
+    if(self.hasLoaded === undefined && state.members.length == 0){
       self.hasLoaded = true;
-      self.props.loadMembersForApproval(self.settings, state.identity);
+      self.props.loadMembersForApproval(self.settings, self.userInfo);
     }
   }
 
@@ -56,8 +59,7 @@ class MemberManagementPageUnwrapped extends React.Component{
     let state = this.state;
       return (
       <div id="philosopher-ruler-page">
-        <Menu active={"ruler"} userInfo={state.identity}/>
-        <br/><br/>
+        <Menu active={"ruler"} />
         <div className="container">
             <div className="card">
                 <div className="card-content">
@@ -67,10 +69,13 @@ class MemberManagementPageUnwrapped extends React.Component{
                     </p>
                 </div>
             </div>
-        </div>        
+        </div>
+        {(this.userInfo.roles !== undefined && this.userInfo.roles.indexOf("guardian") > -1 ? 
         <div className="container">
           <MemberCardList members={state.members.members} approve={this.addRole} settings={this.settings} userInfo={state.identity}/>
         </div>
+        : <div className="container">If you were an Administrator, you would see a list  of people to approve. But, you're not. Soon, we will allow  people to do that
+        so check back!</div>)}
       </div>
       );
   }

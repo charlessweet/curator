@@ -79,7 +79,6 @@ class ArticlePageUnwrapped extends React.Component{
     if(this.state.articles.length == 0){
       return (<div id="bookmark-page">
         <Menu active="articles" settings={this.settings} userInfo={this.state.identity.userInfo} pageSearch={this.searchForArticle}/>
-        <br/> <br/>
         <ArticlePost settings={this.settings} userInfo={this.state.identity.userInfo} analyzeArticle={this.analyzeArticle}/>
       </div>
       );
@@ -87,7 +86,6 @@ class ArticlePageUnwrapped extends React.Component{
     return (
       <div id="bookmark-page">
         <Menu active="articles" settings={this.settings} userInfo={this.state.identity.userInfo} pageSearch={this.searchForArticle}/>
-        <br/> <br/>
         <ArticlePost settings={this.settings} userInfo={this.state.identity.userInfo} analyzeArticle={this.analyzeArticle}/>
         <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.state.identity.userInfo}/>
       </div>

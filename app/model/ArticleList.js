@@ -39,7 +39,6 @@ export default class ArticleList{
 		if(this.articles.find((a) => a.id == article.id) === undefined){
 			this.articles.unshift(article)
 		}
-		console.log(this.articles)
 		return this;//so we can chain calls
 	}
 

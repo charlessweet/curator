@@ -18,15 +18,6 @@ const StreamInfo = (props) => {
                     will give you some insight into the themes of the news cycle, and types of articles being viewed on Facebook.
                     </p>
                     <br/>
-                    <div style={guardianBlurbStyle} >
-                    <p>As a <b>Guardian</b>, you can add Cx (out of context), Le (logical error), or Fe (factual error) information to the articles below by clicking on the corresponding element icon, if the 
-                    article has not already been reviewed. Look for the 'N/A' score as an indicator of an article ready for your review.</p>
-                    <br/>
-                    <BoxElement article={{}} aspect="demo" />
-                    </div>
-                </div>
-                <div className="card-action">
-                    <Link to="/stream/123456">Link to Article Test</Link>
                 </div>
             </div>
         </div>)

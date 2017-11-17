@@ -10,15 +10,13 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import {loadStreamAsync, reviewArticle, loginJwt, changePage} from '../actions/actions'
 import Auth from '../model/Auth'
+import UserIdentity from '../model/UserIdentity'
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
-    if(props.userInfo === undefined){
-      props.loginJwt(Auth.getJwt())
-    }
     this.settings = props.settings
-    this.userInfo = props.userInfo
+    this.userInfo = new UserIdentity(Auth.getDecodedJwt())
     this.reviewArticle = props.reviewArticle
     this.changePage = props.changePage
     this.history = props.history    
@@ -27,21 +25,15 @@ class StreamPageUnwrapped extends React.Component{
   selectState(superState){
     return { 
       articles:superState.articleList.stream, 
-      identity: superState.identity, 
       bookmark:superState.articleList.bookmark,
       error: superState.failure.error
     }
   }
 
   compareState(subStateA, subStateB){
-    let evaluated = subStateA.identity !== undefined
-      && subStateB.identity !== undefined
-      && subStateA.identity.userInfo.biasToken == subStateB.identity.userInfo.biasToken
-      && subStateA.articles !== undefined
+    let evaluated = subStateA.articles !== undefined
       && subStateB.articles !== undefined
       && subStateA.articles.equals(subStateB.articles)
-
-    let b = subStateA.articles.equals(subStateB.articles)
     return evaluated
   }
 
@@ -65,8 +57,8 @@ class StreamPageUnwrapped extends React.Component{
         self.changePage("stream", "", self.history)
       }
     }    
-    if(state.identity.userInfo !== undefined && state.articles.articles.length == 0 && self.hasLoaded === undefined){
-      self.props.loadStream(self.settings, state.identity.userInfo);
+    if(self.hasLoaded === undefined){
+      self.props.loadStream(self.settings);
       self.hasLoaded = true;  
     }
 
@@ -82,13 +74,12 @@ class StreamPageUnwrapped extends React.Component{
 	render(){
 //      console.log("articles", this.state.articles.articles[0])
       return (<div id="bookmark-page">
-        <Menu active="stream" settings={this.settings} userInfo={this.state.identity.userInfo} pageSearch={this.searchForArticle}/>
-        <br/> <br/>
-        <StreamInfo userInfo={this.state.identity.userInfo}/>
+        <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+        <StreamInfo userInfo={this.userInfo}/>
         {
           this.state.articles.length == 0
           ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
-          : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.state.identity.userInfo} reviewArticle={this.reviewArticle}/>
+          : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} reviewArticle={this.reviewArticle}/>
         }
         </div>
       );

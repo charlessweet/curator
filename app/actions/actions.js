@@ -265,12 +265,10 @@ const loadStream = (articles) => {
 	}
 };
 
-export const loadStreamAsync = (settings, userInfo) => {
+export const loadStreamAsync = (settings) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
-	let userId = userInfo.facebookUserId;
-	let biasToken = userInfo.biasToken;
 	return function(dispatch){
-		return biasCheckerService.loadStream(biasToken)
+		return biasCheckerService.loadStream()
 		.then((data) =>{
 			if(!Array.isArray(data)){
 				dispatch(failCall(data))

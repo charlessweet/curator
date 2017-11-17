@@ -13,13 +13,12 @@ class ChangePassword extends React.Component{
 		this.state = {};
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleCancel = this.handleCancel.bind(this);
 		this.history = props.history;
 		this.emailRegex = /^\S+@\S+\.\S+$/;
 		this.validation = {};
 		this.changePassword = props.changePassword
 		this.settings = props.settings
-		console.log("constructor",props)
+		this.userInfo = props.userInfo
 	}
 
 	handleInputChange(event){
@@ -38,32 +37,19 @@ class ChangePassword extends React.Component{
 		}
 	}
 
-	handleCancel(event){
-		this.history.push("/articles");
-	}
-
 	componentWillMount(){
 		if(this.hasMounted === undefined){
 	    	let state = store.getState();
-			this.setState({["isMember"]:state.identity.userInfo.memberId !== undefined})
-			if(state.identity.userInfo.roles !== undefined){
-				this.setState({["isGuardian"]:state.identity.userInfo.roles.filter((x) => x === "guardian") !== undefined })
-				this.setState({["guardian"]:state.identity.userInfo.roles.filter((x) => x === "guardian") !== undefined })				
+			this.setState({["isMember"]:this.userInfo.memberId !== undefined})
+			if(this.userInfo.roles !== undefined){
+				this.setState({["isGuardian"]:this.userInfo.roles.filter((x) => x === "guardian") !== undefined })
+				this.setState({["guardian"]:this.userInfo.roles.filter((x) => x === "guardian") !== undefined })				
 			}
-			if(state.identity.userInfo.email !== undefined){
-				this.setState({["email"]:state.identity.userInfo.email})			
+			if(this.userInfo.email !== undefined){
+				this.setState({["email"]:this.userInfo.email})			
 			}
 			this.hasMounted = true		
 		}
-	}
-
-	componentDidMount(){
-		if(this.state.isMember){
-			this.action = this.createMembership
-		}else{
-			this.action = this.updateMembership
-		}
-//		console.log(this.state)
 	}
 
 	validate(){
@@ -74,7 +60,6 @@ class ChangePassword extends React.Component{
 	}
 
 	render(){
-//		console.log(this.state)
 		return  <Card>
 					<CardHeader
 						title={"Change my password"}

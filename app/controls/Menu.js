@@ -2,14 +2,25 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router'
 import {Link} from 'react-router-dom'
+import {Tabs,Tab} from 'material-ui/Tabs'
+import FontIcon from 'material-ui/FontIcon';
+import UserIdentity from '../model/UserIdentity'
+import {connect} from 'react-redux';
+import Auth from '../model/Auth'
+import {changePage} from '../actions/actions'
+import AppBar from 'material-ui/AppBar'
 
 class Menu extends React.Component {
 	constructor(props){
 		super(props)
 		this.settings = props.settings
-		this.userInfo = props.userInfo
+		this.userInfo = new UserIdentity(Auth.getDecodedJwt())
 		this.activeMenu = props.active
 		this.showNav = (props.showNav === undefined ? true : props.showNav)
+		this.history = props.history
+		this.changePage = props.changePage
+		this.handleActiveTabChange = this.handleActiveTabChange.bind(this);	
+		this.handleTitleTouch = this.handleTitleTouch.bind(this);
 		this.rulerStyle = {
 			display: (this.userInfo === undefined || this.userInfo.roles ===  undefined || this.userInfo.roles.find((x) => { return x === "philosopher-ruler"}) === undefined ? "none" : "block")
 		}
@@ -23,34 +34,59 @@ class Menu extends React.Component {
 		this.pageSearch(keyword, this.settings, this.userInfo)			
 	}
 
+	handleActiveTabChange(newActiveTab){
+		//TODO: permissions!styling!!showNav!
+		switch(newActiveTab.props.index){
+			case 0:
+				this.changePage(this.active, "stream", this.history)
+				break
+			case 1:
+				this.changePage(this.active, "articles", this.history)
+				break
+			case 2:
+				this.changePage(this.active, "profile", this.history)
+				break
+			case 3:
+				this.changePage(this.active, "ruler", this.history)
+				break
+		}
+	}
+
+	handleTitleTouch(){
+		this.changePage(this.active, "/", this.history)
+	}
+	getCurrentIndex(){
+		switch(this.activeMenu){
+			case "stream": return 0
+			case "articles": return 1
+			case "profile": return 2
+			case "ruler": return 3
+		}
+	}
+
 	render(){
-		return( <div className="navbar-extended navbar-fixed">
-		  	<nav className="indigo darken-4">
-		  		<div className="nav-wrapper">
-			  		<a href="#" className="brand-logo left">Curator</a><br/>
-			  		{
-			  			(this.pageSearch !== undefined ? <div className="input-field right">
-					  			<input id="search" type="search" placeholder="keyword search" required onInput={this.handleSearchChange}></input>
-					  			<label className="label-icon" htmlFor="search"><i className="material-icons right">search</i></label>
-					  			<i className="material-icons">close</i>
-							</div>			  				
-			  			:
-			  				<div/>)
-			  		}
-		  		</div>
-		  		{
-		  		(this.showNav ? 
-					<ul className="tabs tabs-transparent indigo darken-4">
-						<li className={"tab " + (this.activeMenu == "stream" ? "active" : "")}><Link title="View all articles in BiasChecker" to="/stream"><i className="active large material-icons">view_stream</i></Link></li>
-						<li className={"tab " + (this.activeMenu == "articles" ? "active" : "")}><Link title="Review articles I have analyzed" to="/articles"><i className="active large material-icons">list</i></Link></li>
-						<li className={"tab " + (this.activeMenu == "profile" ? "active" : "")}><Link title="View or edit my profile" to="/profile"><i className="large material-icons">perm_identity</i></Link></li>
-						<li style={this.rulerStyle} className={"tab " + (this.activeMenu == "ruler" ? "active" : "")}><Link title="Approve permissions for other users" to="/ruler"><i className="large material-icons">supervisor_account</i></Link></li>
-					</ul>
-					: <div/>)
-		  		}
-	  		</nav>
-		</div>
+		return(<div>
+				<AppBar showMenuIconButton={false} title="Curator (0.1.0)" onTitleTouchTap={this.handleTitleTouch} />
+				<Tabs initialSelectedIndex={this.getCurrentIndex()}>
+					<Tab icon={<FontIcon className="material-icons">view_stream</FontIcon>} onActive={this.handleActiveTabChange} />
+					<Tab icon={<FontIcon className="material-icons">list</FontIcon>} onActive={this.handleActiveTabChange}/>
+					<Tab icon={<FontIcon className="material-icons">perm_identity</FontIcon>} onActive={this.handleActiveTabChange}/>
+					<Tab icon={<FontIcon className="material-icons">supervisor_account</FontIcon>} onActive={this.handleActiveTabChange}/>
+				</Tabs>
+			</div>
 	)}
 }
 
-export default withRouter(Menu);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+      changePage: (currentPage, targetPage, history) => { dispatch(changePage(currentPage, targetPage, history)) }
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    settings: state.settings
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Menu))

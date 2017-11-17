@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BoxElement from './BoxElement';
+import Auth from '../../model/Auth'
+import UserIdentity from '../../model/UserIdentity'
 
 const BoxScore = (props) => {
 	const article = props.article;
-	const reviewArticle = props.reviewArticle
+	const userInfo = new UserIdentity(Auth.getDecodedJwt())
+	const reviewArticle = (userInfo.roles !== undefined && userInfo.roles !== null && userInfo.roles.indexOf("guardian")>-1 ?
+		props.reviewArticle : null)
 	let boxStyle = {
 		display: 'inline-block'
 	}

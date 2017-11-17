@@ -9,17 +9,20 @@ import StreamPage from './components/StreamPage'
 import AboutPage from './components/AboutPage'
 import ProfilePage from './components/ProfilePage'
 import CreateAccountPage from './components/CreateAccountPage'
-
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import store from './store'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Auth from './model/Auth'
+import BiasCheckerTheme from './theme/BiasCheckerTheme'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 const Blank = () => (
 	<div>
 		this is Blank
 	</div>
 );
+
+const theme = getMuiTheme(BiasCheckerTheme)
 
 /**
  * If a user is logged in, then displays 'component', othrwise,
@@ -47,7 +50,7 @@ const App = () => (
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>
-    <MuiThemeProvider>
+    <MuiThemeProvider muiTheme={theme}>
 		  <App />
     </MuiThemeProvider>
 	</BrowserRouter>

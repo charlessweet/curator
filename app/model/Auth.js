@@ -1,6 +1,10 @@
 import Settings from "../model/Settings"
 
 export default class Auth{
+	static getDecodedJwt(){
+		return this.decodeJwt(this.getJwt())
+	}
+
 	static getJwt(){
 		if(this.storageKey === undefined){
 			this.storageKey = new Settings().biasCheckerJwtKey	

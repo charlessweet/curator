@@ -6,21 +6,24 @@ import Menu from '../controls/Menu'
 import ChangePasswordCard from '../controls/ChangePasswordCard'
 import {createBiasCheckerAccountFromFacebookAsync} from '../actions/actions'
 import ProfileInfo from '../controls/ProfileInfo'
+import Auth from '../model/Auth'
+import UserIdentity from '../model/UserIdentity'
 
 class ProfilePageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
     this.settings = props.settings
-    this.userInfo = props.userInfo
+    this.userInfo = new UserIdentity(Auth.getDecodedJwt())
+    this.history = props.history
+    this.changePage = props.changePage
 	}
 
 	render(){
       return (<div id="profile-page">
         <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
-        <br/><br/>
         <ProfileInfo userInfo={this.userInfo}/>
         <div className="container">
-          <ChangePasswordCard/>
+          <ChangePasswordCard userInfo={this.userInfo}/>
         </div>
       </div>
       )
@@ -29,14 +32,15 @@ class ProfilePageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    createBiasCheckerAccountFromFB: (settings, userInfo, email, password, guardian, history) => dispatch(createBiasCheckerAccountFromFacebookAsync(settings, userInfo, email, password, guardian, history))
+      changePage: (currentPage, targetPage, history) => {
+      dispatch(changePage(currentPage, targetPage, history));
+    }
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    settings: state.settings,
-    userInfo:state.identity.userInfo
+    settings: state.settings
   }
 }
 
