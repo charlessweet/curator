@@ -76,7 +76,7 @@ const identity = (state = {}, action) => {
 
 const memberList = (state = {"members":new MemberList([])}, action) => {
   switch(action.type)  {
-    case actionTypes.LOAD_PROMOTION_REQUESTS:
+    case actionTypes.LOAD_ROLE_REQUESTS:
       if(action.members.length > 0){
         let nss = Object.assign({}, state, {
             members: new MemberList(action.members)
@@ -94,6 +94,15 @@ const memberList = (state = {"members":new MemberList([])}, action) => {
           )
       })
       return nss;
+    case actionTypes.DENY_PROMOTION_REQUEST:
+      let rss = Object.assign({}, state, {
+          members: new MemberList(state.members.members.filter((mem)=>
+            { 
+              mem.memberId !== action.grantInfo.grantorMemberId && mem["requesting_" + action.grantInfo.roleName] !== true 
+            })
+          )
+      })
+      return rss;
     default:
       return state;    
   }

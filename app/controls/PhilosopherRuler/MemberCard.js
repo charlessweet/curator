@@ -1,31 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Member from '../../model/Member'
+import {List, ListItem} from 'material-ui/List';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import AccountCircle from 'material-ui/svg-icons/action/account-circle';
+import RaisedButton from 'material-ui/RaisedButton'
 
 const MemberCard = (props) => {
-	let roleFilter = (member) => {
-		if(member.request_guardian){
-			return "guardian";
-		}else{
-			return "guardian";
-		}
-	}
-	let member = props.member;
-	let approveAction = props.approve;
+	let member = props.member
+	let approveAction = props.approve
+	let denyAction = props.deny
 //	console.log("MemberCard", member, approveAction);
 	return (
-		<div className="card">
-			<div className="card-content">
-				<span className="card-title">{member.email}</span>
-				<i>...is requesting the <b>{"Guardian"}</b> role.</i>
-				<div><a href={"mailto:" + member.email}>Contact This Member</a></div>
-			</div>
-			<div className="card-action">
-				<button id="create_member" type="button" className="btn-large waves-effect waves-light indigo lighten-1"
-					onClick={()=>{approveAction(member.memberId, roleFilter(member), props.settings, props.userInfo)}}>Approve</button>&nbsp;&nbsp;
-				<button id="cancel" type="button" className="orange btn-large waves-effect waves-light indigo lighten-1">Deny</button>&nbsp;&nbsp;
-			</div>
-		</div>
+		<Card>
+			<CardHeader
+				title={member.email}
+				avatar={<AccountCircle/>}
+			/>
+			<CardText> 
+				<List>
+					<ListItem primaryText="Member Id:" secondaryText={member.memberId} style={{wordWrap: "break-word"}} />
+					<ListItem primaryText="Requested Role:" secondaryText={member.roleName} />
+				</List>
+			</CardText>
+			<CardActions>
+				<RaisedButton label="Approve" primary={true} onClick={()=>{approveAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
+				<RaisedButton label="Deny" primary={false} onClick={()=>{denyAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
+			</CardActions>
+		</Card>
 	);
 };
 export default MemberCard;

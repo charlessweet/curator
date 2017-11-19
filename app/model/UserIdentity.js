@@ -4,7 +4,7 @@ export default class UserIdentity{
 			this.userId = jwtOrUserId.userId
 			this.userName = jwtOrUserId.email
 			this.memberId = jwtOrUserId.memberId
-			this.roles = jwtOrUserId.roles	
+			this.roles = jwtOrUserId.scope	
 		}else{
 			this.userId = jwtOrUserId;
 			this.userName = userName;

@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import store from '../store'
 import Menu from '../controls/Menu'
 import MemberCardList from '../controls/PhilosopherRuler/MemberCardList'
-import {loadMembersForApprovalAsync, addRoleAsync} from '../actions/actions'
+import {loadRoleRequestsAsync, addRoleAsync, denyRoleAsync} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
@@ -16,6 +16,7 @@ class MemberManagementPageUnwrapped extends React.Component{
     this.settings = props.settings;
     this.history = props.history;
     this.addRole = props.addRole;
+    this.denyRole = props.denyRole
     this.userInfo = new UserIdentity(Auth.getDecodedJwt())
   }
 
@@ -56,7 +57,8 @@ class MemberManagementPageUnwrapped extends React.Component{
   }
 
   render(){
-    let state = this.state;
+      let state = this.state;   
+      console.log("manstate", state)   
       return (
       <div id="philosopher-ruler-page">
         <Menu active={"ruler"} />
@@ -70,9 +72,9 @@ class MemberManagementPageUnwrapped extends React.Component{
                 </div>
             </div>
         </div>
-        {(this.userInfo.roles !== undefined && this.userInfo.roles.indexOf("guardian") > -1 ? 
-        <div className="container">
-          <MemberCardList members={state.members.members} approve={this.addRole} settings={this.settings} userInfo={state.identity}/>
+        {(this.userInfo.roles !== undefined && this.userInfo.roles.indexOf("philosopher-ruler") > -1 ? 
+        <div>
+          <MemberCardList members={state.members} approve={this.addRole} deny={this.denyRole} settings={this.settings} userInfo={state.identity}/>
         </div>
         : <div className="container">If you were an Administrator, you would see a list  of people to approve. But, you're not. Soon, we will allow  people to do that
         so check back!</div>)}
@@ -83,8 +85,9 @@ class MemberManagementPageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadMembersForApproval: (settings, userInfo) => dispatch(loadMembersForApprovalAsync(settings, userInfo)),
-    addRole: (targetMemberId, targetRoleName, settings, userInfo) =>  { dispatch(addRoleAsync(targetMemberId, targetRoleName, settings, userInfo)) }
+    loadMembersForApproval: (settings, userInfo) => dispatch(loadRoleRequestsAsync(settings, userInfo)),
+    addRole: (targetMemberId, targetRoleName, settings) =>  { dispatch(addRoleAsync(targetMemberId, targetRoleName, settings)) },
+    denyRole: (targetMemberId, targetRoleName, settings) =>  { dispatch(denyRoleAsync(targetMemberId, targetRoleName, settings)) }
   }
 }
 

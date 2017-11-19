@@ -150,24 +150,29 @@ export const createBiasCheckerAccountFromFacebookAsync = (settings, userInfo, em
 	}
 }
 
-const loadMembersForApproval = (members) => {
+const loadRoleRequests = (members) => {
+	console.log("loadRoleRequests", members)
 	return {
-		type: actionTypes.LOAD_PROMOTION_REQUESTS,
+		type: actionTypes.LOAD_ROLE_REQUESTS,
 		id: 5,
 		members: members
 	}
 };
 
-export const loadMembersForApprovalAsync = (settings, userInfo) => {
+export const loadRoleRequestsAsync = (settings, userInfo) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	let biasToken = userInfo.biasToken;
 	return function(dispatch){
 		return biasCheckerService.loadMembersForApproval(biasToken)
-		.then((members) =>{
-			dispatch(loadMembersForApproval(members));
+		.then((data) =>{
+			if(data.error !== undefined){
+				dispatch(failCall(data))
+			}else{
+				dispatch(loadRoleRequests(data))
+			}
 		})
 		.catch((error) => {
-			console.log("loadMembersForApprovalAsync", error);
+			console.log("loadRoleRequestsAsync", error);
 		})
 	}
 };
@@ -182,9 +187,8 @@ const addRole = (grantInfo) => {
 
 export const addRoleAsync = (targetMemberId, targetRoleId, settings, userInfo) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
-	let biasToken = userInfo.biasToken
 	return function(dispatch){
-		return biasCheckerService.addRole(targetMemberId, targetRoleId, biasToken)
+		return biasCheckerService.approveRole(targetMemberId, targetRoleId)
 		.then((grantInfo) => {
 			dispatch(addRole(grantInfo))
 		})
@@ -363,4 +367,54 @@ export const createAccountAsync = (settings, email, password, history) => {
 			dispatch(failCall(error))
 		})
 	}
+}
+
+const requestRole = (data) => {
+	return {
+		type: actionTypes.REQUEST_ROLE,
+		id: 18,
+		result:data
+	}
+}
+
+export const requestRoleAsync = (settings, targetMemberId, roleName) => {
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret)
+	return function(dispatch){
+		return biasCheckerService.requestRole(targetMemberId, roleName)
+		.then((data) => {
+			if(data.error === undefined){
+				dispatch(requestRole(data))
+			}else{
+				dispatch(failCall(data))
+			}
+		})
+		.catch((error) => {
+			dispatch(failCall(error))
+		})
+	}	
+}
+
+const denyRole = (grantInfo) => {
+	return {
+		type: actionTypes.DENY_PROMOTION_REQUEST,
+		id: 19,
+		grantInfo: grantInfo
+	}
+}
+
+export const denyRoleAsync = (targetMemberId, targetRoleId, settings) => {
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	return function(dispatch){
+		return biasCheckerService.denyRole(targetMemberId, targetRoleId)
+		.then((data) => {
+			if(data.error === undefined){
+				dispatch(denyRole(data))
+			}else{
+				dispatch(failCall(data))
+			}
+		})
+		.catch((error) => {
+			dispatch(failCall(error))
+		})
+	}	
 }

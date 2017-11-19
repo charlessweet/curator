@@ -94,24 +94,44 @@ export default class BiasCheckerService{
 			return res
 		})
 	}
+
 	loadMembersForApproval(biasToken){
-		let relativeUrl = "/members/promotions/pending?biasToken=" + biasToken;
+		let relativeUrl = "/roles/requests";
 		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(rows){
-//			console.log("BiasCheckerService_loadMembersForApproval",rows);
+			console.log("BiasCheckerService_loadMembersForApproval",rows);
 			return rows;
 		})
 	}
 
-	addRole(memberId, targetRole, biasToken){
-		let relativeUrl = "/members/promotions/pending?biasToken=" + biasToken
+	//for me only
+	requestRole(memberId, targetRole){
+		let relativeUrl = "/my/roles"
 		let body ={}
 		body.targetMemberId = memberId
-		body.targetRole = targetRole
+		body.roleName = targetRole
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
 			return result;
 		})
+	}
+
+	approveRole(memberId, targetRole){
+		let relativeUrl = "/members/" + memberId + "/roles"
+		let body = {}
+		body.roleName = targetRole
+		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result;
+		})
+	}
+
+	denyRole(targetMemberId, targetRole){
+		let relativeUrl = "/roles/" + targetRole + "/requests/" + targetMemberId
+		return this.callBiasChecker(relativeUrl, "DELETE", undefined)
+		.then(function(result){
+			return result;
+		})		
 	}
 
 	changePassword(newPassword){

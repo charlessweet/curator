@@ -2,7 +2,7 @@ import Member from './Member'
 
 export default class MemberList{
 	constructor(members){
-		this.members = members.map((a) => new Member(a.memberId, a.email, a.request_guardian));
+		this.members = members.map((a) => new Member(a.memberId, a.requestDate, a.requestor, a.roleName, a.email));
 		this.length = members.length;
 	}
 	
@@ -13,8 +13,8 @@ export default class MemberList{
 
 		for(var i = 0; i < this.members.length; i++){
 			let memberId = this.members[i].memberId;
-			let require_guardian = this.members[i].require_guardian;
-			if(!otherList.members.find((x) => { x.memberId == memberId && x.require_guardian == require_guardian })){
+			let roleName = this.members[i].roleName;
+			if(!otherList.members.find((x) => { x.memberId == memberId && x.roleName == roleName })){
 				return false;
 			}
 		}

@@ -1,11 +1,12 @@
 import Karma from './Karma'
 
 class Member{
-	constructor(memberId, email, requireGuardian){
+	constructor(memberId, requestDate, requestor, roleName, email){
 		this.memberId = memberId;
-		this.email = email;
-		this.requireGuardian = requireGuardian;
-
+		this.requestDate = requestDate;
+		this.requestor = requestor;
+		this.roleName = roleName
+		this.email = email
 		//reputation
 		this.karma = new Karma(5);
 	}
