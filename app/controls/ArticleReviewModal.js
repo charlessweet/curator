@@ -32,7 +32,7 @@ class ArticleReviewModal extends React.Component{
 	}
 
 	render(){
-		return <Modal header="Add Inaccuracy Details" trigger={<Button waves='light'>Add</Button>} actions={
+		return <Modal header="Add Inaccuracy Details" trigger={<Button waves='light' className="indigo">Add Critique</Button>} actions={
     <div>
       <Button modal="close" waves="light" className="red darken-2" onClick={ this.handleSubmit }><Icon left>add</Icon>add</Button>
       <Button flat modal="close" waves="light">dismiss</Button>

@@ -305,11 +305,9 @@ const critiqueArticle = (article) => {
 
 export const critiqueArticleAsync = (articleId, critique, settings, userInfo) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
-	let userId = userInfo.facebookUserId;
-	let biasToken = userInfo.biasToken;
 	return function(dispatch){
 		return biasCheckerService.critiqueArticle(articleId, critique.paragraphIndex, critique.sentenceIndex, critique.quote, 
-			critique.analysis, critique.errorType, biasToken)
+			critique.analysis, critique.errorType)
 		.then((article) =>{
 			dispatch(critiqueArticle(article));
 		})

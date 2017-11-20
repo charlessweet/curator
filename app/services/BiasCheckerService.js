@@ -163,7 +163,7 @@ export default class BiasCheckerService{
 	}
 
 	critiqueArticle(articleId, paragraphNum, sentenceNum, quote, analysis, errorType, biasToken){
-		let relativeUrl = "/articles/" + articleId + "/critique?biasToken=" + biasToken
+		let relativeUrl = "/articles/" + articleId + "/critique"
 		let body = {}
 		body.paragraph = paragraphNum
 		body.sentence = sentenceNum
