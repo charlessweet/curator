@@ -14,11 +14,13 @@ class CreateAccount extends React.Component{
 		this.state = {}
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
+		this.sendToRoot = this.sendToRoot.bind(this)
 		this.history = props.history
 		this.validation = {}
 		this.createAccount = props.createAccount
 		this.notifyUser = props.notifyUser
 		this.settings = props.settings
+		this.changePage = props.changePage
 	}
 
 	handleInputChange(event){
@@ -42,6 +44,10 @@ class CreateAccount extends React.Component{
 	    	let state = store.getState()
 			this.hasMounted = true		
 		}
+	}
+
+	sendToRoot(){
+		this.changePage("account", "/", this.history)
 	}
 
 	validate(){
@@ -85,14 +91,15 @@ class CreateAccount extends React.Component{
 			  		</form>
 		  		</CardText>
 		  		<UserNotification 
-		  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created"/>
+		  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created" closeAction={this.sendToRoot}/>
 		  	</Card>	
 	}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    createAccount: (settings, email, password, history) => dispatch(createAccountAsync(settings, email, password, history))
+    createAccount: (settings, email, password, history) => dispatch(createAccountAsync(settings, email, password, history)),
+    changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history))
   }
 }
 

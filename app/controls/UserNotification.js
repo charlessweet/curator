@@ -17,6 +17,7 @@ class UserNotification extends React.Component{
 		this.triggerState = props.triggerState //state which causes the message to show
 		this.message = props.message
 		this.clearMessage = props.clearMessage
+		this.closeAction = props.closeAction
 	}
 
 	selectState(superState){
@@ -49,6 +50,7 @@ class UserNotification extends React.Component{
 	handleRequestClose(event) {
 		this.setState({"open":false})
 		this.clearMessage(this.triggerGroup, this.triggerState)
+		this.closeAction()
 	}
 
 	render(){
