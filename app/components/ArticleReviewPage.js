@@ -26,9 +26,11 @@ class ArticleReviewPageUnwrapped extends React.Component{
   }
 
   compareState(subStateA, subStateB){
-    let evaluated = subStateA.article !== undefined
-      && subStateB.article !== undefined
-      && subStateA.article.id === subStateB.article.id
+    let evaluated = subStateA.identity !== undefined
+      && subStateB.identity !== undefined
+      && subStateA.articles !== undefined
+      && subStateB.articles !== undefined
+      && subStateA.articles.equals(subStateB.articles)
   }
 
   componentWillMount(){

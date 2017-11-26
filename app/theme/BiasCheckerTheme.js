@@ -13,7 +13,7 @@ export default {
     accent1Color: indigo50,
     accent2Color: grey100,
     accent3Color: grey500,
-    textColor: indigo500,
+    textColor: lightBlack,
     alternateTextColor: white,
     canvasColor: white,
     borderColor: grey300,

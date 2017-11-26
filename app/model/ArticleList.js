@@ -42,6 +42,14 @@ export default class ArticleList{
 		return this;//so we can chain calls
 	}
 
+	overwriteIfExists(article){
+		let existingIndex = this.articles.findIndex((a) => a.id == article.id)
+		if(existingIndex > -1){
+			this.articles[existingIndex] = article
+		}
+		return this
+	}
+
 	filter(keyword){
 		if(keyword.length > 4){
 			let articles = this.articles.find((a) => a.keywords.some((k) => k.includes(keyword)))

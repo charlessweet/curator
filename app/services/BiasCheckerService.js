@@ -162,7 +162,7 @@ export default class BiasCheckerService{
 		})
 	}
 
-	critiqueArticle(articleId, paragraphNum, sentenceNum, quote, analysis, errorType, biasToken){
+	critiqueArticle(userName, articleId, paragraphNum, sentenceNum, quote, analysis, errorType, biasToken){
 		let relativeUrl = "/articles/" + articleId + "/critique"
 		let body = {}
 		body.paragraph = paragraphNum
@@ -171,6 +171,7 @@ export default class BiasCheckerService{
 		body.quote = quote
 		body.analysis = analysis
 		body.errorType = errorType
+		body.userName = userName
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
 			return result

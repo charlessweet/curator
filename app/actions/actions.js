@@ -22,6 +22,7 @@ export const indicatePageWasLoaded = (page) => {
  * @param history Object used to navigate from one page to another (accessible in props usually).
  */
 export const changePage = (fromPage, toPage, history) => {
+	history.push("/") //reposition at root - hacky, i know
 	history.push(toPage)
 	return{
 		type: actionTypes.CHANGE_PAGE,
@@ -63,6 +64,7 @@ export const loginJwt = (jwt) =>{
 	//sync jwt in browser with current jwt
 	localStorage.setItem(new Settings().biasCheckerJwtKey, jwt)
 	let jwtd = Auth.decodeJwt(jwt)
+	console.log(jwtd)
 	if(jwtd !== null){
 		return {
 			type: actionTypes.LOGIN,
@@ -295,21 +297,21 @@ export const reviewArticle = (article, history) => {
 	}
 }
 
-const critiqueArticle = (article) => {
+const critiqueArticle = (articleWithNewCritique) => {
 	return {
 		type: actionTypes.ADD_ARTICLE_CRITIQUE,
 		id: 14,
-		article: article
+		article: articleWithNewCritique
 	}
 }
 
-export const critiqueArticleAsync = (articleId, critique, settings, userInfo) => {
+export const critiqueArticleAsync = (articleId, critique, settings) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
-		return biasCheckerService.critiqueArticle(articleId, critique.paragraphIndex, critique.sentenceIndex, critique.quote, 
+		return biasCheckerService.critiqueArticle(critique.userName, articleId, critique.paragraphIndex, critique.sentenceIndex, critique.quote, 
 			critique.analysis, critique.errorType)
-		.then((article) =>{
-			dispatch(critiqueArticle(article));
+		.then((articleWithNewCritique) =>{
+			dispatch(critiqueArticle(articleWithNewCritique));
 		})
 		.catch((error) => {
 			console.log("critiqueArticleAsync", error);
@@ -342,7 +344,7 @@ export const changePasswordAsync = (newPassword, settings) => {
 	}
 }
 
-const createAccount = (data) =>{
+const createAccount = (data, email) =>{
 	return {
 		type:actionTypes.CREATE_MEMBER,
 		id: 17,
@@ -355,8 +357,8 @@ export const createAccountAsync = (settings, email, password, history) => {
 	return function(dispatch){
 		return biasCheckerService.createAccount(email, password)
 		.then((data) => {
-			if(data.error !== undefined){
-				dispatch(createAccount(data))
+			if(data.error === undefined){
+				dispatch(createAccount(data, email))
 			}else{
 				dispatch(failCall(data))
 			}
@@ -415,4 +417,21 @@ export const denyRoleAsync = (targetMemberId, targetRoleId, settings) => {
 			dispatch(failCall(error))
 		})
 	}	
+}
+
+export const notifyUser = (message) => {
+	return {
+		type: actionTypes.NOTIFY_USER,
+		id: 20,
+		message: message
+	}
+}
+
+export const clearUserNotification = (triggerGroup, triggerState) => {
+	return {
+		type: actionTypes.CLEAR_NOTIFY_USER,
+		id: 21,
+		triggerGroup: triggerGroup,
+		triggerState: triggerState
+	}
 }

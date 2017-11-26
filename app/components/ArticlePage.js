@@ -39,6 +39,7 @@ class ArticlePageUnwrapped extends React.Component{
       && subStateA.articles !== undefined
       && subStateB.articles !== undefined
       && subStateA.articles.equals(subStateB.articles)
+      return evaluated
   }
 
   componentWillMount(){

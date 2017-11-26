@@ -4,8 +4,9 @@ import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
-import {createAccountAsync} from '../actions/actions'
+import {createAccountAsync, notifyUser, changePage} from '../actions/actions'
 import {connect} from 'react-redux'
+import UserNotification from './UserNotification'
 
 class CreateAccount extends React.Component{
 	constructor(props){
@@ -16,6 +17,7 @@ class CreateAccount extends React.Component{
 		this.history = props.history
 		this.validation = {}
 		this.createAccount = props.createAccount
+		this.notifyUser = props.notifyUser
 		this.settings = props.settings
 	}
 
@@ -40,9 +42,6 @@ class CreateAccount extends React.Component{
 	    	let state = store.getState()
 			this.hasMounted = true		
 		}
-	}
-
-	componentDidMount(){
 	}
 
 	validate(){
@@ -81,10 +80,12 @@ class CreateAccount extends React.Component{
 					    <div className="row">
 					        <div className="input-field col s12 white-text">
 					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Create!"}</button>&nbsp&nbsp
-					        </div>	  	
+					        </div>
 					    </div>
 			  		</form>
 		  		</CardText>
+		  		<UserNotification 
+		  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created"/>
 		  	</Card>	
 	}
 }
