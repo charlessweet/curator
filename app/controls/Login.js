@@ -75,14 +75,7 @@ class Login extends React.Component{
 					<TextField id="password" label="Password" type="Password" fullWidth={true} hintText="Password"  onChange={this.handleInputChange}/><br/>
 					<br/>
 					<RaisedButton label="Log In" style={barStyle} fullWidth={true} primary={true} onClick={this.handleSubmit} /><br/><br/>
-					<Divider />
-					<center>
-					<br/><br/>
-					<div>No account?</div>
-					<Link to="/create">Create an Account</Link>
-					</center>
 				</Paper>
-				<Divider />
 				<UserNotification triggerGroup="notify" triggerState="loginFailed" message="Login failed" />
 		  	</div>			
 	}
