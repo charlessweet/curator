@@ -9,6 +9,7 @@ import ProfileInfo from '../controls/ProfileInfo'
 import RoleRequest from '../controls/RoleRequest'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
+import LinkToFacebook from '../controls/LinkToFacebook'
 
 class ProfilePageUnwrapped extends React.Component{
 	constructor(props){
@@ -28,6 +29,9 @@ class ProfilePageUnwrapped extends React.Component{
         </div>
         <div className="container">
           <ChangePasswordCard userInfo={this.userInfo}/>
+        </div>
+        <div className = "container">
+          <LinkToFacebook />
         </div>
       </div>
       )

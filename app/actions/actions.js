@@ -4,6 +4,8 @@ import BiasCheckerService from "../services/BiasCheckerService"
 import Settings from "../model/Settings"
 import Auth from '../model/Auth'
 
+const settings = new Settings()
+
 export const indicatePageWasLoaded = (page) => {
 	return{
 		type: actionTypes.SET_PAGE,
@@ -64,7 +66,6 @@ export const loginJwt = (jwt) =>{
 	//sync jwt in browser with current jwt
 	localStorage.setItem(new Settings().biasCheckerJwtKey, jwt)
 	let jwtd = Auth.decodeJwt(jwt)
-	console.log(jwtd)
 	if(jwtd !== null){
 		return {
 			type: actionTypes.LOGIN,
@@ -75,14 +76,14 @@ export const loginJwt = (jwt) =>{
 			roles: jwtd.scope
 		}		
 	}else{
+		console.log('made it this far')
 		return failCall({
 			message: "Invalid client-side JWT"
-		})
+		}, actionTypes.LOGIN_FAILED)
 	}
 }
 
 const loadArticles = (articles) => {
-	console.log("loadArticles", articles)
 	return {
 		type: actionTypes.SHOW_ARTICLES,
 		id: 7,
@@ -208,12 +209,15 @@ const analyzeArticle = (article) => {
 	}
 }
 
-const failCall = (error) => {
-	return {
-		type: actionTypes.FAILED,
+const failCall = (error, actionType) => {
+	console.log(error,actionType)
+	var action = {
+		type: (actionType !== undefined ? actionType : actionTypes.FAILED),
 		id: 16,
 		error: error
 	}
+	console.log(action)
+	return action
 }
 
 export const analyzeArticleAsync = (label, link, settings, userInfo, history) => {
@@ -435,3 +439,30 @@ export const clearUserNotification = (triggerGroup, triggerState) => {
 		triggerState: triggerState
 	}
 }
+
+const linkToFacebook = (data) => {
+	console.log('linkToFacebook', data)
+	return {
+		type: actionTypes.LINK_TO_FACEBOOK,
+		id: 22,
+		data: data
+	}
+}
+
+export const linkToFacebookAsync = (facebookToken) =>{
+	//log user in to biaschecker and retrieve biasToken, keep details
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
+	return function(dispatch) {
+		return biasCheckerService.linkToFacebook(facebookToken)
+		.then((data) => {
+			if(data.error === undefined){
+				dispatch(linkToFacebook(data))
+			}else{
+				dispatch(failCall(data))
+			}
+		})
+		.catch((error) => {
+			dispatch(failCall(error))
+		})
+	}
+};

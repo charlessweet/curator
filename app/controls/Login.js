@@ -10,6 +10,7 @@ import Divider from 'material-ui/Divider'
 import RaisedButton from 'material-ui/RaisedButton'
 import {connect} from 'react-redux'
 import {loginBasicAsync, changePage} from '../actions/actions'
+import UserNotification from './UserNotification'
 
 class Login extends React.Component{
 	constructor(props){
@@ -61,6 +62,7 @@ class Login extends React.Component{
 	}
 
 	render(){
+		console.log(store.getState())
 	    let barStyle = {
 	      "backgroundColor": "#3F51B5",
 	      "color": "white"
@@ -81,6 +83,7 @@ class Login extends React.Component{
 					</center>
 				</Paper>
 				<Divider />
+				<UserNotification triggerGroup="notify" triggerState="loginFailed" message="Login failed" />
 		  	</div>			
 	}
 }

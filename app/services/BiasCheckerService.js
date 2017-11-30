@@ -177,4 +177,15 @@ export default class BiasCheckerService{
 			return result
 		})
 	}
+
+	linkToFacebook(facebookToken){
+		console.log("linkToFacebook", facebookToken)
+		let relativeUrl = "/my/facebook"
+		let body = {}
+		body.facebookUserId = facebookToken.userID
+		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result
+		})
+	}
 }

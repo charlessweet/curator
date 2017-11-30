@@ -21,6 +21,7 @@ class UserNotification extends React.Component{
 	}
 
 	selectState(superState){
+		//console.log(superState)
 		return { 
 		  open:(superState[this.triggerGroup] !== undefined && superState[this.triggerGroup][this.triggerState] !== undefined && superState[this.triggerGroup][this.triggerState])
 		}
@@ -50,10 +51,13 @@ class UserNotification extends React.Component{
 	handleRequestClose(event) {
 		this.setState({"open":false})
 		this.clearMessage(this.triggerGroup, this.triggerState)
-		this.closeAction()
+		if(this.closeAction !== undefined){
+			this.closeAction()			
+		}
 	}
 
 	render(){
+		//console.log(this.state.open)
         return <Snackbar
           open={this.state.open}
           message={this.message}

@@ -132,15 +132,14 @@ const failure = (state = {}, action) => {
 //effects
 const notify = (state={}, action) => {
   switch(action.type){
-    case actionTypes.CREATE_MEMBER:
-      let ns = Object.assign({}, state, {
-        newAccountCreated: true
-      })
-      return ns;
     case actionTypes.CLEAR_NOTIFY_USER:
       let ns2 = Object.assign({}, state)
       ns2[action.triggerState] = false
       return ns2
+    case actionTypes.CREATE_MEMBER:
+      return Object.assign({}, state, { newAccountCreated: true })
+    case actionTypes.LOGIN_FAILED:
+      return Object.assign({}, state, { "loginFailed": true })
     default:
       return state
   }  

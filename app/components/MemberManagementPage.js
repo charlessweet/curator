@@ -58,7 +58,7 @@ class MemberManagementPageUnwrapped extends React.Component{
 
   render(){
       let state = this.state;   
-      console.log("manstate", state)   
+//      console.log("manstate", state)   
       return (
       <div id="philosopher-ruler-page">
         <Menu active={"ruler"} />

@@ -22,7 +22,7 @@ class TestPageUnwrapped extends React.Component{
   }
 
 	render(){
-    console.log("TestPageUnwrapped_render", this.state)
+//    console.log("TestPageUnwrapped_render", this.state)
       return (<ArticleReviewModal articleId={this.state.article.id} />)
   }
 };
