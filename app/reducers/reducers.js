@@ -107,7 +107,6 @@ const memberList = (state = {"members":new MemberList([])}, action) => {
 }
 
 const page = (state = {"current":"LOGIN"}, action) => {
-  //console.log("page", action);
   switch(action.type){
     case actionTypes.SET_PAGE:
       return Object.assign({}, state, {"current": action.currentPage})
@@ -123,6 +122,8 @@ const failure = (state = {}, action) => {
     case actionTypes.FAILED:
       let lstate = Object.assign({}, state, {"error": action.error})
       return lstate
+    case actionTypes.CLEAR_ERROR:
+      return {}
     default:
       return state
   }

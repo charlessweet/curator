@@ -154,7 +154,7 @@ export const createBiasCheckerAccountFromFacebookAsync = (settings, userInfo, em
 }
 
 const loadRoleRequests = (members) => {
-	console.log("loadRoleRequests", members)
+//	console.log("loadRoleRequests", members)
 	return {
 		type: actionTypes.LOAD_ROLE_REQUESTS,
 		id: 5,
@@ -210,7 +210,7 @@ const analyzeArticle = (article) => {
 }
 
 const failCall = (error, actionType) => {
-	console.log(error,actionType)
+//	console.log(error,actionType)
 	var action = {
 		type: (actionType !== undefined ? actionType : actionTypes.FAILED),
 		id: 16,
@@ -299,6 +299,24 @@ export const reviewArticle = (article, history) => {
 		id:12,
 		article: article
 	}
+}
+
+export const reviewArticleAsync = (articleId, history) => {
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	return function(dispatch){
+		return biasCheckerService.loadArticle(articleId)
+		.then((data) =>{
+			console.log("reviewArticleAsync", data)
+			if(data.error !== undefined){
+				dispatch(failCall(data))
+			}else{
+				dispatch(reviewArticle(data, history))				
+			}
+		})
+		.catch((error) => {
+			console.log("reviewArticleAsync", error);
+		})
+	}	
 }
 
 const critiqueArticle = (articleWithNewCritique) => {
@@ -441,7 +459,6 @@ export const clearUserNotification = (triggerGroup, triggerState) => {
 }
 
 const linkToFacebook = (data) => {
-	console.log('linkToFacebook', data)
 	return {
 		type: actionTypes.LINK_TO_FACEBOOK,
 		id: 22,
@@ -465,4 +482,11 @@ export const linkToFacebookAsync = (facebookToken) =>{
 			dispatch(failCall(error))
 		})
 	}
-};
+}
+
+export const clearError = () => {
+	return {
+		type: actionTypes.CLEAR_ERROR,
+		id: 23
+	}
+}

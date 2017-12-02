@@ -24,7 +24,7 @@ class LinkToFacebookCard extends React.Component{
 
 	processFacebookLogin(facebookResponse, settings){
 		this.facebookToken = facebookResponse
-		console.log(facebookResponse)
+		//console.log(facebookResponse)
 		if(facebookResponse.status === undefined){
 			this.setState({"showFBLogin" : false})			
 		}
@@ -32,7 +32,7 @@ class LinkToFacebookCard extends React.Component{
 	}
 
 	handleSubmit(){
-		console.log("clicked")
+		//console.log("clicked")
 		this.linkToFacebook(this.facebookToken)
 	}
 

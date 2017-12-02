@@ -62,7 +62,6 @@ class Login extends React.Component{
 	}
 
 	render(){
-		console.log(store.getState())
 	    let barStyle = {
 	      "backgroundColor": "#3F51B5",
 	      "color": "white"

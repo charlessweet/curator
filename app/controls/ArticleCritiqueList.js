@@ -31,7 +31,7 @@ const ArticleCritiqueList = (props) => {
 	let getAvatarStyle = (critique) => {
 		return { backgroundColor: "#" + intToRGB(hashCode("" + critique.userName)) }
 	}
-	console.log("ArticleCritiqueList", props.critiques)
+	//console.log("ArticleCritiqueList", props.critiques)
 	return (
 	<div id="my-posts" className="container">
 	<p>Displaying {(props.critiques !== undefined ? props.critiques.length : 0)} critiques.</p>

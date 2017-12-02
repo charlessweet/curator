@@ -99,7 +99,7 @@ export default class BiasCheckerService{
 		let relativeUrl = "/roles/requests";
 		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(rows){
-			console.log("BiasCheckerService_loadMembersForApproval",rows);
+//			console.log("BiasCheckerService_loadMembersForApproval",rows);
 			return rows;
 		})
 	}
@@ -179,11 +179,18 @@ export default class BiasCheckerService{
 	}
 
 	linkToFacebook(facebookToken){
-		console.log("linkToFacebook", facebookToken)
 		let relativeUrl = "/my/facebook"
 		let body = {}
 		body.facebookUserId = facebookToken.userID
 		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result
+		})
+	}
+
+	loadArticle(articleId){
+		let relativeUrl = "/articles/" + articleId
+		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(result){
 			return result
 		})

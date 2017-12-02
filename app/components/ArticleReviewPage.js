@@ -12,6 +12,7 @@ import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
 import ReviewResultsInfo from '../controls/ReviewResultsInfo'
 import ReviewDetailsCard from '../controls/ReviewDetailsCard'
+import {reviewArticleAsync, changePage} from '../actions/actions'
 
 class ArticleReviewPageUnwrapped extends React.Component{
 	constructor(props){
@@ -19,10 +20,13 @@ class ArticleReviewPageUnwrapped extends React.Component{
     this.settings = props.settings
     this.userInfo = new UserIdentity(Auth.getDecodedJwt())
     this.articleId = props.match.params.articleId
+    this.reviewArticle = props.reviewArticle
+    this.history = props.history
+    this.changePage = props.changePage
 	}
   
   selectState(superState){
-    return { article:superState.articleList.currentArticle, showReview: false };
+    return { article:superState.articleList.currentArticle, showReview: false, error:superState.failure.error };
   }
 
   compareState(subStateA, subStateB){
@@ -47,10 +51,26 @@ class ArticleReviewPageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
+    //check for auth error and redirect if we can't log in
+    if(state.error !== undefined){
+      if(state.error.httpCode === 401){
+        self.changePage("article", "", self.history)
+      }
+    }
+
+    //
+    if(self.state.article === undefined && this.hasLoaded === undefined){
+      self.reviewArticle(self.articleId, self.history)
+      this.hasLoaded = true
+    }
   }
 
 	render(){
-      let index = 0
+    if(this.state.error !== undefined && this.state.error == "Failed to validate JWT"){
+      return null
+    }
+    let index = 0
+    if(this.state.article !== undefined){
       return (
         <div id="article-review-page" className="container">
           <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
@@ -58,12 +78,16 @@ class ArticleReviewPageUnwrapped extends React.Component{
           <ReviewResultsInfo />
           <ReviewDetailsCard article={this.state.article} />
         </div>
-      )
+      )        
+    }else{
+      return null
+    }
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    reviewArticle: (articleId, history) => dispatch(reviewArticleAsync(articleId, history))
   }
 }
 

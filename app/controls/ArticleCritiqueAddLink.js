@@ -91,11 +91,15 @@ class ArticleCritiqueAddLink extends React.Component{
 					<a onClick={this.handleSubmit}>save</a>&nbsp;&nbsp;<a onClick={this.handleCancel}>cancel</a>
 				</div>
 		}else{
-			return <div>
-				<Divider />
-				<a onClick={this.handleCritiqueClick}>add critique</a>
-				<SnackBar open={this.state.showConfirmation} message="Analysis saved" autoHideDuration={400} onRequestClose={this.handleConfirmationClosed} />
-			</div>
+			if(this.userInfo.roles.indexOf("guardian") > -1){
+				return <div>
+					<Divider />
+					<a onClick={this.handleCritiqueClick}>add critique</a>
+					<SnackBar open={this.state.showConfirmation} message="Analysis saved" autoHideDuration={400} onRequestClose={this.handleConfirmationClosed} />
+				</div>
+			}else{
+				return null
+			}
 		}
 	}
 }
