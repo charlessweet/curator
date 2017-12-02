@@ -4,8 +4,9 @@ import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
-import {createAccountAsync} from '../actions/actions'
+import {createAccountAsync, notifyUser, changePage} from '../actions/actions'
 import {connect} from 'react-redux'
+import UserNotification from './UserNotification'
 
 class CreateAccount extends React.Component{
 	constructor(props){
@@ -13,10 +14,13 @@ class CreateAccount extends React.Component{
 		this.state = {}
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
+		this.sendToRoot = this.sendToRoot.bind(this)
 		this.history = props.history
 		this.validation = {}
 		this.createAccount = props.createAccount
+		this.notifyUser = props.notifyUser
 		this.settings = props.settings
+		this.changePage = props.changePage
 	}
 
 	handleInputChange(event){
@@ -42,7 +46,8 @@ class CreateAccount extends React.Component{
 		}
 	}
 
-	componentDidMount(){
+	sendToRoot(){
+		this.changePage("account", "/", this.history)
 	}
 
 	validate(){
@@ -81,17 +86,20 @@ class CreateAccount extends React.Component{
 					    <div className="row">
 					        <div className="input-field col s12 white-text">
 					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Create!"}</button>&nbsp&nbsp
-					        </div>	  	
+					        </div>
 					    </div>
 			  		</form>
 		  		</CardText>
+		  		<UserNotification 
+		  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created" closeAction={this.sendToRoot}/>
 		  	</Card>	
 	}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    createAccount: (settings, email, password, history) => dispatch(createAccountAsync(settings, email, password, history))
+    createAccount: (settings, email, password, history) => dispatch(createAccountAsync(settings, email, password, history)),
+    changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history))
   }
 }
 

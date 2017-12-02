@@ -94,8 +94,9 @@ export default class BiasCheckerService{
 			return res
 		})
 	}
+
 	loadMembersForApproval(biasToken){
-		let relativeUrl = "/members/promotions/pending?biasToken=" + biasToken;
+		let relativeUrl = "/roles/requests";
 		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(rows){
 //			console.log("BiasCheckerService_loadMembersForApproval",rows);
@@ -103,15 +104,34 @@ export default class BiasCheckerService{
 		})
 	}
 
-	addRole(memberId, targetRole, biasToken){
-		let relativeUrl = "/members/promotions/pending?biasToken=" + biasToken
+	//for me only
+	requestRole(memberId, targetRole){
+		let relativeUrl = "/my/roles"
 		let body ={}
 		body.targetMemberId = memberId
-		body.targetRole = targetRole
+		body.roleName = targetRole
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
 			return result;
 		})
+	}
+
+	approveRole(memberId, targetRole){
+		let relativeUrl = "/members/" + memberId + "/roles"
+		let body = {}
+		body.roleName = targetRole
+		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result;
+		})
+	}
+
+	denyRole(targetMemberId, targetRole){
+		let relativeUrl = "/roles/" + targetRole + "/requests/" + targetMemberId
+		return this.callBiasChecker(relativeUrl, "DELETE", undefined)
+		.then(function(result){
+			return result;
+		})		
 	}
 
 	changePassword(newPassword){
@@ -142,8 +162,8 @@ export default class BiasCheckerService{
 		})
 	}
 
-	critiqueArticle(articleId, paragraphNum, sentenceNum, quote, analysis, errorType, biasToken){
-		let relativeUrl = "/articles/" + articleId + "/critique?biasToken=" + biasToken
+	critiqueArticle(userName, articleId, paragraphNum, sentenceNum, quote, analysis, errorType, biasToken){
+		let relativeUrl = "/articles/" + articleId + "/critique"
 		let body = {}
 		body.paragraph = paragraphNum
 		body.sentence = sentenceNum
@@ -151,7 +171,26 @@ export default class BiasCheckerService{
 		body.quote = quote
 		body.analysis = analysis
 		body.errorType = errorType
+		body.userName = userName
 		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result
+		})
+	}
+
+	linkToFacebook(facebookToken){
+		let relativeUrl = "/my/facebook"
+		let body = {}
+		body.facebookUserId = facebookToken.userID
+		return this.callBiasChecker(relativeUrl, "POST", body)
+		.then(function(result){
+			return result
+		})
+	}
+
+	loadArticle(articleId){
+		let relativeUrl = "/articles/" + articleId
+		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(result){
 			return result
 		})

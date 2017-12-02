@@ -11,6 +11,10 @@ import Paper from 'material-ui/Paper'
 import Login from '../controls/Login'
 import AppBar from 'material-ui/AppBar'
 import pageTypes from '../pageTypes'
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import worldImg from '../images/world.jpg'
+import communityImg from '../images/community.jpg'
+import joinImg from '../images/join.jpg'
 
 class LoginUnwrapped extends React.Component{
 	constructor(props){
@@ -69,40 +73,39 @@ class LoginUnwrapped extends React.Component{
         <div>
           <AppBar showMenuIconButton={false} title="Curator" iconElementRight={<span>Socializing news analysis</span>} />
           <Login target={pageTypes.STREAM} />
+          <br/><br/>
         </div>      
-        <br/>
-        <br/>    
-        <Paper style={this.style} zDepth={0}>
-            <h2 className="center indigo-text"><i className="material-icons">flash_on</i></h2>
-            <h5 className="center">Truth in a post-truth world.</h5>
-            <p className="light">
-              Even on the internet, reputation matters.<br/><br/>If you edit an article in Wikipedia, the most relevant source of encyclopedic knowledge
-              on the planet, there are multiple layers of protections in place for users to police themselves and others, all driven by reputation.  In a post-truth world, people still care about reputation, perhaps
-              even more so than before.<br/><br/>Bias Checker began as a site for checking articles for bias, but has evolved into a reputation system for individuals who, like you, act as
-              reporters in disclosing information to others to consume.
-            </p>          
-        </Paper>
-        <Paper style={this.style} zDepth={2}>
-            <h2 className="center indigo-text"><i className="material-icons">group</i></h2>
-            <h5 className="center">Of the people, by the people...</h5>
-            <p className="light">
-              Algorithms are awesome. There are many, many things that algorithms are good at. Determining intent isn't one of them.<br/><br/><br/>
-              Algorithms can't tell you if an article is true - or not. Algorithms can't detect bias tucked away in quotes, within quotes. Algorithms
-              can't determine what's missing from a quote taken out of context.<br/><br/>Curator leverages people to do what people are good at, and algorithms to do what 
-              algorithms are good at.
-            </p>            
-        </Paper>
-        <Paper style={this.style} zDepth={0}>
-            <h2 className="center indigo-text"><i className="material-icons">settings</i></h2>
-            <h5 className="center">How do you use it?</h5>
-            <p className="light">
-              Create a Curator account. Curator uses Facebook as the source of articles. When you join, Curator will immediately start pulling
-              in data you post to your facebook feed. This data is added to the 'stream'.  Guardians (and you can be a Guardian for anyone's 
-              articles but your own) will then analyze different aspects of the article you shared (context, logic, truthfulness), and give you feedback on what that score is.  That 
-              feedback will be shared anonymously with all other users of the community.  Curious about an article? You can also bypass Facebook
-              and post your article directly within Curator.
-            </p>        
-        </Paper>
+        <Card>
+          <CardMedia overlay={<CardTitle title="Truth" subtitle="matters" />} >
+            <img src={worldImg} alt="" />
+          </CardMedia>
+          <CardText>
+                <p>And it isn't relative. By definition, truth is foundational. It's the thing that you build conversations, agreements, 
+                and make business deals on top of.</p>
+          </CardText>
+        </Card>
+        <Card>
+          <CardMedia overlay={<CardTitle title="Community" subtitle="matters" />} >
+            <img src={communityImg} alt="" />
+          </CardMedia>
+          <CardText>
+                <p>Be part of the Curator community by becoming a Guardian. Curator Guardians are the keepers of truth. Analyze 
+                articles for logical and factual errors, and tell the world.</p>
+          </CardText>
+        </Card>
+        <Card>
+          <CardMedia overlay={<CardTitle title="Join" subtitle="the solution" />} >
+            <img src={joinImg} alt="" />
+          </CardMedia>
+          <CardText>
+                <p>Sign up for a Curator account now, and become part of the solution.</p>
+          </CardText>
+          <CardActions>
+            <center>
+              <Link to="/create">Create an Account</Link>
+            </center>
+          </CardActions>
+        </Card>
   		</div>
   	);
 	}

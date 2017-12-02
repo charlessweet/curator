@@ -8,7 +8,7 @@ import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import {loadStreamAsync, reviewArticle, loginJwt, changePage} from '../actions/actions'
+import {loadStreamAsync, reviewArticle, changePage, clearError} from '../actions/actions'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
 
@@ -19,7 +19,8 @@ class StreamPageUnwrapped extends React.Component{
     this.userInfo = new UserIdentity(Auth.getDecodedJwt())
     this.reviewArticle = props.reviewArticle
     this.changePage = props.changePage
-    this.history = props.history    
+    this.history = props.history 
+    this.clearError = props.clearError  
 	}
   
   selectState(superState){
@@ -30,10 +31,10 @@ class StreamPageUnwrapped extends React.Component{
     }
   }
 
-  compareState(subStateA, subStateB){
-    let evaluated = subStateA.articles !== undefined
-      && subStateB.articles !== undefined
-      && subStateA.articles.equals(subStateB.articles)
+  areEqual(subStateA, subStateB){
+    let evaluated = subStateA.articles === subStateB.articles
+      && subStateA.error === subStateB.error
+      
     return evaluated
   }
 
@@ -43,7 +44,7 @@ class StreamPageUnwrapped extends React.Component{
   }
 
   componentDidMount(){
-    this.observer = new StoreObserver(this, store, this.selectState, this.loadComponent, this.compareState)
+    this.observer = new StoreObserver(this, store, this.selectState, this.loadComponent, this.areEqual)
   }
 
   componentWillUnmount(){
@@ -54,6 +55,7 @@ class StreamPageUnwrapped extends React.Component{
     self.setState(state);
     if(state.error !== undefined){
       if(state.error.httpCode === 401){
+        self.clearError()
         self.changePage("stream", "", self.history)
       }
     }    
@@ -72,7 +74,6 @@ class StreamPageUnwrapped extends React.Component{
   }
 
 	render(){
-//      console.log("articles", this.state.articles.articles[0])
       return (<div id="bookmark-page">
         <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
         <StreamInfo userInfo={this.userInfo}/>
@@ -91,7 +92,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     loadStream:(settings, userInfo) => dispatch(loadStreamAsync(settings, userInfo)),
     reviewArticle: (article, history) => dispatch(reviewArticle(article, history)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
-    loginJwt: (jwt) => dispatch(loginJwt(jwt))
+    clearError: () => dispatch(clearError())
   }
 }
 

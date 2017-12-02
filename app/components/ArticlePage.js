@@ -6,39 +6,36 @@ import store from '../store'
 import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
-import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, loginJwt} from '../actions/actions'
+import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, clearError} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 import Auth from '../model/Auth'
+import UserIdentity from '../model/UserIdentity'
 
 class ArticlePageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
-    if(props.userInfo === undefined){
-      props.loginJwt(Auth.getJwt())
-    }    
+    this.userInfo = new UserIdentity(Auth.getDecodedJwt())
     this.settings = props.settings
     this.analyzeArticle = props.analyzeArticle
     this.searchForArticle = props.searchForArticle
     this.changePage = props.changePage
     this.history = props.history
+    this.clearError = props.clearError
 	}
   
   selectState(superState){
     return { 
-      articles:superState.articleList.articles, 
-      identity: superState.identity, 
+      articles:superState.articleList.articles,
       bookmark:superState.articleList.bookmark,
       error: superState.failure.error
     };
   }
 
-  compareState(subStateA, subStateB){
-    let evaluated = subStateA.identity !== undefined
-      && subStateB.identity !== undefined
-      && subStateA.identity.userInfo.biasToken == subStateB.identity.userInfo.biasToken
-      && subStateA.articles !== undefined
-      && subStateB.articles !== undefined
-      && subStateA.articles.equals(subStateB.articles)
+  areEqual(subStateA, subStateB){
+    let evaluated = subStateA.articles === subStateB.articles
+      && subStateA.error === subStateB.error
+      && subStateA.bookmark === subStateB.bookmark
+      return evaluated
   }
 
   componentWillMount(){
@@ -47,22 +44,26 @@ class ArticlePageUnwrapped extends React.Component{
   }
 
   componentDidMount(){
-    this.observer = new StoreObserver(this, store, this.selectState, this.loadComponent, this.compareState)
+    this.observer = new StoreObserver(this, store, this.selectState, this.loadComponent, this.areEqual)
   }
 
   componentWillUnmount(){
-    this.observer.unsubscribe();
+    if(this.observer !== undefined){
+      this.observer.unsubscribe();
+    }
   }
 
   loadComponent(self, state){
     self.setState(state);
+//    console.log("loadComponent", state)
     if(state.error !== undefined){
       if(state.error.httpCode === 401){
+        self.clearError()
         self.changePage("article", "", self.history)
       }
     }
-    if(state.identity.userInfo !== undefined && state.articles.length == 0 && self.hasLoaded === undefined){
-      self.props.loadArticles(self.settings, state.identity.userInfo);
+    if(self.userInfo !== undefined && state.articles.length == 0 && self.hasLoaded === undefined){
+      self.props.loadArticles(self.settings, self.userInfo);
       self.hasLoaded = true;  
     }
 
@@ -78,16 +79,16 @@ class ArticlePageUnwrapped extends React.Component{
 	render(){
     if(this.state.articles.length == 0){
       return (<div id="bookmark-page">
-        <Menu active="articles" settings={this.settings} userInfo={this.state.identity.userInfo} pageSearch={this.searchForArticle}/>
-        <ArticlePost settings={this.settings} userInfo={this.state.identity.userInfo} analyzeArticle={this.analyzeArticle}/>
+        <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+        <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
       </div>
       );
     }else{
     return (
       <div id="bookmark-page">
-        <Menu active="articles" settings={this.settings} userInfo={this.state.identity.userInfo} pageSearch={this.searchForArticle}/>
-        <ArticlePost settings={this.settings} userInfo={this.state.identity.userInfo} analyzeArticle={this.analyzeArticle}/>
-        <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.state.identity.userInfo}/>
+        <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+        <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
+        <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo}/>
       </div>
     );}
   }
@@ -100,14 +101,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     analyzeArticle: (label, link, settings, userInfo) => dispatch(analyzeArticleAsync(label, link, settings, userInfo)),
     searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
-    loginJwt: (jwt) => dispatch(loginJwt(jwt))
+    clearError: () => dispatch(clearError())
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    settings: state.settings,
-    userInfo: state.identity.userInfo
+    settings: state.settings
   }
 }
 

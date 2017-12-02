@@ -5,18 +5,28 @@ import Member from '../../model/Member'
 import store from '../../store'
 
 const MemberCardList = (props) => {
+	let id = 0 //hack until i enforce better business rules
 	if(props.members.length >0)
 		return (
 		<div id="requests" className="container">
 		{
-			props.members.map((mem)=>{
-				let member = new Member(mem.memberId, mem.email, mem.require_guardian);
-				return <MemberCard settings={props.settings} userInfo={props.userInfo} approve={props.approve} key={mem.memberId} member={mem} />
+			props.members.members.map((mem)=>{
+				let member = new Member(mem.memberId, mem.requestDate, mem.requestor, mem.roleName);
+				return <MemberCard settings={props.settings} userInfo={props.userInfo} approve={props.approve} deny={props.deny} key={id++} member={mem} />
 			})
 		}
 		</div>)
 	else
-		return (<div id="requests"><h4>This queue is empty</h4><div>Requests to become moderators will go here.</div></div>)
+		return (<div className="container">
+            <div className="card">
+                <div className="card-content">
+                    <span className="card-title">This Queue is Empty</span>
+                    <p>
+                    Requests to become moderators will populate this list.
+                    </p>
+                </div>
+            </div>
+        </div>)
 }
 
 export default MemberCardList;

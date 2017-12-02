@@ -5,29 +5,36 @@ import { Link, withRouter } from 'react-router-dom'
 import Menu from '../controls/Menu'
 import store from '../store'
 import StoreObserver from '../services/StoreObserver'
-import ArticleReviewModal from '../controls/ArticleReviewModal'
 import {Modal} from 'react-materialize'
 import {critiqueArticleAsync} from '../actions/actions'
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import UserIdentity from '../model/UserIdentity'
+import Auth from '../model/Auth'
+import ReviewResultsInfo from '../controls/ReviewResultsInfo'
+import ReviewDetailsCard from '../controls/ReviewDetailsCard'
+import {reviewArticleAsync, changePage} from '../actions/actions'
 
 class ArticleReviewPageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
     this.settings = props.settings
-    this.userInfo = props.userInfo
+    this.userInfo = new UserIdentity(Auth.getDecodedJwt())
     this.articleId = props.match.params.articleId
+    this.reviewArticle = props.reviewArticle
+    this.history = props.history
+    this.changePage = props.changePage
 	}
   
   selectState(superState){
-    return { article:superState.articleList.currentArticle, identity: superState.identity, showReview: false };
+    return { article:superState.articleList.currentArticle, showReview: false, error:superState.failure.error };
   }
 
   compareState(subStateA, subStateB){
     let evaluated = subStateA.identity !== undefined
       && subStateB.identity !== undefined
-      && subStateA.identity.userInfo.biasToken === subStateB.identity.userInfo.biasToken
-      && subStateA.article !== undefined
-      && subStateB.article !== undefined
-      && subStateA.article.id === subStateB.article.id
+      && subStateA.articles !== undefined
+      && subStateB.articles !== undefined
+      && subStateA.articles.equals(subStateB.articles)
   }
 
   componentWillMount(){
@@ -44,48 +51,43 @@ class ArticleReviewPageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
+    //check for auth error and redirect if we can't log in
+    if(state.error !== undefined){
+      if(state.error.httpCode === 401){
+        self.changePage("article", "", self.history)
+      }
+    }
+
+    //
+    if(self.state.article === undefined && this.hasLoaded === undefined){
+      self.reviewArticle(self.articleId, self.history)
+      this.hasLoaded = true
+    }
   }
 
 	render(){
-//      console.log(this.state.article)
-      let index = 0
-      return (<div id="bookmark-page">
-        <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
-        <Link to="/stream"><i className="material-icons">arrow_back</i></Link>
-        <br/> <br/>
-        <div className="container">
-          <h2>
-            {this.state.article.title}
-          </h2>
-          <p>
-            {this.state.article.summary}
-          </p>
-          <div>
-            <a target="_blank" href={this.state.article.link}>Display Article In Separate Tab</a>
-          </div>
-          <ul className="collection with-header">
-            <li className="collection-header"><h4>Problems with Article</h4> <ArticleReviewModal articleId={this.state.article.id} /></li>
-            {
-              (this.state.article.critiques !== undefined ? 
-              this.state.article.critiques.sort((x,y)=>{ return (x.paragraph * 100 + x.sentence) - (y.paragraph * 100 + y.sentence) })
-                .map((c) => {
-                return <li className="collection-item" key={index++}>
-                    <p className="secondary-content chip">{c.errorType}</p>
-                    <p>From paragraph {c.paragraph}, sentence {c.sentence}...</p>
-                    <p><i>...{c.quote}...</i></p>
-                    <p><b>{c.analysis}</b></p> 
-                </li>
-              }) : <li className="collection-item">No critiques found.</li>)
-            }
-          </ul>
+    if(this.state.error !== undefined && this.state.error == "Failed to validate JWT"){
+      return null
+    }
+    let index = 0
+    if(this.state.article !== undefined){
+      return (
+        <div id="article-review-page" className="container">
+          <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
+          <Link to="/stream"><i className="material-icons">arrow_back</i></Link>
+          <ReviewResultsInfo />
+          <ReviewDetailsCard article={this.state.article} />
         </div>
-      </div>
-      )
+      )        
+    }else{
+      return null
+    }
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    reviewArticle: (articleId, history) => dispatch(reviewArticleAsync(articleId, history))
   }
 }
 

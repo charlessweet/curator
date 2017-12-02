@@ -32,7 +32,7 @@ class ArticleReviewModal extends React.Component{
 	}
 
 	render(){
-		return <Modal header="Add Inaccuracy Details" trigger={<Button waves='light'>Add</Button>} actions={
+		return <Modal header="Add Critique" trigger={<Button waves='light' className="indigo">Add Critique</Button>} actions={
     <div>
       <Button modal="close" waves="light" className="red darken-2" onClick={ this.handleSubmit }><Icon left>add</Icon>add</Button>
       <Button flat modal="close" waves="light">dismiss</Button>
@@ -43,10 +43,10 @@ class ArticleReviewModal extends React.Component{
 			  inaccuracy you are seeing.
 			  </p>
               <form>
+                <textarea name="analysis" onInput={this.handleInputChange} className="materialize-textarea" placeholder="analysis"></textarea>
                 <input name="paragraph_number" onInput={this.handleInputChange} type="number" placeholder="paragraph number"></input>
                 <input name="sentence_number"  onInput={this.handleInputChange} type="number" placeholder="sentence number"></input>
                 <textarea name="quote" onInput={this.handleInputChange} className="materialize-textarea" placeholder="quote"></textarea>
-                <textarea name="analysis" onInput={this.handleInputChange} className="materialize-textarea" placeholder="analysis"></textarea>
                 <div className="row">
                   <div className="col s4">
                     <input className="with-gap" onChange={this.handleInputChange} name="error_type" type="radio" id="factual-error" />

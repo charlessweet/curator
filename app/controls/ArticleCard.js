@@ -34,7 +34,7 @@ const ArticleCard = (props) => {
 	return (
 		<Card>
 			<CardHeader
-				title={htmlDecode(article.title).substring(0,50)}
+				title={htmlDecode(article.title)}
 				actAsExpander={true}
       			showExpandableButton={true}
 			/>

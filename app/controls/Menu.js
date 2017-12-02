@@ -65,8 +65,9 @@ class Menu extends React.Component {
 	}
 
 	render(){
+
 		return(<div>
-				<AppBar showMenuIconButton={false} title="Curator (0.1.0)" onTitleTouchTap={this.handleTitleTouch} />
+				<AppBar showMenuIconButton={false} title="Curator" onTitleTouchTap={this.handleTitleTouch} />
 				<Tabs initialSelectedIndex={this.getCurrentIndex()}>
 					<Tab icon={<FontIcon className="material-icons">view_stream</FontIcon>} onActive={this.handleActiveTabChange} />
 					<Tab icon={<FontIcon className="material-icons">list</FontIcon>} onActive={this.handleActiveTabChange}/>

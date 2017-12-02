@@ -7,6 +7,7 @@ import MemberList from '../model/MemberList'
 import actionTypes from '../actionTypes'
 
 const articleList = (state = { "articles":new ArticleList([]), "stream": new ArticleList([])}, action) => {
+  let article = {}
   switch (action.type) {
     case actionTypes.SHOW_ARTICLES:
       let ns = Object.assign({}, state, {
@@ -17,8 +18,8 @@ const articleList = (state = { "articles":new ArticleList([]), "stream": new Art
       return Object.assign({}, state, {
         bookmark: action.bookmark
       })
-      case actionTypes.ANALYZE_ARTICLE:
-      let article = action.article
+    case actionTypes.ANALYZE_ARTICLE:
+      article = action.article
       return Object.assign({}, state, {
         articles: new ArticleList(state.articles.articles).addIfNotExists(new Article(article.id, article.title, article.description, article.link, article.keywords, 0, article.biasScore, 0, article.critiques, article.outOfContextScore, article.factualErrorScore, article.logicalErrorScore))
       })
@@ -38,7 +39,13 @@ const articleList = (state = { "articles":new ArticleList([]), "stream": new Art
     case actionTypes.REVIEW_ARTICLE:
       return Object.assign({}, state, {
         currentArticle:  action.article
-      })    
+      })
+    case actionTypes.ADD_ARTICLE_CRITIQUE:
+      article = action.article
+      return Object.assign({}, state, {
+        articles: new ArticleList(state.articles.articles).overwriteIfExists(new Article(article.id, article.title, article.description, article.link, article.keywords, 0, article.biasScore, 0, article.critiques, article.outOfContextScore, article.factualErrorScore, article.logicalErrorScore)),
+        currentArticle: article
+      })
     default:
       return state
   }
@@ -60,15 +67,6 @@ const identity = (state = {}, action) => {
         userInfo: userIdentity
       })
       return newState;
-    case actionTypes.CREATE_MEMBER:
-      if(action.memberId === undefined){
-        return state;
-      }
-      let ns = Object.assign({}, state, {
-        userInfo: Object.assign({}, state.userInfo, {
-          memberId: action.memberId
-      })})
-      return ns;
     default:
       return state;
   }
@@ -76,7 +74,7 @@ const identity = (state = {}, action) => {
 
 const memberList = (state = {"members":new MemberList([])}, action) => {
   switch(action.type)  {
-    case actionTypes.LOAD_PROMOTION_REQUESTS:
+    case actionTypes.LOAD_ROLE_REQUESTS:
       if(action.members.length > 0){
         let nss = Object.assign({}, state, {
             members: new MemberList(action.members)
@@ -94,13 +92,21 @@ const memberList = (state = {"members":new MemberList([])}, action) => {
           )
       })
       return nss;
+    case actionTypes.DENY_PROMOTION_REQUEST:
+      let rss = Object.assign({}, state, {
+          members: new MemberList(state.members.members.filter((mem)=>
+            { 
+              mem.memberId !== action.grantInfo.grantorMemberId && mem["requesting_" + action.grantInfo.roleName] !== true 
+            })
+          )
+      })
+      return rss;
     default:
       return state;    
   }
 }
 
 const page = (state = {"current":"LOGIN"}, action) => {
-  //console.log("page", action);
   switch(action.type){
     case actionTypes.SET_PAGE:
       return Object.assign({}, state, {"current": action.currentPage})
@@ -116,15 +122,36 @@ const failure = (state = {}, action) => {
     case actionTypes.FAILED:
       let lstate = Object.assign({}, state, {"error": action.error})
       return lstate
+    case actionTypes.CLEAR_ERROR:
+      return {}
     default:
       return state
   }
 }
+
+//user notification states only - changing these states doesn't have persistent side
+//effects
+const notify = (state={}, action) => {
+  switch(action.type){
+    case actionTypes.CLEAR_NOTIFY_USER:
+      let ns2 = Object.assign({}, state)
+      ns2[action.triggerState] = false
+      return ns2
+    case actionTypes.CREATE_MEMBER:
+      return Object.assign({}, state, { newAccountCreated: true })
+    case actionTypes.LOGIN_FAILED:
+      return Object.assign({}, state, { "loginFailed": true })
+    default:
+      return state
+  }  
+}
+
 export default combineReducers({
   articleList, //note:  this prompts the creation of a reducer-specific state of the same name
   identity,
   settings,
   memberList,
   page,
-  failure
+  failure,
+  notify
 })
