@@ -7,8 +7,7 @@ import UserIdentity from '../../model/UserIdentity'
 const BoxScore = (props) => {
 	const article = props.article;
 	const userInfo = new UserIdentity(Auth.getDecodedJwt())
-	const reviewArticle = (userInfo.roles !== undefined && userInfo.roles !== null && userInfo.roles.indexOf("guardian")>-1 ?
-		props.reviewArticle : null)
+	const reviewArticle = props.reviewArticle
 	let boxStyle = {
 		display: 'inline-block'
 	}
