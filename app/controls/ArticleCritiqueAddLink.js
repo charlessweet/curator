@@ -9,7 +9,7 @@ import TextField from 'material-ui/TextField'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Critique from '../model/Critique'
 import Divider from 'material-ui/Divider'
-import SnackBar from 'material-ui/SnackBar'
+import SnackBar from 'material-ui/Snackbar'
 import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
 
