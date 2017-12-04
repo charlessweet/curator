@@ -12,9 +12,9 @@ import Login from '../controls/Login'
 import AppBar from 'material-ui/AppBar'
 import pageTypes from '../pageTypes'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import worldImg from '../images/world.jpg'
-import communityImg from '../images/community.jpg'
-import joinImg from '../images/join.jpg'
+import worldImg from '../images/world.png'
+import communityImg from '../images/community.png'
+import joinImg from '../images/join.png'
 
 class LoginUnwrapped extends React.Component{
 	constructor(props){
