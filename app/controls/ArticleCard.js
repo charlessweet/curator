@@ -28,6 +28,12 @@ const ArticleCard = (props) => {
 	}else{
 		keywords = "No keywords assigned."
 	}
+	let prevenBreakout = {
+		overflowWrap: "break-word",
+  		wordWrap: "break-word",
+  		wordBreak: "break-word",
+  		hyphens:"auto"
+	}
 	const getShareLink = ()=> { return [<ShareLink key='shareLink' fbappid={fbAppId} 
 		biasToken={biasToken} settings={props.settings} article={article} 
 		createBookmark={props.createBookmark} />] }
@@ -37,10 +43,10 @@ const ArticleCard = (props) => {
 				title={htmlDecode(article.title)}
 				actAsExpander={true}
       			showExpandableButton={true}
-      			style={{wordWrap: "break-word"}}
+      			style={prevenBreakout}
 			/>
 			<CardText expandable={true}> 
-				<div style={{wordWrap: "break-word"}}>{article.summary}</div>
+				<div style={prevenBreakout}>{article.summary}</div>
 				<p><span><a className="grey-text" target="_blank" href={article.link}>Link to Article</a></span></p>
 				<div>
 					<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
