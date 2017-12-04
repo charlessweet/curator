@@ -73,6 +73,7 @@ class LoginUnwrapped extends React.Component{
         <div>
           <AppBar showMenuIconButton={false} title="Curator" iconElementRight={<span>Socializing news analysis</span>} />
           <Login target={pageTypes.STREAM} />
+          <center><Link to="/create">Create an Account</Link></center>
           <br/><br/>
         </div>      
         <Card>
