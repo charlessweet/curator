@@ -37,6 +37,7 @@ const ArticleCard = (props) => {
 				title={htmlDecode(article.title)}
 				actAsExpander={true}
       			showExpandableButton={true}
+      			style={{wordWrap: "break-word"}}
 			/>
 			<CardText expandable={true}> 
 				<div style={{wordWrap: "break-word"}}>{article.summary}</div>
