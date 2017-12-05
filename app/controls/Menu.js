@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import Auth from '../model/Auth'
 import {changePage} from '../actions/actions'
 import AppBar from 'material-ui/AppBar'
+import appLogo from '../images/app-logo.png'
 
 class Menu extends React.Component {
 	constructor(props){
@@ -65,9 +66,17 @@ class Menu extends React.Component {
 	}
 
 	render(){
-
+	    let socialStyle = {
+	      "color":"white",
+	      "fontSize": "1.2em"
+	    }
+	    let iStyle = {
+	      "color":"ivory"
+	    }
 		return(<div>
-				<AppBar showMenuIconButton={false} title="Curator" onTitleTouchTap={this.handleTitleTouch} />
+          		<AppBar showMenuIconButton={false} title={<span><img src={appLogo}/></span>} 
+          			iconElementRight={<div><span style={socialStyle}>Curator by BiasChecker</span><br/><i style={iStyle}>socializing news analysis</i></div>} 
+          			onTitleTouchTap={this.handleTitleTouch} />
 				<Tabs initialSelectedIndex={this.getCurrentIndex()}>
 					<Tab icon={<FontIcon className="material-icons">view_stream</FontIcon>} onActive={this.handleActiveTabChange} />
 					<Tab icon={<FontIcon className="material-icons">list</FontIcon>} onActive={this.handleActiveTabChange}/>
