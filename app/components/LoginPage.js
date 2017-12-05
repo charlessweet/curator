@@ -15,6 +15,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import worldImg from '../images/world.png'
 import communityImg from '../images/community.png'
 import joinImg from '../images/join.png'
+import appLogo from '../images/app-logo.png'
 
 class LoginUnwrapped extends React.Component{
 	constructor(props){
@@ -67,11 +68,18 @@ class LoginUnwrapped extends React.Component{
   }
 
   render(){
+    let socialStyle = {
+      "color":"white",
+      "fontSize": "1.2em"
+    }
+    let iStyle = {
+      "color":"ivory"
+    }
     return (
       <div>
         <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
         <div>
-          <AppBar showMenuIconButton={false} title="Curator" iconElementRight={<span>Socializing news analysis</span>} />
+          <AppBar showMenuIconButton={false} title={<span><img src={appLogo}/></span>} iconElementRight={<div><span style={socialStyle}>Curator by BiasChecker</span><br/><i style={iStyle}>socializing news analysis</i></div>} />
           <Login target={pageTypes.STREAM} />
           <center><Link to="/create">Create an Account</Link></center>
           <br/><br/>
