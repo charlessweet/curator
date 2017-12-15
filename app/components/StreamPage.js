@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom'
 import {loadStreamAsync, reviewArticle, changePage, clearError} from '../actions/actions'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
+import Grid from 'material-ui/Grid';
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){
@@ -74,15 +75,19 @@ class StreamPageUnwrapped extends React.Component{
   }
 
 	render(){
-      return (<div id="bookmark-page">
-        <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
-        <StreamInfo userInfo={this.userInfo}/>
-        {
-          this.state.articles.length == 0
-          ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
-          : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} reviewArticle={this.reviewArticle}/>
-        }
-        </div>
+      return (<Grid container>
+          <Grid item xs={12} md={12}>
+            <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+            <StreamInfo userInfo={this.userInfo}/>
+          </Grid>
+          <Grid item xs={12}>
+          {
+            this.state.articles.length == 0
+            ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
+            : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} reviewArticle={this.reviewArticle}/>
+          }
+          </Grid>
+        </Grid>
       );
   }
 };

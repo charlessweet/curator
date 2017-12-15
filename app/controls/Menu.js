@@ -2,13 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router'
 import {Link} from 'react-router-dom'
-import {Tabs,Tab} from 'material-ui/Tabs'
-import FontIcon from 'material-ui/FontIcon';
+import Tabs, {Tab} from 'material-ui/Tabs'
+import Icon from 'material-ui/Icon';
 import UserIdentity from '../model/UserIdentity'
 import {connect} from 'react-redux';
 import Auth from '../model/Auth'
 import {changePage} from '../actions/actions'
 import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
 import appLogo from '../images/app-logo.png'
 
 class Menu extends React.Component {
@@ -16,7 +18,6 @@ class Menu extends React.Component {
 		super(props)
 		this.settings = props.settings
 		this.userInfo = new UserIdentity(Auth.getDecodedJwt())
-		this.activeMenu = props.active
 		this.showNav = (props.showNav === undefined ? true : props.showNav)
 		this.history = props.history
 		this.changePage = props.changePage
@@ -27,6 +28,7 @@ class Menu extends React.Component {
 		}
 		this.pageSearch = undefined;//props.pageSearch
 		this.handleSearchChange = this.handleSearchChange.bind(this)
+		this.state = {"activeMenu":props.active}
 	}
 
 	handleSearchChange(event){
@@ -35,34 +37,12 @@ class Menu extends React.Component {
 		this.pageSearch(keyword, this.settings, this.userInfo)			
 	}
 
-	handleActiveTabChange(newActiveTab){
-		//TODO: permissions!styling!!showNav!
-		switch(newActiveTab.props.index){
-			case 0:
-				this.changePage(this.active, "stream", this.history)
-				break
-			case 1:
-				this.changePage(this.active, "articles", this.history)
-				break
-			case 2:
-				this.changePage(this.active, "profile", this.history)
-				break
-			case 3:
-				this.changePage(this.active, "ruler", this.history)
-				break
-		}
+	handleActiveTabChange(event, value){
+		this.changePage(this.active, value, this.history)
 	}
 
 	handleTitleTouch(){
 		this.changePage(this.active, "/", this.history)
-	}
-	getCurrentIndex(){
-		switch(this.activeMenu){
-			case "stream": return 0
-			case "articles": return 1
-			case "profile": return 2
-			case "ruler": return 3
-		}
 	}
 
 	render(){
@@ -73,16 +53,21 @@ class Menu extends React.Component {
 	    let iStyle = {
 	      "color":"ivory"
 	    }
+	    console.log(this.state.activeMenu)
 		return(<div>
-          		<AppBar showMenuIconButton={false} title={<span><img src={appLogo}/></span>} 
-          			iconElementRight={<div><span style={socialStyle}>Curator by BiasChecker</span><br/><i style={iStyle}>socializing news analysis</i></div>} 
-          			onTitleTouchTap={this.handleTitleTouch} />
-				<Tabs initialSelectedIndex={this.getCurrentIndex()}>
-					<Tab icon={<FontIcon className="material-icons">view_stream</FontIcon>} onActive={this.handleActiveTabChange} />
-					<Tab icon={<FontIcon className="material-icons">list</FontIcon>} onActive={this.handleActiveTabChange}/>
-					<Tab icon={<FontIcon className="material-icons">perm_identity</FontIcon>} onActive={this.handleActiveTabChange}/>
-					<Tab icon={<FontIcon className="material-icons">supervisor_account</FontIcon>} onActive={this.handleActiveTabChange}/>
-				</Tabs>
+          		<AppBar position="static">
+          			<Toolbar>
+          				<Typography type="title" color="inherit">
+            				Curator
+          				</Typography>
+          			</Toolbar>
+					<Tabs value={this.state.activeMenu} onChange={this.handleActiveTabChange}>
+						<Tab icon={<Icon className="material-icons">view_stream</Icon>} value="stream" />
+						<Tab icon={<Icon className="material-icons">list</Icon>} value="articles"/>
+						<Tab icon={<Icon className="material-icons">perm_identity</Icon>} value="profile"/>
+						<Tab icon={<Icon className="material-icons">supervisor_account</Icon>} value="ruler"/>
+					</Tabs>
+          		</AppBar>
 			</div>
 	)}
 }

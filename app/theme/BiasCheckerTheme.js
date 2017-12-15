@@ -1,8 +1,9 @@
-import {indigo500, indigo700, lightBlack, indigo50, deepPurpleA700, white, grey500, grey100, grey300} from 'material-ui/styles/colors';
+import {indigo500, indigo700, lightBlack, indigo50, deepPurpleA700, white, grey500, grey100, grey300} from 'material-ui/colors';
 import Spacing from 'material-ui/styles/spacing';
 import zIndex from 'material-ui/styles/zIndex';
+import { createMuiTheme } from 'material-ui/styles';
 
-export default {
+export default createMuiTheme({
   spacing: Spacing,
   zIndex: zIndex,
   fontFamily: 'Roboto, sans-serif',
@@ -20,4 +21,4 @@ export default {
     disabledColor: grey500,
     pickerHeaderColor: indigo500,
   }
-};
+})

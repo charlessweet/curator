@@ -11,10 +11,10 @@ import ProfilePage from './components/ProfilePage'
 import CreateAccountPage from './components/CreateAccountPage'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import store from './store'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
 import Auth from './model/Auth'
 import BiasCheckerTheme from './theme/BiasCheckerTheme'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import LandingPage from './components/LandingPage'
 
 const Blank = () => (
 	<div>
@@ -22,7 +22,7 @@ const Blank = () => (
 	</div>
 );
 
-const theme = getMuiTheme(BiasCheckerTheme)
+console.log(BiasCheckerTheme)
 
 /**
  * If a user is logged in, then displays 'component', othrwise,
@@ -44,13 +44,14 @@ const App = () => (
     <Route exact path="/about" component={n2(AboutPage)} />
     <Route exact path="/profile" component={n2(ProfilePage)} />
     <Route exact path="/create" component={CreateAccountPage} />
+    <Route exact path="/landing" component={LandingPage} />
   </Switch>
 )
 
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>
-    <MuiThemeProvider muiTheme={theme}>
+    <MuiThemeProvider theme={BiasCheckerTheme}>
 		  <App />
     </MuiThemeProvider>
 	</BrowserRouter>

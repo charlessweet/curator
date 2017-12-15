@@ -92,7 +92,7 @@ const loadArticles = (articles) => {
 };
 
 export const loadArticlesAsync = (settings, userInfo) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
 	return function(dispatch){
 		return biasCheckerService.loadArticles()
 		.then((data) =>{

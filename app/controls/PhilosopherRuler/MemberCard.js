@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import Member from '../../model/Member'
 import {List, ListItem} from 'material-ui/List';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import AccountCircle from 'material-ui/svg-icons/action/account-circle';
-import RaisedButton from 'material-ui/RaisedButton'
+import AccountCircle from 'material-ui-icons/AccountCircle';
+import Button from 'material-ui/Button'
 
 const MemberCard = (props) => {
 	let member = props.member
@@ -24,8 +24,8 @@ const MemberCard = (props) => {
 				</List>
 			</CardText>
 			<CardActions>
-				<RaisedButton label="Approve" primary={true} onClick={()=>{approveAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
-				<RaisedButton label="Deny" primary={false} onClick={()=>{denyAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
+				<Button raised label="Approve" primary={true} onClick={()=>{approveAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
+				<Button raised label="Deny" primary={false} onClick={()=>{denyAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
 			</CardActions>
 		</Card>
 	);

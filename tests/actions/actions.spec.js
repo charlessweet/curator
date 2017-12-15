@@ -3,6 +3,10 @@ import * as actions from '../../app/actions/actions'
 import {expect} from 'chai';
 import jwt from 'jsonwebtoken'
 import sinon from 'sinon'
+import FetchUrl from '../../app/services/FetchUrl'
+import Settings from '../../app/model/Settings'
+
+var settings = new Settings()
 
 //NOTE: EINVAL error is specific to windows 10
 function guid() {
@@ -45,10 +49,13 @@ describe('Navigation actions', ()=>{
 	it('changePage should push correct page to history', ()=>{
 		let toPage = "articles"
 		let fromPage = "profile"
+		let slash = false;
 		let history = {
 			push: (page) => { 
-					if(page != "articles") {
-						throw("History push was not /articles.")
+					if(!slash){
+						slash = (page == "/")
+					}else if(page != "articles") {
+						throw("History push was " + page + " (not /articles as expected).")
 					}
 				}
 		}
@@ -65,7 +72,7 @@ describe('Login actions', ()=>{
 	it('loginJwt should fail on an invalid jwt', ()=>{
 		let fakeJwt = guid()
 		expect(actions.loginJwt(fakeJwt)).to.eql({
-			type: actionTypes.FAILED,
+			type: actionTypes.LOGIN_FAILED,
 			id: 16,
 			error: {
 				message: "Invalid client-side JWT"
@@ -91,11 +98,11 @@ describe('Successful article actions', ()=>{
 	let articles = { httpCode: 200, "stuff" : "nonsense" }
 	beforeEach(function(done){
 		global.fetch = (url,req) => {
-			let ret = {}
-			ret.json = () => {
-				return articles
-			}
-			return Promise.resolve(ret)
+			return new Promise((resolve,reject) => {
+				let ret = {}
+				//ret.json = articles
+				resolve(ret)
+			})
 		}
 		done()
 	}),
@@ -104,7 +111,10 @@ describe('Successful article actions', ()=>{
 		done()
 	}),	
 	it('loadArticles should emit the correct event', (done)=>{
-		let f = actions.loadArticlesAsync({},{})
+		FetchUrl.stageCall(settings.biasServiceUrl + "/my/articles", () => {
+			return 
+		})
+		let f = actions.loadArticlesAsync(settings)
 		f((event) => {
 			expect(event).to.eql({
 				type: actionTypes.SHOW_ARTICLES,

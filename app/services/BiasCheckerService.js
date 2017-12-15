@@ -1,14 +1,15 @@
 import Settings from "../model/Settings"
 import Auth from '../model/Auth'
+import FetchUrl from './FetchUrl'
 
 export default class BiasCheckerService{
 	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret){
-		this.biasServiceUrl = biasServiceUrl;
-		this.biasServiceSecret = biasServiceSecret;
-		this.biasServiceAppId = biasServiceAppId;
+		this.biasServiceUrl = biasServiceUrl
+		this.biasServiceSecret = biasServiceSecret
+		this.biasServiceAppId = biasServiceAppId
 	}
 	callBiasChecker(relativeUrl, method, data, basicAuth){
-		var url  = this.biasServiceUrl + relativeUrl;
+		var url  = this.biasServiceUrl + relativeUrl
 		var req = {
 			method: method,
 			mode: "cors",
@@ -18,70 +19,64 @@ export default class BiasCheckerService{
 				"Content-Type": "application/json",
 				"Authorization": "Bearer " + Auth.getJwt()
 			}
-		};
+		}
 		if(basicAuth !== undefined){
 			req.headers["Authorization"] = basicAuth
 		}
 
 		if(data !== undefined){
-			req.body = JSON.stringify(data);
+			req.body = JSON.stringify(data)
 		}
-		return fetch(url, req)
-		.then(function(res){
-			return res.json();
-		})
-		.catch(function(err){
-			throw "BiasChecker service call failed for " + relativeUrl + ".  Error was: " + err;
-		})
+		return FetchUrl.executeFetch(url, req)
 	}
 
 	authenticateFacebook(fbAuthToken, tokenType){
 		return this.callBiasChecker("/authenticate/facebook", "POST", fbAuthToken)
 			.then(function(res){
-				return res;
+				return res
 		})
 	}
 	
 	makeBasicAuth(user, password) {
-		var tok = user + ':' + password;
-		var hash = btoa(tok);
-		return "Basic " + hash;
+		var tok = user + ':' + password
+		var hash = btoa(tok)
+		return "Basic " + hash
 	}
 
 	authenticateBasic(username, password){
 		let basicAuth = this.makeBasicAuth(username, password)
 		return this.callBiasChecker("/authenticate/basic", "POST", undefined, basicAuth)
 			.then(function(res){
-				return res;
+				return res
 		})
 	}
 
 	loadArticles(memberId){
-		var relativeUrl = "/my/articles";
+		var relativeUrl = "/my/articles"
 		return this.callBiasChecker(relativeUrl, "GET")
 	}
 
 	loadStream(){
-		var relativeUrl = "/articles";
+		var relativeUrl = "/articles"
 		return this.callBiasChecker(relativeUrl, "GET")
 	}
 
 	createBookmark(article, biasToken){
-		var relativeUrl = "/bookmark?biasToken=" + biasToken + "&fullUrl=true";
+		var relativeUrl = "/bookmark?biasToken=" + biasToken + "&fullUrl=true"
 		return this.callBiasChecker(relativeUrl, "POST", article)
 		.then(function(res){
-			return res.id;//bookmark id
+			return res.id//bookmark id
 		})
 	}
 	createBiasCheckerMemberFromFacebook(facebookUserId, biasToken, email, password, guardian){
-		let relativeUrl = "/users/" + facebookUserId + "/register?biasToken=" + biasToken;
-		let body = {};
-		body.email = email;
-		body.password = password;
-		body.guardian = guardian;
+		let relativeUrl = "/users/" + facebookUserId + "/register?biasToken=" + biasToken
+		let body = {}
+		body.email = email
+		body.password = password
+		body.guardian = guardian
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(res){
-			return res.memberId;
+			return res.memberId
 		})
 	}
 	createAccount(email, password){
@@ -96,11 +91,11 @@ export default class BiasCheckerService{
 	}
 
 	loadMembersForApproval(biasToken){
-		let relativeUrl = "/roles/requests";
+		let relativeUrl = "/roles/requests"
 		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(rows){
-//			console.log("BiasCheckerService_loadMembersForApproval",rows);
-			return rows;
+//			console.log("BiasCheckerService_loadMembersForApproval",rows)
+			return rows
 		})
 	}
 
@@ -112,7 +107,7 @@ export default class BiasCheckerService{
 		body.roleName = targetRole
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
-			return result;
+			return result
 		})
 	}
 
@@ -122,7 +117,7 @@ export default class BiasCheckerService{
 		body.roleName = targetRole
 		return this.callBiasChecker(relativeUrl, "POST", body)
 		.then(function(result){
-			return result;
+			return result
 		})
 	}
 
@@ -130,7 +125,7 @@ export default class BiasCheckerService{
 		let relativeUrl = "/roles/" + targetRole + "/requests/" + targetMemberId
 		return this.callBiasChecker(relativeUrl, "DELETE", undefined)
 		.then(function(result){
-			return result;
+			return result
 		})		
 	}
 
@@ -144,7 +139,7 @@ export default class BiasCheckerService{
 	}
 
 	analyzeArticle(label, link, biasToken){
-		let relativeUrl = "/analyze";
+		let relativeUrl = "/analyze"
 		let body = {}
 		body.selfLabel = label
 		body.linkToValidate = link

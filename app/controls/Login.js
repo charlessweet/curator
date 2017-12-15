@@ -3,11 +3,9 @@ import ReactDOM from 'react-dom'
 import { Link, withRouter } from 'react-router-dom'
 import {PropTypes} from 'prop-types'
 import store from '../store'
-import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField'
 import Checkbox from 'material-ui/Checkbox'
-import Divider from 'material-ui/Divider'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from 'material-ui/Button'
 import {connect} from 'react-redux'
 import {loginBasicAsync, changePage} from '../actions/actions'
 import UserNotification from './UserNotification'
@@ -62,19 +60,21 @@ class Login extends React.Component{
 	}
 
 	render(){
+	    let fullWidth = {
+	    	"width":"100%"
+	    }
 	    let barStyle = {
 	      "backgroundColor": "#3F51B5",
 	      "color": "white"
-	    }		
-		return 	<div className="container">
-				<Paper zDepth={0}>
-					<br/><br/><br/>
-					<h5>Log In to Curator</h5>
-					<TextField id="email" label="Email Address" hintText="Email Address" fullWidth={true}  onChange={this.handleInputChange}/><br/>
-					<TextField id="password" label="Password" type="Password" fullWidth={true} hintText="Password"  onChange={this.handleInputChange}/><br/>
-					<br/>
-					<RaisedButton label="Log In" style={barStyle} fullWidth={true} primary={true} onClick={this.handleSubmit} /><br/><br/>
-				</Paper>
+	    }
+		return 	<div>
+				<h5>Log In to Curator</h5>
+				<TextField style={fullWidth} id="email" label="Email Address" onChange={this.handleInputChange}/><br/>
+				<TextField style={fullWidth} id="password" type="Password" label="Password"  onChange={this.handleInputChange}/><br/>
+				<br/>
+				<Button style={fullWidth} raised style={barStyle} onClick={this.handleSubmit} color="primary">
+					Log In
+				</Button>
 				<UserNotification triggerGroup="notify" triggerState="loginFailed" message="Login failed" />
 		  	</div>			
 	}

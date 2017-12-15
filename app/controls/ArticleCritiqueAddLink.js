@@ -6,7 +6,7 @@ import store from '../store'
 import {critiqueArticleAsync} from '../actions/actions'
 import {connect} from 'react-redux'
 import TextField from 'material-ui/TextField'
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Radio, {RadioGroup} from 'material-ui/Radio';
 import Critique from '../model/Critique'
 import Divider from 'material-ui/Divider'
 import SnackBar from 'material-ui/Snackbar'
@@ -84,10 +84,10 @@ class ArticleCritiqueAddLink extends React.Component{
                 	<TextField name="paragraph_number" fullWidth={true} onInput={this.handleInputChange} type="number" placeholder="approximate paragraph number, 0 if general" />
                 	<TextField name="sentence_number" fullWidth={true} onInput={this.handleInputChange} type="number" placeholder="approximate sentence number, 0 if general" />
 					<TextField name="quote" fullWidth={true} multiLine={true} rows={3} rowsMax={3} placeholder="Enter an example quotation from the article." onChange={this.handleInputChange}/>
-					<RadioButtonGroup name="error_type">
-						<RadioButton id="factual-error" name="factual-error" onClick={this.handleInputChange} label="Factual Error" value="factual-error"/>
-						<RadioButton id="logical-error" name="logical-error" onClick={this.handleInputChange} label="Logical Error" value="logical-error"/>
-					</RadioButtonGroup>
+					<RadioGroup name="error_type">
+						<FormControlLabel control={<Radio/>} id="factual-error" name="factual-error" onClick={this.handleInputChange} label="Factual Error" value="factual-error"/>
+						<FormControlLabel control={<Radio/>} id="logical-error" name="logical-error" onClick={this.handleInputChange} label="Logical Error" value="logical-error"/>
+					</RadioGroup>
 					<a onClick={this.handleSubmit}>save</a>&nbsp;&nbsp;<a onClick={this.handleCancel}>cancel</a>
 				</div>
 		}else{

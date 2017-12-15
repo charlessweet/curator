@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
 import store from '../store'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import {linkToFacebookAsync} from '../actions/actions'
 import FacebookLogin from 'react-facebook-login'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from 'material-ui/Button'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
+import Card, {CardContent} from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
 
 class LinkToFacebookCard extends React.Component{
 	constructor(props){
@@ -38,8 +39,12 @@ class LinkToFacebookCard extends React.Component{
 
 	render(){
 		return  <Card>
-				<CardHeader title={"Import from BiasChecker.org"} />
-				<CardText>
+					<CardContent>
+		              <Typography type="headline" component="h4">
+		                Import from BiasChecker.org
+		              </Typography>
+		            </CardContent>		
+				<CardContent>
 					<p>If you had any articles previously in BiasChecker before the transition to the new Curator site, please
 					use this panel to import those records.</p>
 					{(this.state.showFBLogin ?
@@ -54,10 +59,12 @@ class LinkToFacebookCard extends React.Component{
 						<center><Avatar src={this.facebookToken.picture.data.url} size={this.facebookToken.picture.data.height} /></center>
 						<center><span>{this.facebookToken.name}</span></center>
 					</div>)}
-		  		</CardText>
-		  		<CardActions>
-		  			<RaisedButton label="Import Articles" fullWidth={true} primary={true} onClick={this.handleSubmit} />
-		  		</CardActions>
+				</CardContent>
+				<CardContent>
+		  			<Button raised onClick={this.handleSubmit}>
+		  				Import Articles
+		  			</Button>
+		  		</CardContent>
 		  	</Card>	
 	}
 }

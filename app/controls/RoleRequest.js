@@ -4,11 +4,11 @@ import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
-import SelectField from 'material-ui/SelectField'
+import Select from 'material-ui/Select'
 import {requestRoleAsync} from '../actions/actions'
 import {connect} from 'react-redux'
-import RaisedButton from 'material-ui/RaisedButton'
-import MenuItem from 'material-ui/MenuItem'
+import Button from 'material-ui/Button'
+import MenuItem from 'material-ui/Menu'
 
 class RoleRequest extends React.Component{
 	constructor(props){
@@ -55,10 +55,10 @@ class RoleRequest extends React.Component{
 						title={"Request an additional role"}
 					/>
 				<CardText>
-					<SelectField name="roleName" floatingLabelText="Role" value="guardian" onChange={this.handleInputChange}>
+					<Select name="roleName" floatingLabelText="Role" value="guardian" onChange={this.handleInputChange}>
 						<MenuItem value="guardian" primaryText="Guardian" />
-					</SelectField>
-					<RaisedButton label="Request Role" fullWidth={true} primary={true} onClick={this.handleSubmit} />					
+					</Select>
+					<Button raised label="Request Role" fullWidth={true} primary={true} onClick={this.handleSubmit} />					
 					<p>
 					A Guardian is a critically-minded person who can distinguish between logical and illogical arguments, and 
 					detect logical faults in articles to point out to others. A Guardian must also be willing and able to analyze

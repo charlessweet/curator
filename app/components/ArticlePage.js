@@ -10,6 +10,7 @@ import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArt
 import StoreObserver from '../services/StoreObserver'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
+import Grid from 'material-ui/Grid'
 
 class ArticlePageUnwrapped extends React.Component{
 	constructor(props){
@@ -77,20 +78,20 @@ class ArticlePageUnwrapped extends React.Component{
   }
 
 	render(){
-    if(this.state.articles.length == 0){
-      return (<div id="bookmark-page">
-        <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
-        <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
-      </div>
-      );
-    }else{
-    return (
-      <div id="bookmark-page">
-        <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
-        <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
-        <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo}/>
-      </div>
-    );}
+    return (<Grid container>
+          <Grid item xs={12} md={12}>
+            <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+            <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
+          </Grid>
+          <Grid item xs={12}>
+          {
+            this.state.articles.length == 0
+            ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
+            : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} />
+          }
+          </Grid>
+        </Grid>
+    );
   }
 };
 

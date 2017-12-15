@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
+import Card, {CardContent} from 'material-ui/Card'
 import {changePasswordAsync} from '../actions/actions'
 import {connect} from 'react-redux'
+import Typography from 'material-ui/Typography'
 
 class ChangePassword extends React.Component{
 	constructor(props){
@@ -61,31 +62,33 @@ class ChangePassword extends React.Component{
 
 	render(){
 		return  <Card>
-					<CardHeader
-						title={"Change my password"}
-					/>
-				<CardText>
-					<form className="col s12">
-					    <div className="row">
-					        <div className="input-field col s12">
-					          <input name="password" type="password" required className="validate" onChange={this.handleInputChange}></input>
-					          <label htmlFor="password">Password</label>
-					        </div>
-					    </div>
-					    <div className="row">
-					        <div className="input-field col s12">
-					          <input name="pwconfirm" type="password" required className="validate" onChange={this.handleInputChange}></input>
-					          <label htmlFor="pwconfirm">Confirm Password</label>
-					        </div>
-					    </div>
-					    <div className="row">
-					        <div className="input-field col s12 white-text">
-					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Save Changes"}</button>&nbsp;&nbsp;
-					        </div>	  	
-					    </div>
-			  		</form>
-		  		</CardText>
-		  	</Card>	
+					<CardContent>
+		              <Typography type="headline" component="h4">
+		                Change my password
+		              </Typography>
+		            </CardContent>
+					<CardContent>
+						<form className="col s12">
+						    <div className="row">
+						        <div className="input-field col s12">
+						          <input name="password" type="password" required className="validate" onChange={this.handleInputChange}></input>
+						          <label htmlFor="password">Password</label>
+						        </div>
+						    </div>
+						    <div className="row">
+						        <div className="input-field col s12">
+						          <input name="pwconfirm" type="password" required className="validate" onChange={this.handleInputChange}></input>
+						          <label htmlFor="pwconfirm">Confirm Password</label>
+						        </div>
+						    </div>
+						    <div className="row">
+						        <div className="input-field col s12 white-text">
+						          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Save Changes"}</button>&nbsp;&nbsp;
+						        </div>	  	
+						    </div>
+				  		</form>
+		  			</CardContent>
+		  		</Card>	
 	}
 }
 
