@@ -8,50 +8,52 @@ import Paper from 'material-ui/Paper'
 import Button from 'material-ui/Button'
 import Grid from 'material-ui/Grid'
 import Typography from 'material-ui/Typography'
+import {changePage} from '../actions/actions'
 
-  const styles = {
-    paperContainer: {
-        height: 1356,
-        backgroundImage: "url(" + CurationImg + ")",
-        "backgroundRepeat":"no-repeat",
-        "border":0,
-        "backgroundColor":"white",
-        "boxShadow":"none"
-    }
+const styles = {
+  paperContainer: {
+      height: 1356,
+      backgroundImage: "url(" + CurationImg + ")",
+      "backgroundRepeat":"no-repeat",
+      "border":0,
+      "backgroundColor":"white",
+      "boxShadow":"none",
+      "margin":"5em"
   }
+}
 
 class LandingPageUnwrapped extends React.Component{
 	constructor(props){
 		super(props);
-    this.settings = props.settings
-    this.userInfo = props.userInfo
+    this.goToPage = (page) => { props.goToPage(page, props.history) }
 	}
   
-    render() {
+  render() {
         return (
-            <Paper style={styles.paperContainer} elevation={0}>
-              <Button>Learn More</Button>
-              <Button>Log In</Button>
-              <Grid container>
-                <Grid item xs={0} md={6}>&nbsp;</Grid>
-                <Grid item md={6} xs={12}>
-                  Put my verbiage here!
-                </Grid>
-              </Grid>
-            </Paper>
+          <Grid container>
+            <Grid item xs={12}>
+              <Paper style={styles.paperContainer} elevation={0}>
+                <Typography type="headline" component="h2">Socializing News Analysis</Typography>
+                <Button>Learn More</Button>
+                <Button onClick={()=>{this.goToPage('login')}}>Log In</Button>
+              </Paper>
+            </Grid>
+          </Grid>
         )
     }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  let currentPage = "landing"
   return {
+    goToPage: (targetPage, history) => {
+      dispatch(changePage(currentPage, targetPage, history));
+    }
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    settings: state.settings,
-    userInfo:state.identity.userInfo
   }
 }
 

@@ -22,8 +22,6 @@ const Blank = () => (
 	</div>
 );
 
-console.log(BiasCheckerTheme)
-
 /**
  * If a user is logged in, then displays 'component', othrwise,
  * displays the login page.
@@ -36,7 +34,7 @@ const n2 = (component) => {
 
 const App = () => (
   <Switch>
-    <Route exact path="/" component={LoginPage} />
+    <Route exact path="/login" component={LoginPage} />
     <Route exact path="/ruler" component={n2(MemberManagementPage)} />
     <Route exact path="/articles" component={n2(ArticlePage)} />
     <Route path="/stream/:articleId" component={n2(ArticleReviewPage)} />
@@ -44,10 +42,10 @@ const App = () => (
     <Route exact path="/about" component={n2(AboutPage)} />
     <Route exact path="/profile" component={n2(ProfilePage)} />
     <Route exact path="/create" component={CreateAccountPage} />
-    <Route exact path="/landing" component={LandingPage} />
+    <Route exact path="/" component={LandingPage} />
   </Switch>
 )
-
+console.log("Theme", BiasCheckerTheme)
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>
