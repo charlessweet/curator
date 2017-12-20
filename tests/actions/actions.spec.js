@@ -8,6 +8,26 @@ import Settings from '../../app/model/Settings'
 
 var settings = new Settings()
 
+before(function(done){
+	global.fetch = (url,req) => {
+		return new Promise((resolve, reject) => {
+			reject({"error": "default fetch called"})
+			done()
+		})
+	}
+	global.dispatch = (action) => {
+		return { "action": action }
+		done()
+	}
+	done()
+})
+
+after(function(done){
+	delete global.fetch//clean up
+	delete global.dispatch
+	done()
+})
+
 //NOTE: EINVAL error is specific to windows 10
 function guid() {
   function s4() {
@@ -94,34 +114,122 @@ describe('Login actions', ()=>{
 	})
 })
 
-describe('Successful article actions', ()=>{
-	let articles = { httpCode: 200, "stuff" : "nonsense" }
-	beforeEach(function(done){
-		global.fetch = (url,req) => {
-			return new Promise((resolve,reject) => {
-				let ret = {}
-				//ret.json = articles
-				resolve(ret)
+describe('Article actions', () => {
+	describe('loadArticlesAsync', ()=>{
+		it('should emit the correct event when successful', (done)=>{
+			let articles = [{ articleId: 1 }] //testing 
+			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
+				try{
+					resolve(articles)
+				}catch(e){
+					reject(e)
+				}
 			})
-		}
-		done()
-	}),
-	afterEach(function(done){
-		delete global.fetch//clean up
-		done()
-	}),	
-	it('loadArticles should emit the correct event', (done)=>{
-		FetchUrl.stageCall(settings.biasServiceUrl + "/my/articles", () => {
-			return 
+			FetchUrl.stageCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysSucceedsLoading)
+			let f = actions.loadArticlesAsync(settings)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'SHOW_ARTICLES', 
+					id: 7, 
+					articles: [ { articleId: 1 } ]
+				})
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let alwaysFailsLoading = new Promise((resolve, reject) => {
+				reject({"message":"failed the promise"})
+			})
+			FetchUrl.overrideCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysFailsLoading)
+			let f = actions.loadArticlesAsync(settings)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: { message: 'failed the promise' }
+				})
+				done()
+			})
 		})
-		let f = actions.loadArticlesAsync(settings)
-		f((event) => {
-			expect(event).to.eql({
-				type: actionTypes.SHOW_ARTICLES,
-				id: 7,
-				articles: articles
+	})
+	describe('loadStreamAsync', ()=>{
+		it('should emit the correct event when successful', (done)=>{
+			let articles = [{ articleId: 1 }] //testing 
+			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
+				try{
+					resolve(articles)
+				}catch(e){
+					reject(e)
+				}
 			})
-			done()
+			FetchUrl.stageCall(settings.biasServiceUrl + "/articles", undefined , alwaysSucceedsLoading)
+			let f = actions.loadStreamAsync(settings)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'SHOW_STREAM', 
+					id: 11, 
+					articles: [ { articleId: 1 } ]
+				})
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let alwaysFailsLoading = new Promise((resolve, reject) => {
+				reject({"message":"failed the promise"})
+			})
+			FetchUrl.overrideCall(settings.biasServiceUrl + "/articles", undefined , alwaysFailsLoading)
+			let f = actions.loadStreamAsync(settings)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: { message: 'failed the promise' }
+				})
+				done()
+			})
+		})
+	})	
+	describe('reviewArticleAsync', ()=>{
+		let history = {
+			push: (target) => { }
+		}
+		let i = 0
+		it('should emit the correct event when successful', (done)=>{
+			let articles = [{ id: 1 }] //testing 
+			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
+				try{
+					resolve(articles[0])
+				}catch(e){
+					reject(e)
+				}
+			})
+			FetchUrl.stageCall(settings.biasServiceUrl + "/articles/" + articles[0].id, undefined , alwaysSucceedsLoading)
+			let f = actions.reviewArticleAsync(articles[0].id, history)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'REVIEW_ARTICLE', 
+					id: 12, 
+					article: articles[0]
+				})
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let articles = [{ id: 4 }] //testing 
+			let error = {"message":"failed the promise"}
+			let alwaysFailsLoading = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			FetchUrl.overrideCall(settings.biasServiceUrl + "/articles/" + articles[0].id, undefined , alwaysFailsLoading)
+			let f = actions.reviewArticleAsync(articles[0].id, history)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
 		})
 	})
 })

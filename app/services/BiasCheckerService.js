@@ -27,7 +27,7 @@ export default class BiasCheckerService{
 		if(data !== undefined){
 			req.body = JSON.stringify(data)
 		}
-		return FetchUrl.executeFetch(url, req)
+		return FetchUrl.executeFetch(url, data, req)
 	}
 
 	authenticateFacebook(fbAuthToken, tokenType){
@@ -54,6 +54,12 @@ export default class BiasCheckerService{
 	loadArticles(memberId){
 		var relativeUrl = "/my/articles"
 		return this.callBiasChecker(relativeUrl, "GET")
+			.then(function(res){
+				return res
+			})
+			.catch(function(error){
+				throw error
+			})
 	}
 
 	loadStream(){
@@ -186,8 +192,5 @@ export default class BiasCheckerService{
 	loadArticle(articleId){
 		let relativeUrl = "/articles/" + articleId
 		return this.callBiasChecker(relativeUrl, "GET")
-		.then(function(result){
-			return result
-		})
 	}
 }

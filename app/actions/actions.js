@@ -76,7 +76,6 @@ export const loginJwt = (jwt) =>{
 			roles: jwtd.scope
 		}		
 	}else{
-		console.log('made it this far')
 		return failCall({
 			message: "Invalid client-side JWT"
 		}, actionTypes.LOGIN_FAILED)
@@ -103,7 +102,7 @@ export const loadArticlesAsync = (settings, userInfo) => {
 			}
 		})
 		.catch((error) => {
-			console.log("loadArticlesAsync", error);
+			dispatch(failCall(error))
 		})
 	}
 };
@@ -216,7 +215,7 @@ const failCall = (error, actionType) => {
 		id: 16,
 		error: error
 	}
-	console.log(action)
+//	console.log(action)
 	return action
 }
 
@@ -287,7 +286,7 @@ export const loadStreamAsync = (settings) => {
 			}
 		})
 		.catch((error) => {
-			console.log("loadStreamAsync", error);
+			dispatch(failCall(error))
 		})
 	}
 }
@@ -306,7 +305,6 @@ export const reviewArticleAsync = (articleId, history) => {
 	return function(dispatch){
 		return biasCheckerService.loadArticle(articleId)
 		.then((data) =>{
-			console.log("reviewArticleAsync", data)
 			if(data.error !== undefined){
 				dispatch(failCall(data))
 			}else{
@@ -314,7 +312,7 @@ export const reviewArticleAsync = (articleId, history) => {
 			}
 		})
 		.catch((error) => {
-			console.log("reviewArticleAsync", error);
+			dispatch(failCall(error))
 		})
 	}	
 }

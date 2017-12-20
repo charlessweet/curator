@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
+import Card, {CardHeader, CardContent} from 'material-ui/Card'
 import {createAccountAsync, notifyUser, changePage} from '../actions/actions'
 import {connect} from 'react-redux'
 import UserNotification from './UserNotification'
+import Typography from 'material-ui/Typography'
 
 class CreateAccount extends React.Component{
 	constructor(props){
@@ -60,10 +61,10 @@ class CreateAccount extends React.Component{
 
 	render(){
 		return  <Card>
-					<CardHeader
-						title={"Enter account information"}
-					/>
-				<CardText>
+				<CardContent>
+					<Typography type="headline" component="h4">
+		                {"Enter account information"}
+		            </Typography>
 					<form className="col s12">
 					    <div className="row">
 					        <div className="input-field col s12">
@@ -89,9 +90,11 @@ class CreateAccount extends React.Component{
 					        </div>
 					    </div>
 			  		</form>
-		  		</CardText>
-		  		<UserNotification 
-		  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created" closeAction={this.sendToRoot}/>
+		  		</CardContent>
+		  		<CardContent>
+			  		<UserNotification 
+			  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created" closeAction={this.sendToRoot}/>		  		
+		  		</CardContent>
 		  	</Card>	
 	}
 }

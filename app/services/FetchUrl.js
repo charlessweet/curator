@@ -7,42 +7,36 @@ export default class FetchUrl{
 	/**
 	This executeFetch method allows us to inject service call responses based on the URL + parameter.
 	*/
-	static executeFetch(url, req){
-		let callId = this.generateCallId(url, req)
-		this.stageCall(url, req, () => {
-			console.log(fetch)
-			fetch(url, req)
-			.then((res) => {
-				return res.json()
-			})
-			.catch((err) => {
-				return "BiasChecker service call failed for " + url + ".  Error was: " + err
-			})
-		})
-		this.makeCall(callId)
+	static executeFetch(url, data, req){
+		let callId = this.generateCallId(url, data)
+		this.stageCall(url, data, fetch(url, req))
+		return this.makeCall(callId)
 	}
 	
-	static generateCallId(url, req){
-		return sha256(url + JSON.stringify(req))
+	static generateCallId(url, data){
+		return sha256(url + JSON.stringify(data))
 	}
 	
-	static stageCall(url, req, callback){
-		let serviceCallId = this.generateCallId(url, req)
+	static stageCall(url, data, callPromise){
+		let serviceCallId = this.generateCallId(url, data)
 		if(FetchUrl.serviceCalls === undefined){
 			FetchUrl.serviceCalls = {}
 		}
 		if(FetchUrl.serviceCalls[serviceCallId] === undefined){
-			FetchUrl.serviceCalls[serviceCallId] = callback	
+			FetchUrl.serviceCalls[serviceCallId] = callPromise	
 		}
+	}
+
+	static overrideCall(url, data, callPromise){
+		let serviceCallId = this.generateCallId(url, data)
+		if(FetchUrl.serviceCalls === undefined){
+			FetchUrl.serviceCalls = {}
+		}
+		FetchUrl.serviceCalls[serviceCallId] = callPromise
 	}
 
 	static makeCall(serviceCallId){
 		let call = this.serviceCalls[serviceCallId]
-		if(call !== undefined && call !== null){
-			call()
-			//we're basically caching - but we don't really want to
-			//clear this every time the call is made
-			delete this.serviceCalls[serviceCallId]
-		}
+		return call //must be a promise
 	}
 }

@@ -11,8 +11,11 @@ import StoreObserver from '../services/StoreObserver'
 import Paper from 'material-ui/Paper'
 import Login from '../controls/Login'
 import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
 import pageTypes from '../pageTypes'
 import CreateAccountInfo from '../controls/CreateAccountInfo'
+import Grid from 'material-ui/Grid'
+import Typography from 'material-ui/Typography'
 
 class CreateAccountPageUnwrapped extends React.Component{
   constructor(props){
@@ -82,17 +85,24 @@ class CreateAccountPageUnwrapped extends React.Component{
       "color": "white"
     }
     return (
-      <div>
+      <Grid container>
         <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
-        <div>
-          <AppBar iconElementLeft={<span style={titleStyle}><a href="/" style={{"color":"white"}}>Curator</a></span>} style={barStyle}
-            iconElementRight={<span style={subTitleStyle}>Socializing news analysis</span>} />
+        <Grid item xs={12}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography type="title" color="inherit">
+                Curator
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        </Grid>  
+        <Grid item xs={12} md={3}>
             <CreateAccountInfo />
-            <div className="container">
-              <CreateAccount />
-            </div>
-        </div>      
-      </div>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <CreateAccount />
+        </Grid>
+      </Grid>      
     );
   }
 };
