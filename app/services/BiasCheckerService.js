@@ -32,9 +32,6 @@ export default class BiasCheckerService{
 
 	authenticateFacebook(fbAuthToken, tokenType){
 		return this.callBiasChecker("/authenticate/facebook", "POST", fbAuthToken)
-			.then(function(res){
-				return res
-		})
 	}
 	
 	makeBasicAuth(user, password) {
@@ -43,28 +40,35 @@ export default class BiasCheckerService{
 		return "Basic " + hash
 	}
 
+	/**
+	...as in I promise I'll give you some JSON :)
+	*/
+	jsonPromise(biasCheckerPromise){
+		return biasCheckerPromise
+			.then((response) => {
+				return new Promise((resolve,reject) => {
+					try{
+						resolve(response.json())						
+					}catch(e){
+						reject(e)
+					}
+				})
+			})
+	}
+
 	authenticateBasic(username, password){
 		let basicAuth = this.makeBasicAuth(username, password)
-		return this.callBiasChecker("/authenticate/basic", "POST", undefined, basicAuth)
-			.then(function(res){
-				return res
-		})
+		return this.jsonPromise(this.callBiasChecker("/authenticate/basic", "POST", undefined, basicAuth))
 	}
 
 	loadArticles(memberId){
 		var relativeUrl = "/my/articles"
-		return this.callBiasChecker(relativeUrl, "GET")
-			.then(function(res){
-				return res
-			})
-			.catch(function(error){
-				throw error
-			})
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "GET"))
 	}
 
 	loadStream(){
 		var relativeUrl = "/articles"
-		return this.callBiasChecker(relativeUrl, "GET")
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "GET"))
 	}
 
 	createBookmark(article, biasToken){
