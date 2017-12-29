@@ -13,6 +13,7 @@ import {changePage} from '../actions/actions'
 const styles = {
   paperContainer: {
       height: 1356,
+      width: "100%",
       backgroundImage: "url(" + CurationImg + ")",
       "backgroundRepeat":"no-repeat",
       "border":0,
@@ -36,6 +37,7 @@ class LandingPageUnwrapped extends React.Component{
                 <Typography type="headline" component="h2">Socializing News Analysis</Typography>
                 <Button>Learn More</Button>
                 <Button onClick={()=>{this.goToPage('login')}}>Log In</Button>
+                <Button onClick={()=>{this.goToPage('create')}}>Join</Button>
               </Paper>
             </Grid>
           </Grid>

@@ -53,7 +53,6 @@ class Menu extends React.Component {
 	    let iStyle = {
 	      "color":"ivory"
 	    }
-	    console.log(this.state.activeMenu)
 		return(<div>
           		<AppBar position="static">
           			<Toolbar>

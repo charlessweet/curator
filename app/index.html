@@ -10,19 +10,4 @@
   <script id="materialize_cdn" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
 	<div id='appDiv'></div>
 </body>
-<script>
-function updateStatusCallback(response){
-//  console.log(response);
-}
-$(document).ready(function(){
-  $.ajaxSetup({ cache: true });
-  $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
-    FB.init({
-      appId: '250670435348050', //todo needs to be a constant
-      version: 'v2.7' // or v2.1, v2.2, v2.3, ...
-    });
-    FB.getLoginStatus(updateStatusCallback);
-  });
-});
-</script>
 </html>	

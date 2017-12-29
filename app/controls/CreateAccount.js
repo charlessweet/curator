@@ -15,6 +15,7 @@ class CreateAccount extends React.Component{
 		this.state = {}
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
+		this.handleCancel = this.handleCancel.bind(this)
 		this.sendToRoot = this.sendToRoot.bind(this)
 		this.history = props.history
 		this.validation = {}
@@ -40,6 +41,9 @@ class CreateAccount extends React.Component{
 		}
 	}
 
+	handleCancel(event){
+		this.changePage("create", "/", this.history)
+	}
 	componentWillMount(){
 		if(this.hasMounted === undefined){
 	    	let state = store.getState()
@@ -86,7 +90,8 @@ class CreateAccount extends React.Component{
 					    </div>
 					    <div className="row">
 					        <div className="input-field col s12 white-text">
-					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Create!"}</button>&nbsp&nbsp
+					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Join Now"}</button>&nbsp;&nbsp;
+					          <button id="cancel" type="button" onClick={this.handleCancel} className="btn-large waves-effect waves-light grey lighten-1">{"Cancel"}</button>&nbsp&nbsp
 					        </div>
 					    </div>
 			  		</form>

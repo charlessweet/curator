@@ -7,6 +7,7 @@ import Card, {CardContent} from 'material-ui/Card'
 import {changePasswordAsync} from '../actions/actions'
 import {connect} from 'react-redux'
 import Typography from 'material-ui/Typography'
+import UserNotification from './UserNotification'
 
 class ChangePassword extends React.Component{
 	constructor(props){
@@ -87,6 +88,7 @@ class ChangePassword extends React.Component{
 						        </div>	  	
 						    </div>
 				  		</form>
+						<UserNotification triggerGroup="notify" triggerState="passwordChanged" message="Password successfully changed" />				  		
 		  			</CardContent>
 		  		</Card>	
 	}

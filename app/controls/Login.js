@@ -21,6 +21,8 @@ class Login extends React.Component{
 		this.emailRegex = /^\S+@\S+\.\S+$/ 
 		this.validation = {} 
 		this.login = props.loginWithUserNameAndPassword
+		this.handleCancel = this.handleCancel.bind(this)
+		this.changePage = props.changePage
 	}
 
 	handleInputChange(event){
@@ -38,6 +40,9 @@ class Login extends React.Component{
 		}else{
 			alert("The form is invalid.") 
 		}
+	}
+	handleCancel(event){
+		this.changePage("create", "/", this.history)
 	}
 
 	componentWillMount(){
@@ -72,9 +77,8 @@ class Login extends React.Component{
 				<TextField style={fullWidth} id="email" label="Email Address" onChange={this.handleInputChange}/><br/>
 				<TextField style={fullWidth} id="password" type="Password" label="Password"  onChange={this.handleInputChange}/><br/>
 				<br/>
-				<Button style={fullWidth} raised style={barStyle} onClick={this.handleSubmit} color="primary">
-					Log In
-				</Button>
+				<button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Login"}</button>&nbsp;&nbsp;
+				<button id="cancel" type="button" onClick={this.handleCancel} className="btn-large waves-effect waves-light grey lighten-1">{"Cancel"}</button>&nbsp;&nbsp;
 				<UserNotification triggerGroup="notify" triggerState="loginFailed" message="Login failed" />
 		  	</div>			
 	}

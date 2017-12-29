@@ -10,9 +10,10 @@ const ArticleCardList = (props) => {
 	return (
 	<Grid container>
 	{
+		(props.articles.articles.length > 0 ?
 		props.articles.articles.map((afl)=>{
 			return <ArticleCard settings={props.settings} reviewArticle={props.reviewArticle} createBookmark={props.createBookmark} key={afl.link} article={afl} fbAppId={props.settings.fbAppId} biasToken={props.userInfo.biasToken}/>
-		})
+		}) : <Grid item xs={12}>No articles selected</Grid>)
 	}
 	</Grid>
 )}

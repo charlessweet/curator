@@ -25,16 +25,16 @@ class ProfilePageUnwrapped extends React.Component{
         <AuthController />
         <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
         <Grid container>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <ProfileInfo userInfo={this.userInfo}/>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <ChangePasswordCard userInfo={this.userInfo}/>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <LinkToFacebookCard />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <RoleRequest userInfo={this.userInfo}/>
           </Grid>
         </Grid>

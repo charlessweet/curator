@@ -64,10 +64,8 @@ export const loginBasicAsync = (settings, username, password, targetComponent, h
 
 export const loginJwt = (jwt) =>{
 	//sync jwt in browser with current jwt
-	console.log("jwt", jwt)
 	localStorage.setItem(new Settings().biasCheckerJwtKey, jwt)
 	let jwtd = Auth.decodeJwt(jwt)
-	console.log("jwtd", jwtd)
 	if(jwtd !== null){
 		return {
 			type: actionTypes.LOGIN,

@@ -141,6 +141,14 @@ const notify = (state={}, action) => {
       return Object.assign({}, state, { newAccountCreated: true })
     case actionTypes.LOGIN_FAILED:
       return Object.assign({}, state, { "loginFailed": true })
+    case actionTypes.LINK_TO_FACEBOOK:
+      return Object.assign({}, state, {"existingLinksImported":true})
+    case actionTypes.REQUEST_ROLE:
+      return Object.assign({}, state, {"roleRequested":true})
+    case actionTypes.FAIL:
+      return Object.assign({}, state, {"failed":true})
+    case actionTypes.CHANGE_PASSWORD:
+      return Object.assign({}, state, {"passwordChanged":true})
     default:
       return state
   }  

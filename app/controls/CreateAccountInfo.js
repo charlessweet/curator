@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import Auth from '../model/Auth'
 
 const CreateAccountInfo = (props) => {
-        return (<div className="container">
+        return (
             <div className="card">
                 <div className="card-content">
                     <span className="card-title">Create a new BiasChecker Account</span>
@@ -13,8 +13,7 @@ const CreateAccountInfo = (props) => {
                     Create a new account to start analyzing articles today!
                     </p>
                 </div>
-            </div>
-        </div>)
+            </div>)
 }
 
 export default CreateAccountInfo;

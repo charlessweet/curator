@@ -22,6 +22,7 @@ class ArticlePageUnwrapped extends React.Component{
     this.changePage = props.changePage
     this.history = props.history
     this.clearError = props.clearError
+    this.hasLoaded = false
 	}
   
   selectState(superState){
@@ -56,14 +57,13 @@ class ArticlePageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
-//    console.log("loadComponent", state)
     if(state.error !== undefined){
       if(state.error.httpCode === 401){
         self.clearError()
         self.changePage("article", "", self.history)
       }
     }
-    if(self.userInfo !== undefined && state.articles.length == 0 && self.hasLoaded === undefined){
+    if(state.articles.length == 0 && self.hasLoaded === false){
       self.props.loadArticles(self.settings, self.userInfo);
       self.hasLoaded = true;  
     }
@@ -85,7 +85,7 @@ class ArticlePageUnwrapped extends React.Component{
           </Grid>
           <Grid item xs={12}>
           {
-            this.state.articles.length == 0
+            this.state.articles.length == 0 && !this.hasLoaded
             ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
             : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} />
           }
