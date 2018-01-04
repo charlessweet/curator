@@ -6,7 +6,6 @@ import ArticlePage from './components/ArticlePage'
 import MemberManagementPage from './components/MemberManagementPage'
 import ArticleReviewPage from './components/ArticleReviewPage'
 import StreamPage from './components/StreamPage'
-import AboutPage from './components/AboutPage'
 import ProfilePage from './components/ProfilePage'
 import CreateAccountPage from './components/CreateAccountPage'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -39,7 +38,6 @@ const App = () => (
     <Route exact path="/articles" component={n2(ArticlePage)} />
     <Route path="/stream/:articleId" component={n2(ArticleReviewPage)} />
     <Route exact path="/stream" component={n2(StreamPage)} />
-    <Route exact path="/about" component={n2(AboutPage)} />
     <Route exact path="/profile" component={n2(ProfilePage)} />
     <Route exact path="/create" component={CreateAccountPage} />
     <Route exact path="/" component={LandingPage} />

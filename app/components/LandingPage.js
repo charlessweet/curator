@@ -35,9 +35,8 @@ class LandingPageUnwrapped extends React.Component{
             <Grid item xs={12}>
               <Paper style={styles.paperContainer} elevation={0}>
                 <Typography type="headline" component="h2">Socializing News Analysis</Typography>
-                <Button>Learn More</Button>
                 <Button onClick={()=>{this.goToPage('login')}}>Log In</Button>
-                <Button onClick={()=>{this.goToPage('create')}}>Join</Button>
+                <Button onClick={()=>{this.goToPage('create')}}>Get Started</Button>
               </Paper>
             </Grid>
           </Grid>

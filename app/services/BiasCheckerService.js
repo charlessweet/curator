@@ -46,13 +46,7 @@ export default class BiasCheckerService{
 	jsonPromise(biasCheckerPromise){
 		return biasCheckerPromise
 			.then((response) => {
-				return new Promise((resolve,reject) => {
-					try{
-						resolve(response.json())						
-					}catch(e){
-						reject(e)
-					}
-				})
+				return response.json()
 			})
 	}
 
@@ -78,6 +72,7 @@ export default class BiasCheckerService{
 			return res.id//bookmark id
 		})
 	}
+
 	createBiasCheckerMemberFromFacebook(facebookUserId, biasToken, email, password, guardian){
 		let relativeUrl = "/users/" + facebookUserId + "/register?biasToken=" + biasToken
 		let body = {}
@@ -148,15 +143,12 @@ export default class BiasCheckerService{
 		})
 	}
 
-	analyzeArticle(label, link, biasToken){
+	analyzeArticle(label, link){
 		let relativeUrl = "/analyze"
 		let body = {}
 		body.selfLabel = label
 		body.linkToValidate = link
-		return this.callBiasChecker(relativeUrl, "POST", body)
-		.then(function(result){
-			return result
-		})
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 	}
 
 	searchMyArticles(keyword, facebookUserId, biasToken){

@@ -4,12 +4,14 @@ import ArticleCard from './ArticleCard'
 import Article from '../model/Article'
 import Settings from '../model/Settings'
 import store from '../store'
-import {List, ListItem} from 'material-ui/List'
-import Chip from 'material-ui/Chip'
+import Card, {CardContent} from 'material-ui/Card'
+import Grid from 'material-ui/Grid'
+import Paper from 'material-ui/Paper'
 import Avatar from 'material-ui/Avatar'
 import Divider from 'material-ui/Divider'
 import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
+import Typography from 'material-ui/Typography'
 
 const ArticleCritiqueList = (props) => {
 	let userInfo = new UserIdentity(Auth.getDecodedJwt())
@@ -31,31 +33,33 @@ const ArticleCritiqueList = (props) => {
 	let getAvatarStyle = (critique) => {
 		return { backgroundColor: "#" + intToRGB(hashCode("" + critique.userName)) }
 	}
-	//console.log("ArticleCritiqueList", props.critiques)
+//	console.log("ArticleCritiqueList", props.critiques)
 	return (
-	<div id="my-posts" className="container">
-	<p>Displaying {(props.critiques !== undefined ? props.critiques.length : 0)} critiques.</p>
-	<List>
-	{
-		(props.critiques !== undefined ? 
-			props.critiques.sort((a,b) => {
-				if(a.critiqueDate > b.critiqueDate){
-					return -1
-				}else if(a.critiqueDate < b.critiqueDate){
-					return 1
-				}else{
-					return 0
-				}
-			}).map((critique)=>{
-				return <div key={i++}><Divider /><ListItem 
-						leftAvatar={<Avatar style={getAvatarStyle(critique)}>C</Avatar>} 
-						primaryText={<span><Chip>{critique.errorType}</Chip><br/>{critique.analysis}</span>}
-						secondaryText={<div><font size="small">{critique.critiqueDate}</font></div>}>
-					</ListItem></div>
-			}) : <span>No analyses exist for this article.</span>)
-	}
-	</List>
-	</div>
+	<Grid container>
+		<Grid item xs={12}>Displaying {(props.critiques !== undefined ? props.critiques.length : 0)} critiques.</Grid>
+		{
+			(props.critiques !== undefined ? 
+				props.critiques.map((critique)=>{
+					//console.log(critique)
+					return <Grid item xs={12} md={3} key={i++}><Card>
+								<CardContent>
+									<Avatar style={getAvatarStyle(critique)}>C</Avatar>
+									<Divider/>
+									<Typography component="h4">
+										{critique.errorType}
+									</Typography>
+									<Divider/><br/>
+									<Typography component="p">
+										{critique.analysis}
+									</Typography>
+								</CardContent>
+								<CardContent>
+									<font size="small">{critique.critiqueDate}</font>
+								</CardContent>
+							</Card></Grid>
+				}) : <Grid item>{"No analyses exist for this article."}</Grid>)
+		}
+	</Grid>
 )}
 
 export default ArticleCritiqueList;

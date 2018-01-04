@@ -119,20 +119,19 @@ describe('Article actions', () => {
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ articleId: 1 }] //testing 
 			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
-				try{
-					resolve(articles)
-				}catch(e){
-					reject(e)
-				}
+				let ret = {}
+				ret.json = () => {return articles}
+				resolve(ret)
 			})
 			FetchUrl.stageCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysSucceedsLoading)
 			let f = actions.loadArticlesAsync(settings)
-			f((event)=>{
-				expect(event).to.eql({
+			f((actual)=>{
+				let expected = {
 					type: 'SHOW_ARTICLES', 
 					id: 7, 
 					articles: [ { articleId: 1 } ]
-				})
+				}
+				expect(expected).to.eql(actual)
 				done()
 			})
 		}),
@@ -142,12 +141,13 @@ describe('Article actions', () => {
 			})
 			FetchUrl.overrideCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysFailsLoading)
 			let f = actions.loadArticlesAsync(settings)
-			f((event)=>{
-				expect(event).to.eql({
+			f((actual)=>{
+				let expected = {
 					type: 'FAIL', 
 					id: 16, 
 					error: { message: 'failed the promise' }
-				})
+				}
+				expect(expected).to.eql(actual)
 				done()
 			})
 		})
@@ -156,20 +156,19 @@ describe('Article actions', () => {
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ articleId: 1 }] //testing 
 			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
-				try{
-					resolve(articles)
-				}catch(e){
-					reject(e)
-				}
+				let ret = {}
+				ret.json = () => {return articles}
+				resolve(ret)
 			})
 			FetchUrl.stageCall(settings.biasServiceUrl + "/articles", undefined , alwaysSucceedsLoading)
 			let f = actions.loadStreamAsync(settings)
-			f((event)=>{
-				expect(event).to.eql({
+			f((actual)=>{
+				let expected = {
 					type: 'SHOW_STREAM', 
 					id: 11, 
 					articles: [ { articleId: 1 } ]
-				})
+				}
+				expect(expected).to.eql(expected)
 				done()
 			})
 		}),
@@ -179,12 +178,13 @@ describe('Article actions', () => {
 			})
 			FetchUrl.overrideCall(settings.biasServiceUrl + "/articles", undefined , alwaysFailsLoading)
 			let f = actions.loadStreamAsync(settings)
-			f((event)=>{
-				expect(event).to.eql({
+			f((actual)=>{
+				let expected = {
 					type: 'FAIL', 
 					id: 16, 
 					error: { message: 'failed the promise' }
-				})
+				}
+				expect(expected).to.eql(actual)
 				done()
 			})
 		})

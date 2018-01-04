@@ -221,10 +221,10 @@ const failCall = (error, actionType) => {
 
 export const analyzeArticleAsync = (label, link, settings, userInfo, history) => {
 	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret)
-	let biasToken = userInfo.biasToken
 	return function(dispatch){
-		return biasCheckerService.analyzeArticle(label, link, userInfo.biasToken)
+		return biasCheckerService.analyzeArticle(label, link)
 		.then((data) => {
+			console.log("analyzeArticleAsync", data)
 			if(data.error !== undefined){
 				dispatch(failCall(data))
 			}else{
