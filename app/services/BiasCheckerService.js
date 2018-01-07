@@ -3,13 +3,15 @@ import Auth from '../model/Auth'
 import FetchUrl from './FetchUrl'
 
 export default class BiasCheckerService {
-	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret){
+	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret, fetchUrl){
 		this.biasServiceUrl = biasServiceUrl
 		this.biasServiceSecret = biasServiceSecret
 		this.biasServiceAppId = biasServiceAppId
+		this.fetchUrl = fetchUrl
 	}
 	callBiasChecker(relativeUrl, method, data, basicAuth){
 		var url  = this.biasServiceUrl + relativeUrl
+		//console.log(url)
 		var req = {
 			method: method,
 			mode: "cors",
@@ -27,7 +29,7 @@ export default class BiasCheckerService {
 		if(data !== undefined){
 			req.body = JSON.stringify(data)
 		}
-		return FetchUrl.executeFetch(url, data, req)
+		return this.fetchUrl.executeFetch(url, data, req)
 	}
 
 	authenticateFacebook(fbAuthToken, tokenType){
@@ -46,7 +48,14 @@ export default class BiasCheckerService {
 	jsonPromise(biasCheckerPromise){
 		return biasCheckerPromise
 			.then((response) => {
-				return response.json()
+				try{
+					return response.json()
+				}catch(error){
+					return response
+				}
+			})
+			.catch((error)=>{
+				return {"error": error }
 			})
 	}
 

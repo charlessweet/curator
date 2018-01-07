@@ -3,8 +3,11 @@ import pageTypes from "../pageTypes"
 import BiasCheckerService from "../services/BiasCheckerService"
 import Settings from "../model/Settings"
 import Auth from '../model/Auth'
+import {FetchUrlInstance} from '../services/FetchUrl'
 
 const settings = new Settings()
+export const fetchUrl = new FetchUrlInstance()
+const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, fetchUrl);
 
 //tested
 export const indicatePageWasLoaded = (page) => {
@@ -12,7 +15,7 @@ export const indicatePageWasLoaded = (page) => {
 		type: actionTypes.SET_PAGE,
 		id: 0,
 		currentPage: page
-	}	
+	}
 }
 
 //tested
@@ -27,13 +30,19 @@ export const changePage = (fromPage, toPage, history) => {
 	}
 }
 
-export const loginBasicAsync = (username, password, suppliedSettings) =>{
+export const loginBasicAsync = (username, password, biasService) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch) {
-		return biasCheckerService.authenticateBasic(username, password)
-		.then((biasToken)=>{
-			dispatch(loginJwt(biasToken))
+		return biasService.authenticateBasic(username, password)
+		.then((data)=>{
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
+			}else{
+				dispatch(loginJwt(data))
+			}
 		})
 		.catch((error) => {
 			dispatch(failCall(error))
@@ -69,13 +78,15 @@ const loadArticles = (articles) => {
 	}
 };
 
-export const loadArticlesAsync = (settings, userInfo) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
+export const loadArticlesAsync = (settings, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.loadArticles()
+		return biasService.loadArticles()
 		.then((data) =>{
-			if(!Array.isArray(data)){
-				dispatch(failCall(data))
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
 			}else{
 				dispatch(loadArticles(data))			
 			}
@@ -95,7 +106,6 @@ const createBookmark = (article, bookmarkId) => {
 }
 
 export const createBookmarkAsync = (settings, article, biasToken) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.createBookmark(article, biasToken)
 		.then((bookmarkId) => {
@@ -119,7 +129,6 @@ const createBiasCheckerMemberFromFacebook = (memberId, history) =>{
 }
 
 export const createBiasCheckerAccountFromFacebookAsync = (settings, userInfo, email, password, guardian, history) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.createBiasCheckerMemberFromFacebook(userInfo.userId, userInfo.biasToken, email, password, guardian)
 		.then((memberId) => {
@@ -141,7 +150,6 @@ const loadRoleRequests = (members) => {
 };
 
 export const loadRoleRequestsAsync = (settings, userInfo) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	let biasToken = userInfo.biasToken;
 	return function(dispatch){
 		return biasCheckerService.loadMembersForApproval(biasToken)
@@ -167,7 +175,6 @@ const addRole = (grantInfo) => {
 }
 
 export const addRoleAsync = (targetMemberId, targetRoleId, settings, userInfo) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.approveRole(targetMemberId, targetRoleId)
 		.then((grantInfo) => {
@@ -199,7 +206,6 @@ const failCall = (error, actionType) => {
 }
 
 export const analyzeArticleAsync = (label, link, settings, userInfo, history) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret)
 	return function(dispatch){
 		return biasCheckerService.analyzeArticle(label, link)
 		.then((data) => {
@@ -227,7 +233,6 @@ const searchForMyArticle = (keywordWasValid, matchingArticles) => {
 }
 
 export const searchForMyArticleAsync = (keyword, settings, userInfo) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret)
 	let biasToken = userInfo.biasToken
 	let facebookUserId = userInfo.facebookUserId
 	return function(dispatch){
@@ -253,13 +258,15 @@ const loadStream = (articles) => {
 	}
 };
 
-export const loadStreamAsync = (settings) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+export const loadStreamAsync = (settings, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.loadStream()
+		return biasService.loadStream()
 		.then((data) =>{
-			if(!Array.isArray(data)){
-				dispatch(failCall(data))
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
 			}else{
 				dispatch(loadStream(data))			
 			}
@@ -279,10 +286,12 @@ export const reviewArticle = (article, history) => {
 	}
 }
 
-export const reviewArticleAsync = (articleId, history) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
+export const reviewArticleAsync = (articleId, history, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.loadArticle(articleId)
+		return biasService.loadArticle(articleId)
 		.then((data) =>{
 			if(data.error !== undefined){
 				dispatch(failCall(data))
@@ -305,7 +314,6 @@ const critiqueArticle = (articleWithNewCritique) => {
 }
 
 export const critiqueArticleAsync = (articleId, critique, settings) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.critiqueArticle(critique.userName, articleId, critique.paragraphIndex, critique.sentenceIndex, critique.quote, 
 			critique.analysis, critique.errorType)
@@ -327,7 +335,6 @@ const changePassword = (data) => {
 }
 
 export const changePasswordAsync = (newPassword, settings) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.changePassword(newPassword)
 		.then((data) => {
@@ -352,7 +359,6 @@ const createAccount = (data, email) =>{
 }
 
 export const createAccountAsync = (settings, email, password, history) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.createAccount(email, password)
 		.then((data) => {
@@ -377,7 +383,6 @@ const requestRole = (data) => {
 }
 
 export const requestRoleAsync = (settings, targetMemberId, roleName) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret)
 	return function(dispatch){
 		return biasCheckerService.requestRole(targetMemberId, roleName)
 		.then((data) => {
@@ -402,7 +407,6 @@ const denyRole = (grantInfo) => {
 }
 
 export const denyRoleAsync = (targetMemberId, targetRoleId, settings) => {
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch){
 		return biasCheckerService.denyRole(targetMemberId, targetRoleId)
 		.then((data) => {
@@ -445,7 +449,6 @@ const linkToFacebook = (data) => {
 
 export const linkToFacebookAsync = (facebookToken) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
 	return function(dispatch) {
 		return biasCheckerService.linkToFacebook(facebookToken)
 		.then((data) => {

@@ -12,7 +12,7 @@ export default class FetchUrl{
 	}
 }
 
-class FetchUrlInstance{
+export class FetchUrlInstance{
 	/**
 	This executeFetch method allows us to inject service call responses based on the URL + parameter.
 	*/

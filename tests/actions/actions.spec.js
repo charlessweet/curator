@@ -3,10 +3,11 @@ import * as actions from '../../app/actions/actions'
 import {expect} from 'chai';
 import jwt from 'jsonwebtoken'
 import sinon from 'sinon'
-import FetchUrl from '../../app/services/FetchUrl'
+import FetchUrl, {FetchUrlInstance} from '../../app/services/FetchUrl'
 import Settings from '../../app/model/Settings'
+import BiasCheckerService from '../../app/services/BiasCheckerService'
 
-var settings = new Settings()
+const settings = new Settings()
 
 before(function(done){
 	global.fetch = (url,req) => {
@@ -97,6 +98,12 @@ describe('Navigation actions', ()=>{
 	})
 })
 
+let  createMockBiasChecker = (method, rootUrl, url) => {
+	let fetchUrl = new FetchUrlInstance()
+	fetchUrl.stageCall(rootUrl + url, undefined, method)
+	return new BiasCheckerService(rootUrl, "bias_checker_key", "bias_chekcer_value", fetchUrl)	
+}
+
 describe('Login actions', ()=>{
 	it('loginJwt should fail on an invalid jwt', ()=>{
 		let fakeJwt = guid()
@@ -120,15 +127,15 @@ describe('Login actions', ()=>{
 			"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
 			"userName": "chuck.sweet@gmail.com"
       	})		
-	})/*,
+	}),
 	it('loginBasicAsync should emit the correct event when fails', (done)=>{
 		let email = "chuck.sweet@gmail.com"
 		let password = "fail-nopassword"
 		let alwaysFails = new Promise((resolve, reject) =>{
 			reject({"message":"failed the promise"})
 		})
-		FetchUrl.stageCall(settings.biasServiceUrl + "/authenticate/basic", undefined, alwaysFails)
-		let f = actions.loginBasicAsync(email, password)
+		let mockBiasChecker = createMockBiasChecker(alwaysFails, "login_basic_async_fail", "/authenticate/basic")
+		let f = actions.loginBasicAsync(email, password, mockBiasChecker)
 		f((actual)=>{
 			let expected = {
 				type: 'FAIL', 
@@ -138,7 +145,7 @@ describe('Login actions', ()=>{
 			expect(actual).to.eql(expected)
 			done()
 		})
-	})*/,
+	}),
 	it('loginBasicAsync should emit the correct event when successful', (done)=>{
 		let email = "chuck.sweet@gmail.com"
 		let password = "nopassword"
@@ -148,8 +155,8 @@ describe('Login actions', ()=>{
 			ret.json = () => { return realJwt }
 			resolve(ret)
 		})
-		FetchUrl.stageCall(settings.biasServiceUrl + "/authenticate/basic", undefined, alwaysSucceeds)
-		let f = actions.loginBasicAsync(email, password)
+		let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "login_basic_async", "/authenticate/basic")
+		let f = actions.loginBasicAsync(email, password, mockBiasChecker)
 		f((actual) => {
 			let expected = {
 				"id": 15,
@@ -161,7 +168,7 @@ describe('Login actions', ()=>{
 				"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
 				"userName": "chuck.sweet@gmail.com"
 	      	}
-			expect(expected).to.eql(actual)
+			expect(actual).to.eql(expected)
 			done()
 		})
 	})
@@ -171,16 +178,16 @@ describe('Article actions', () => {
 	describe('loadArticlesAsync', ()=>{
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ articleId: 1 }] //testing 
-			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
+			let alwaysSucceeds = new Promise((resolve, reject) => {
 				let ret = {}
 				ret.json = () => {return articles}
 				resolve(ret)
-			})
-			FetchUrl.stageCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysSucceedsLoading)
-			let f = actions.loadArticlesAsync(settings)
+			})	
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "load_articles_async", "/my/articles")
+			let f = actions.loadArticlesAsync(settings, mockBiasChecker)
 			f((actual)=>{
 				let expected = {
-					type: 'SHOW_ARTICLES', 
+					type: 'SHOW_ARTICLES',
 					id: 7, 
 					articles: [ { articleId: 1 } ]
 				}
@@ -189,11 +196,11 @@ describe('Article actions', () => {
 			})
 		}),
 		it('should emit the correct event when fails', (done)=>{
-			let alwaysFailsLoading = new Promise((resolve, reject) => {
+			let alwaysFails = new Promise((resolve, reject) => {
 				reject({"message":"failed the promise"})
 			})
-			FetchUrl.overrideCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysFailsLoading)
-			let f = actions.loadArticlesAsync(settings)
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "load_articles_async_fail", "/my/articles")
+			let f = actions.loadArticlesAsync(settings, mockBiasChecker)
 			let expected = {
 				type: 'FAIL', 
 				id: 16, 
@@ -205,40 +212,40 @@ describe('Article actions', () => {
 			})
 		})
 	})
-	
+
 	describe('loadStreamAsync', ()=>{
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ articleId: 1 }] //testing 
-			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
+			let alwaysSucceeds = new Promise((resolve, reject) => {
 				let ret = {}
 				ret.json = () => {return articles}
 				resolve(ret)
 			})
-			FetchUrl.stageCall(settings.biasServiceUrl + "/articles", undefined , alwaysSucceedsLoading)
-			let f = actions.loadStreamAsync(settings)
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "load_stream_async", "/articles")
+			let f = actions.loadStreamAsync(settings, mockBiasChecker)
 			f((actual)=>{
 				let expected = {
 					type: 'SHOW_STREAM', 
 					id: 11, 
 					articles: [ { articleId: 1 } ]
 				}
-				expect(expected).to.eql(expected)
+				expect(actual).to.eql(expected)
 				done()
 			})
 		}),
 		it('should emit the correct event when fails', (done)=>{
-			let alwaysFailsLoading = new Promise((resolve, reject) => {
+			let alwaysFails = new Promise((resolve, reject) => {
 				reject({"message":"failed the promise"})
 			})
-			FetchUrl.overrideCall(settings.biasServiceUrl + "/articles", undefined , alwaysFailsLoading)
-			let f = actions.loadStreamAsync(settings)
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "load_stream_async_fail", "/articles")
+			let f = actions.loadStreamAsync(settings, mockBiasChecker)
 			f((actual)=>{
 				let expected = {
 					type: 'FAIL', 
 					id: 16, 
 					error: { message: 'failed the promise' }
 				}
-				expect(expected).to.eql(actual)
+				expect(actual).to.eql(expected)
 				done()
 			})
 		})
@@ -250,15 +257,15 @@ describe('Article actions', () => {
 		let i = 0
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ id: 1 }] //testing 
-			let alwaysSucceedsLoading = new Promise((resolve, reject) => {
+			let alwaysSucceeds = new Promise((resolve, reject) => {
 				try{
 					resolve(articles[0])
 				}catch(e){
 					reject(e)
 				}
 			})
-			FetchUrl.stageCall(settings.biasServiceUrl + "/articles/" + articles[0].id, undefined , alwaysSucceedsLoading)
-			let f = actions.reviewArticleAsync(articles[0].id, history)
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "review_article_async", "/articles/" + articles[0].id)
+			let f = actions.reviewArticleAsync(articles[0].id, history, mockBiasChecker)
 			f((event)=>{
 				expect(event).to.eql({
 					type: 'REVIEW_ARTICLE', 
@@ -271,11 +278,11 @@ describe('Article actions', () => {
 		it('should emit the correct event when fails', (done)=>{
 			let articles = [{ id: 4 }] //testing 
 			let error = {"message":"failed the promise"}
-			let alwaysFailsLoading = new Promise((resolve, reject) => {
+			let alwaysFails = new Promise((resolve, reject) => {
 				reject(error)
 			})
-			FetchUrl.overrideCall(settings.biasServiceUrl + "/articles/" + articles[0].id, undefined , alwaysFailsLoading)
-			let f = actions.reviewArticleAsync(articles[0].id, history)
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "review_article_async_fail", "/articles/" + articles[0].id)
+			let f = actions.reviewArticleAsync(articles[0].id, history, mockBiasChecker)
 			f((event)=>{
 				expect(event).to.eql({
 					type: 'FAIL', 
@@ -286,4 +293,4 @@ describe('Article actions', () => {
 			})
 		})
 	})
-})
+})	
