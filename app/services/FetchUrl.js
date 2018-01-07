@@ -1,42 +1,52 @@
 var sha256 = require('js-sha256')
 
-/**
-This abstraction static is to make it easier to test.
-*/
 export default class FetchUrl{
+	static executeFetch(url, data, req){
+		return FetchUrl.instance.executeFetch(url, data, req)
+	}
+	static stageCall(url, data, callPromise){
+		FetchUrl.instance.stageCall(url, data, callPromise)
+	}
+	static overrideCall(url, data, callPromise){
+		FetchUrl.instance.overrideCall(url, data, callPromise)
+	}
+}
+
+class FetchUrlInstance{
 	/**
 	This executeFetch method allows us to inject service call responses based on the URL + parameter.
 	*/
-	static executeFetch(url, data, req){
+	executeFetch(url, data, req){
 		let callId = this.generateCallId(url, data)
 		this.stageCall(url, data, fetch(url, req))
 		return this.makeCall(callId)
 	}
 	
-	static generateCallId(url, data){
+	generateCallId(url, data){
 		return sha256(url + JSON.stringify(data))
 	}
 	
-	static stageCall(url, data, callPromise){
+	stageCall(url, data, callPromise){
 		let serviceCallId = this.generateCallId(url, data)
-		if(FetchUrl.serviceCalls === undefined){
-			FetchUrl.serviceCalls = {}
+		if(this.serviceCalls === undefined){
+			this.serviceCalls = {}
 		}
-		if(FetchUrl.serviceCalls[serviceCallId] === undefined){
-			FetchUrl.serviceCalls[serviceCallId] = callPromise	
+		if(this.serviceCalls[serviceCallId] === undefined){
+			this.serviceCalls[serviceCallId] = callPromise	
 		}
 	}
 
-	static overrideCall(url, data, callPromise){
+	overrideCall(url, data, callPromise){
 		let serviceCallId = this.generateCallId(url, data)
-		if(FetchUrl.serviceCalls === undefined){
-			FetchUrl.serviceCalls = {}
+		if(this.serviceCalls === undefined){
+			this.serviceCalls = {}
 		}
-		FetchUrl.serviceCalls[serviceCallId] = callPromise
+		this.serviceCalls[serviceCallId] = callPromise
 	}
 
-	static makeCall(serviceCallId){
+	makeCall(serviceCallId){
 		let call = this.serviceCalls[serviceCallId]
 		return call //must be a promise
-	}
+	}	
 }
+FetchUrl.instance = new FetchUrlInstance()
