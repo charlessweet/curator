@@ -203,21 +203,17 @@ export const searchForMyArticleAsync = (keyword, biasService) => {
 		biasService = biasCheckerService
 	}
 	return function(dispatch){
-		if(keyword.length > 4){
-			return biasService.searchMyArticles(keyword)
-			.then((data) => {
-				if(data.error !== undefined){
-					dispatch(failCall(data.error))
-				}else{
-					dispatch(searchForMyArticle(true, data))
-				}
-			})
-			.catch((error)=>{
-				dispatch(failCall(error))
-			})			
-		}else{
-			dispatch(searchForMyArticle(false))
-		}
+		return biasService.searchMyArticles(keyword)
+		.then((data) => {
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
+			}else{
+				dispatch(searchForMyArticle(true, data))
+			}
+		})
+		.catch((error)=>{
+			dispatch(failCall(error))
+		})			
 	}
 }
 
