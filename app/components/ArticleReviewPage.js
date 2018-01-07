@@ -13,6 +13,7 @@ import Auth from '../model/Auth'
 import ReviewResultsInfo from '../controls/ReviewResultsInfo'
 import ReviewDetailsCard from '../controls/ReviewDetailsCard'
 import {reviewArticleAsync, changePage} from '../actions/actions'
+import Grid from 'material-ui/Grid'
 
 class ArticleReviewPageUnwrapped extends React.Component{
 	constructor(props){
@@ -72,12 +73,18 @@ class ArticleReviewPageUnwrapped extends React.Component{
     let index = 0
     if(this.state.article !== undefined){
       return (
-        <div id="article-review-page" className="container">
-          <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
-          <Link to="/stream"><i className="material-icons">arrow_back</i></Link>
-          <ReviewResultsInfo />
-          <ReviewDetailsCard article={this.state.article} />
-        </div>
+        <Grid container>
+          <Grid item xs={12} md={12}>
+            <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
+            <Link to="/stream"><i className="material-icons">arrow_back</i></Link>
+          </Grid>
+          <Grid item xs={12}>          
+            <ReviewResultsInfo />
+          </Grid>
+          <Grid item xs={12}>
+            <ReviewDetailsCard article={this.state.article} />
+          </Grid>
+        </Grid>
       )        
     }else{
       return null

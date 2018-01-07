@@ -86,7 +86,7 @@ class Login extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loginWithUserNameAndPassword: (settings, email, password, history) => dispatch(loginBasicAsync(settings, email, password, history)),
+    loginWithUserNameAndPassword: (email, password) => dispatch(loginBasicAsync(email, password)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history))
   }
 }

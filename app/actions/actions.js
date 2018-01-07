@@ -6,6 +6,7 @@ import Auth from '../model/Auth'
 
 const settings = new Settings()
 
+//tested
 export const indicatePageWasLoaded = (page) => {
 	return{
 		type: actionTypes.SET_PAGE,
@@ -14,15 +15,7 @@ export const indicatePageWasLoaded = (page) => {
 	}	
 }
 
-/**
- * Changes the active component from the current component (specified as fromPage) to the target
- * component (specified as toPage). Aslong as toPage is from pageTypes.js, then this function will
- * transition properly.
- *
- * @param fromPage From the pageTypes enum (pageTypes.js) which indicates the 'from'  component.
- * @param toPage From the pageTypes enum (pageTypes.js) which indicates the 'to' component.
- * @param history Object used to navigate from one page to another (accessible in props usually).
- */
+//tested
 export const changePage = (fromPage, toPage, history) => {
 	history.push("/") //reposition at root - hacky, i know
 	history.push(toPage)
@@ -34,27 +27,13 @@ export const changePage = (fromPage, toPage, history) => {
 	}
 }
 
-export const loginFacebookAsync = (settings, facebookToken) =>{
+export const loginBasicAsync = (username, password, suppliedSettings) =>{
 	//log user in to biaschecker and retrieve biasToken, keep details
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
-	return function(dispatch) {
-		return biasCheckerService.exchangeToken(facebookToken, "FB")
-		.then((biasToken)=>{
-			dispatch(loginJwt(biasToken));
-		})
-		.catch((error) => {
-			console.log("loginFacebookAsync", error);
-		});
-	}
-};
-
-export const loginBasicAsync = (settings, username, password, targetComponent, history) =>{
-	//log user in to biaschecker and retrieve biasToken, keep details
-	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, localStorage.getItem(settings.biasCheckerJwtKey));
+	const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret);
 	return function(dispatch) {
 		return biasCheckerService.authenticateBasic(username, password)
 		.then((biasToken)=>{
-			dispatch(loginJwt(biasToken));
+			dispatch(loginJwt(biasToken))
 		})
 		.catch((error) => {
 			dispatch(failCall(error))

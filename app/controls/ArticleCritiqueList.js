@@ -41,9 +41,10 @@ const ArticleCritiqueList = (props) => {
 			(props.critiques !== undefined ? 
 				props.critiques.map((critique)=>{
 					//console.log(critique)
+					let userNameChar = (critique.userName !== undefined ? critique.userName.substring(0,1) : "U")
 					return <Grid item xs={12} md={3} key={i++}><Card>
 								<CardContent>
-									<Avatar style={getAvatarStyle(critique)}>C</Avatar>
+									<Avatar style={getAvatarStyle(critique)}>{userNameChar}</Avatar>
 									<Divider/>
 									<Typography component="h4">
 										{critique.errorType}

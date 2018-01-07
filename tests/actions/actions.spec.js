@@ -58,7 +58,7 @@ global.btoa = (x) => {
 }
 
 describe('Navigation actions', ()=>{
-	it('indicatePageWasLoaded should include the name of the page', ()=>{
+	it('indicatePageWasLoaded should emit the correct event', ()=>{
 		let page = "fakePage" + guid()
 		expect(actions.indicatePageWasLoaded(page)).to.eql({
 			type: actionTypes.SET_PAGE,
@@ -79,11 +79,20 @@ describe('Navigation actions', ()=>{
 					}
 				}
 		}
+		actions.changePage(fromPage, toPage, history);
+	}),
+	it('changePage should emit the correct event', ()=>{
+		let toPage = "articles"
+		let fromPage = "profile"
+		let slash = false;
+		let history = {
+			push: (page) => {}
+		}
 		expect(actions.changePage(fromPage, toPage, history)).to.eql({
 			type: actionTypes.CHANGE_PAGE,
 			id: 6,
-			fromPage: "profile",
-			toPage: "articles"
+			fromPage: fromPage,
+			toPage: toPage
 		})
 	})
 })
@@ -111,6 +120,50 @@ describe('Login actions', ()=>{
 			"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
 			"userName": "chuck.sweet@gmail.com"
       	})		
+	})/*,
+	it('loginBasicAsync should emit the correct event when fails', (done)=>{
+		let email = "chuck.sweet@gmail.com"
+		let password = "fail-nopassword"
+		let alwaysFails = new Promise((resolve, reject) =>{
+			reject({"message":"failed the promise"})
+		})
+		FetchUrl.stageCall(settings.biasServiceUrl + "/authenticate/basic", undefined, alwaysFails)
+		let f = actions.loginBasicAsync(email, password)
+		f((actual)=>{
+			let expected = {
+				type: 'FAIL', 
+				id: 16, 
+				error: { message: 'failed the promise' }
+			}
+			expect(actual).to.eql(expected)
+			done()
+		})
+	})*/,
+	it('loginBasicAsync should emit the correct event when successful', (done)=>{
+		let email = "chuck.sweet@gmail.com"
+		let password = "nopassword"
+		let realJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJndWFyZGlhbiIsInBoaWxvc29waGVyLXJ1bGVyIl0sIm5hbWUiOiJjaHVjay5zd2VldEBnbWFpbC5jb20iLCJtZW1iZXJJZCI6IlpPTUNqVVpxNFdobng2VUpRWnV0NHV4WEpKOW9lWjZnWHozcEF1ekh2bUxuUU5uSjhWa2NhYVJwOVBwdTdMdTIiLCJ1c2VySWQiOiIwZjFlNTMzMDBjYTQ5ZWZmYTkwZDRlNDI3MjhjMmY2OWE4MzYzOWM4YWM5YWU0YzE3OTZiZjg2OTliM2E1OGExIiwiaWF0IjoxNTEwMTE4ODkwLCJleHAiOjE1MTAxMjk0NDUsImlzcyI6InVybjpjdXJhdG9yLmJpYXNjaGVrZXIub3JnIn0.OTBfY14wbw3FUc9civ0Cu1k7Tyha62-fs8VC72RkgF8"		
+		let alwaysSucceeds = new Promise((resolve, reject) =>{
+			let ret = {}
+			ret.json = () => { return realJwt }
+			resolve(ret)
+		})
+		FetchUrl.stageCall(settings.biasServiceUrl + "/authenticate/basic", undefined, alwaysSucceeds)
+		let f = actions.loginBasicAsync(email, password)
+		f((actual) => {
+			let expected = {
+				"id": 15,
+				"memberId": "ZOMCjUZq4Whnx6UJQZut4uxXJJ9oeZ6gXz3pAuzHvmLnQNnJ8VkcaaRp9Ppu7Lu2",
+				"roles": [
+					"guardian",
+					"philosopher-ruler"],
+				"type": "LOGIN",
+				"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
+				"userName": "chuck.sweet@gmail.com"
+	      	}
+			expect(expected).to.eql(actual)
+			done()
+		})
 	})
 })
 
@@ -141,17 +194,18 @@ describe('Article actions', () => {
 			})
 			FetchUrl.overrideCall(settings.biasServiceUrl + "/my/articles", undefined , alwaysFailsLoading)
 			let f = actions.loadArticlesAsync(settings)
+			let expected = {
+				type: 'FAIL', 
+				id: 16, 
+				error: { message: 'failed the promise' }
+			}			
 			f((actual)=>{
-				let expected = {
-					type: 'FAIL', 
-					id: 16, 
-					error: { message: 'failed the promise' }
-				}
 				expect(expected).to.eql(actual)
 				done()
 			})
 		})
 	})
+	
 	describe('loadStreamAsync', ()=>{
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ articleId: 1 }] //testing 

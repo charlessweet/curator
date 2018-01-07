@@ -2,7 +2,7 @@ import Settings from "../model/Settings"
 import Auth from '../model/Auth'
 import FetchUrl from './FetchUrl'
 
-export default class BiasCheckerService{
+export default class BiasCheckerService {
 	constructor(biasServiceUrl, biasServiceAppId, biasServiceSecret){
 		this.biasServiceUrl = biasServiceUrl
 		this.biasServiceSecret = biasServiceSecret
@@ -66,7 +66,7 @@ export default class BiasCheckerService{
 	}
 
 	createBookmark(article, biasToken){
-		var relativeUrl = "/bookmark?biasToken=" + biasToken + "&fullUrl=true"
+		var relativeUrl = "/bookmark?fullUrl=true"
 		return this.callBiasChecker(relativeUrl, "POST", article)
 		.then(function(res){
 			return res.id//bookmark id
