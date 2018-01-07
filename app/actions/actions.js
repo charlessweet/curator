@@ -198,17 +198,22 @@ const searchForMyArticle = (keywordWasValid, matchingArticles) => {
 	}
 }
 
-export const searchForMyArticleAsync = (keyword, settings, userInfo) => {
-	let biasToken = userInfo.biasToken
-	let facebookUserId = userInfo.facebookUserId
+export const searchForMyArticleAsync = (keyword, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
 		if(keyword.length > 4){
-			return biasCheckerService.searchMyArticles(keyword, facebookUserId, biasToken)
-			.then((matchingArticles) => {
-				dispatch(searchForMyArticle(true, matchingArticles))
+			return biasService.searchMyArticles(keyword)
+			.then((data) => {
+				if(data.error !== undefined){
+					dispatch(failCall(data.error))
+				}else{
+					dispatch(searchForMyArticle(true, data))
+				}
 			})
 			.catch((error)=>{
-				console.log("searchByKeywordAsync",error)
+				dispatch(failCall(error))
 			})			
 		}else{
 			dispatch(searchForMyArticle(false))

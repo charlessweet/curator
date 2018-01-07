@@ -433,4 +433,52 @@ describe('Article actions', () => {
 			})
 		})	
 	})
+
+	describe('searchForMyArticleAsync', ()=>{
+		it('should emit the correct event when successful', (done)=>{
+			let articles = [{ id: 1 }]
+			let keyword = 'keyword_search_test'
+			let keywordValid = true
+			let relativeUrl = "/my/articles/search?keyword=" + keyword
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(articles)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test", relativeUrl)
+			let f = actions.searchForMyArticleAsync(keyword, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'MY_ARTICLE_KEYWORD_SEARCH', 
+					id: 10,
+					keywordWasValid:  keywordValid,
+					matchingArticles: articles
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let articles = [{ id: 1 }]
+			let keyword = 'keyword_search_test'
+			let keywordValid = true
+			let relativeUrl = "/my/articles/search?keyword=" + keyword
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test", relativeUrl)
+			let f = actions.searchForMyArticleAsync(keyword, mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})			
+	})
 })	

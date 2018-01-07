@@ -153,8 +153,8 @@ export default class BiasCheckerService {
 		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 	}
 
-	searchMyArticles(keyword, facebookUserId, biasToken){
-		let relativeUrl = "/users/" + facebookUserId + "/search?biasToken=" + biasToken + "&keyword=" + keyword
+	searchMyArticles(keyword){
+		let relativeUrl = "/my/articles/search?keyword=" + keyword
 		return this.callBiasChecker(relativeUrl, "GET")
 		.then(function(result){
 			return result
