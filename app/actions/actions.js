@@ -7,7 +7,7 @@ import {FetchUrlInstance} from '../services/FetchUrl'
 
 const settings = new Settings()
 export const fetchUrl = new FetchUrlInstance()
-const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, fetchUrl);
+const biasCheckerService = new BiasCheckerService(settings.biasServiceUrl, settings.biasCheckerAppId, settings.biasCheckerSecret, fetchUrl)
 
 //tested
 export const indicatePageWasLoaded = (page) => {
@@ -16,6 +16,17 @@ export const indicatePageWasLoaded = (page) => {
 		id: 0,
 		currentPage: page
 	}
+}
+
+const failCall = (error, actionType) => {
+//	console.log(error,actionType)
+	var action = {
+		type: (actionType !== undefined ? actionType : actionTypes.FAILED),
+		id: 16,
+		error: error
+	}
+//	console.log(action)
+	return action
 }
 
 //tested
@@ -46,9 +57,9 @@ export const loginBasicAsync = (username, password, biasService) =>{
 		})
 		.catch((error) => {
 			dispatch(failCall(error))
-		});
+		})
 	}
-};
+}
 
 export const loginJwt = (jwt) =>{
 	//sync jwt in browser with current jwt
@@ -76,7 +87,7 @@ const loadArticles = (articles) => {
 		id: 7,
 		articles: articles
 	}
-};
+}
 
 export const loadArticlesAsync = (settings, biasService) => {
 	if(biasService === undefined){
@@ -95,76 +106,34 @@ export const loadArticlesAsync = (settings, biasService) => {
 			dispatch(failCall(error))
 		})
 	}
-};
-
-const createBookmark = (article, bookmarkId) => {
-	return {
-		type: actionTypes.CREATE_BOOKMARK,
-		id: 3,
-		bookmark: { articleId: article.id, bookmarkId: bookmarkId }
-	}
-}
-
-export const createBookmarkAsync = (settings, article, biasToken) => {
-	return function(dispatch){
-		return biasCheckerService.createBookmark(article, biasToken)
-		.then((bookmarkId) => {
-			dispatch(createBookmark(article, bookmarkId));
-		})
-		.catch((error) => {
-			console.log("createBookmarkAsync", error);
-		})
-	}
-}
-
-const createBiasCheckerMemberFromFacebook = (memberId, history) =>{
-	if(memberId !== undefined){
-		history.push('/register');
-	}
-	return {
-		type:actionTypes.CREATE_MEMBER,
-		id: 4,
-		memberId: memberId
-	}
-}
-
-export const createBiasCheckerAccountFromFacebookAsync = (settings, userInfo, email, password, guardian, history) => {
-	return function(dispatch){
-		return biasCheckerService.createBiasCheckerMemberFromFacebook(userInfo.userId, userInfo.biasToken, email, password, guardian)
-		.then((memberId) => {
-			dispatch(createBiasCheckerMemberFromFacebook(memberId, history));
-		})
-		.catch((error) => {
-			console.log("createBiasCheckerMemberFromFacebookAsync", error);
-		})
-	}
 }
 
 const loadRoleRequests = (members) => {
-//	console.log("loadRoleRequests", members)
 	return {
 		type: actionTypes.LOAD_ROLE_REQUESTS,
 		id: 5,
 		members: members
 	}
-};
+}
 
-export const loadRoleRequestsAsync = (settings, userInfo) => {
-	let biasToken = userInfo.biasToken;
+export const loadRoleRequestsAsync = (biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.loadMembersForApproval(biasToken)
+		return biasService.loadMembersForApproval()
 		.then((data) =>{
 			if(data.error !== undefined){
-				dispatch(failCall(data))
+				dispatch(failCall(data.error))
 			}else{
 				dispatch(loadRoleRequests(data))
 			}
 		})
 		.catch((error) => {
-			console.log("loadRoleRequestsAsync", error);
+			console.log("loadRoleRequestsAsync", error)
 		})
 	}
-};
+}
 
 const addRole = (grantInfo) => {
 	return {
@@ -174,14 +143,21 @@ const addRole = (grantInfo) => {
 	}
 }
 
-export const addRoleAsync = (targetMemberId, targetRoleId, settings, userInfo) => {
+export const addRoleAsync = (targetMemberId, targetRoleId, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.approveRole(targetMemberId, targetRoleId)
-		.then((grantInfo) => {
-			dispatch(addRole(grantInfo))
+		return biasService.approveRole(targetMemberId, targetRoleId)
+		.then((data) => {
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
+			}else{
+				dispatch(addRole(data))
+			}
 		})
 		.catch((error) => {
-			console.log("addRoleAsync",error)
+			dispatch(failCall(error))
 		})
 	}	
 }
@@ -194,30 +170,20 @@ const analyzeArticle = (article) => {
 	}
 }
 
-const failCall = (error, actionType) => {
-//	console.log(error,actionType)
-	var action = {
-		type: (actionType !== undefined ? actionType : actionTypes.FAILED),
-		id: 16,
-		error: error
+export const analyzeArticleAsync = (label, link, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
 	}
-//	console.log(action)
-	return action
-}
-
-export const analyzeArticleAsync = (label, link, settings, userInfo, history) => {
 	return function(dispatch){
-		return biasCheckerService.analyzeArticle(label, link)
+		return biasService.analyzeArticle(label, link)
 		.then((data) => {
-			console.log("analyzeArticleAsync", data)
 			if(data.error !== undefined){
-				dispatch(failCall(data))
+				dispatch(failCall(data.error))
 			}else{
 				dispatch(analyzeArticle(data))				
 			}
 		})
 		.catch((error) => {
-			console.log("analyzeArticleAsync", error)
 			dispatch(failCall(error))
 		})
 	}
@@ -256,7 +222,7 @@ const loadStream = (articles) => {
 		id: 11,
 		articles: articles
 	}
-};
+}
 
 export const loadStreamAsync = (settings, biasService) => {
 	if(biasService === undefined){
@@ -277,7 +243,7 @@ export const loadStreamAsync = (settings, biasService) => {
 	}
 }
 
-export const reviewArticle = (article, history) => {
+const reviewArticle = (article, history) => {
 	history.push("/stream/" + article.id)
 	return {
 		type: actionTypes.REVIEW_ARTICLE,
@@ -318,10 +284,10 @@ export const critiqueArticleAsync = (articleId, critique, settings) => {
 		return biasCheckerService.critiqueArticle(critique.userName, articleId, critique.paragraphIndex, critique.sentenceIndex, critique.quote, 
 			critique.analysis, critique.errorType)
 		.then((articleWithNewCritique) =>{
-			dispatch(critiqueArticle(articleWithNewCritique));
+			dispatch(critiqueArticle(articleWithNewCritique))
 		})
 		.catch((error) => {
-			console.log("critiqueArticleAsync", error);
+			console.log("critiqueArticleAsync", error)
 		})
 	}
 }
@@ -345,7 +311,7 @@ export const changePasswordAsync = (newPassword, settings) => {
 			}
 		})
 		.catch((error) => {
-			console.log("critiqueArticleAsync", error);
+			console.log("critiqueArticleAsync", error)
 		})
 	}
 }

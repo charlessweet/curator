@@ -9,10 +9,16 @@ import BiasCheckerService from '../../app/services/BiasCheckerService'
 
 const settings = new Settings()
 
+let  createMockBiasChecker = (method, rootUrl, url, payload) => {
+	let fetchUrl = new FetchUrlInstance()
+	fetchUrl.stageCall(rootUrl + url, payload, method)
+	return new BiasCheckerService(rootUrl, "bias_checker_key", "bias_chekcer_value", fetchUrl)	
+}
+
 before(function(done){
 	global.fetch = (url,req) => {
 		return new Promise((resolve, reject) => {
-			reject({"error": "default fetch called"})
+			reject({"error": "default fetch called - usually means your matching url is not consistent with what the BiasCheckerService method calls"})
 			done()
 		})
 	}
@@ -98,11 +104,6 @@ describe('Navigation actions', ()=>{
 	})
 })
 
-let  createMockBiasChecker = (method, rootUrl, url) => {
-	let fetchUrl = new FetchUrlInstance()
-	fetchUrl.stageCall(rootUrl + url, undefined, method)
-	return new BiasCheckerService(rootUrl, "bias_checker_key", "bias_chekcer_value", fetchUrl)	
-}
 
 describe('Login actions', ()=>{
 	it('loginJwt should fail on an invalid jwt', ()=>{
@@ -254,7 +255,6 @@ describe('Article actions', () => {
 		let history = {
 			push: (target) => { }
 		}
-		let i = 0
 		it('should emit the correct event when successful', (done)=>{
 			let articles = [{ id: 1 }] //testing 
 			let alwaysSucceeds = new Promise((resolve, reject) => {
@@ -292,5 +292,145 @@ describe('Article actions', () => {
 				done()
 			})
 		})
+	})
+
+	describe('loadRoleRequestsAsync', ()=>{
+		it('should emit the correct event when successful', (done)=>{
+			let members = [{ id: 1 }]
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(members)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  "/roles/requests")
+			let f = actions.loadRoleRequestsAsync(mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'LOAD_ROLE_REQUESTS', 
+					id: 5, 
+					members: members
+				})
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  "/roles/requests")
+			let f = actions.loadRoleRequestsAsync(mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})
+	})
+
+	describe('addRoleAsync', () => {
+		it('should emit the correct event when successful', (done)=>{
+			let members = [{ id: 1 }]
+			let targetMemberId = 1
+			let targetRoleId = "hushpuppie"
+			let relativeUrl = "/members/" + targetMemberId + "/roles"
+			let body ={}
+			body.roleName = targetRoleId
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(members)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  relativeUrl, body)
+			let f = actions.addRoleAsync(targetMemberId, targetRoleId, mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'GRANT_PROMOTION_REQUEST', 
+					id: 8,
+					grantInfo: members
+				})
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let targetMemberId = 1
+			let targetRoleId = "hushpuppie"
+			let relativeUrl = "/members/" + targetMemberId + "/roles"
+			let body ={}
+			body.roleName = targetRoleId
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  relativeUrl, body)
+			let f = actions.addRoleAsync(targetMemberId, targetRoleId, mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})
+	})
+
+	describe('analyzeArticleAsync', () => {
+		it('should emit the correct event when successful', (done)=>{
+			let article = { id: 1 }
+			let label = 'analyze_article_test'
+			let link = 'http://nosuchlink'
+			let body = {}
+			body.selfLabel = label
+			body.linkToValidate = link
+
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(article)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  "/analyze", body)
+			let f = actions.analyzeArticleAsync(label, link, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'ANALYZE_ARTICLE', 
+					id: 9, 
+					article: article
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let article = { id: 1 }
+			let label = 'analyze_article_test'
+			let link = 'http://nosuchlink'
+			let body = {}
+			body.selfLabel = label
+			body.linkToValidate = link
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  "/analyze", body)
+			let f = actions.analyzeArticleAsync(label, link, mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})	
 	})
 })	

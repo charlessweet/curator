@@ -9,9 +9,9 @@ before(function(done){
 	global.fetch = (url,req) => {
 		return new Promise((resolve, reject) => {
 			if(shouldResolve){
-				resolve({"resolved": "default fetch called"})
+				resolve({"resolved": "default fetch called", "url": url })
 			}else{
-				reject({"rejected": "default fetch called"})
+				reject({"rejected": "default fetch called", "url": url})
 			}
 		})
 	}

@@ -104,13 +104,9 @@ export default class BiasCheckerService {
 		})
 	}
 
-	loadMembersForApproval(biasToken){
+	loadMembersForApproval(){
 		let relativeUrl = "/roles/requests"
-		return this.callBiasChecker(relativeUrl, "GET")
-		.then(function(rows){
-//			console.log("BiasCheckerService_loadMembersForApproval",rows)
-			return rows
-		})
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "GET"))
 	}
 
 	//for me only
@@ -119,7 +115,7 @@ export default class BiasCheckerService {
 		let body ={}
 		body.targetMemberId = memberId
 		body.roleName = targetRole
-		return this.callBiasChecker(relativeUrl, "POST", body)
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 		.then(function(result){
 			return result
 		})
@@ -129,10 +125,7 @@ export default class BiasCheckerService {
 		let relativeUrl = "/members/" + memberId + "/roles"
 		let body = {}
 		body.roleName = targetRole
-		return this.callBiasChecker(relativeUrl, "POST", body)
-		.then(function(result){
-			return result
-		})
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 	}
 
 	denyRole(targetMemberId, targetRole){

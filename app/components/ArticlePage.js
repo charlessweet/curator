@@ -6,7 +6,7 @@ import store from '../store'
 import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
-import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, clearError} from '../actions/actions'
+import {loadArticlesAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, clearError} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
@@ -98,7 +98,6 @@ class ArticlePageUnwrapped extends React.Component{
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadArticles:(settings, userInfo) => dispatch(loadArticlesAsync(settings, userInfo)),
-    createBookmark: (settings, article, userInfo) => dispatch(createBookmarkAsync(settings, article, userInfo)),
     analyzeArticle: (label, link, settings, userInfo) => dispatch(analyzeArticleAsync(label, link, settings, userInfo)),
     searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
