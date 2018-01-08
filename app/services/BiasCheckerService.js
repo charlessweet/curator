@@ -161,7 +161,7 @@ export default class BiasCheckerService {
 		})
 	}
 
-	critiqueArticle(userName, articleId, paragraphNum, sentenceNum, quote, analysis, errorType, biasToken){
+	critiqueArticle(articleId, paragraphNum, sentenceNum, quote, analysis, errorType){
 		let relativeUrl = "/articles/" + articleId + "/critique"
 		let body = {}
 		body.paragraph = paragraphNum
@@ -170,11 +170,7 @@ export default class BiasCheckerService {
 		body.quote = quote
 		body.analysis = analysis
 		body.errorType = errorType
-		body.userName = userName
-		return this.callBiasChecker(relativeUrl, "POST", body)
-		.then(function(result){
-			return result
-		})
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 	}
 
 	linkToFacebook(facebookUserId){

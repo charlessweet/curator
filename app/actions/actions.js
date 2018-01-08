@@ -280,15 +280,22 @@ const critiqueArticle = (articleWithNewCritique) => {
 	}
 }
 
-export const critiqueArticleAsync = (articleId, critique, settings) => {
+export const critiqueArticleAsync = (articleId, errorType, analysis, quotation, paragraphIndex, sentenceIndex, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.critiqueArticle(critique.userName, articleId, critique.paragraphIndex, critique.sentenceIndex, critique.quote, 
-			critique.analysis, critique.errorType)
-		.then((articleWithNewCritique) =>{
-			dispatch(critiqueArticle(articleWithNewCritique))
+		return biasService.critiqueArticle(articleId, paragraphIndex, sentenceIndex, quotation, 
+			analysis, errorType)
+		.then((data) =>{
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
+			}else{
+				dispatch(critiqueArticle(data))				
+			}
 		})
 		.catch((error) => {
-			console.log("critiqueArticleAsync", error)
+			dispatch(failCall(error))
 		})
 	}
 }
@@ -301,18 +308,21 @@ const changePassword = (data) => {
 	}
 }
 
-export const changePasswordAsync = (newPassword, settings) => {
+export const changePasswordAsync = (newPassword, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch){
-		return biasCheckerService.changePassword(newPassword)
+		return biasService.changePassword(newPassword)
 		.then((data) => {
 			if(data.error !== undefined){
-				dispatch(failCall(data))
+				dispatch(failCall(data.error))
 			}else{
 				dispatch(changePassword(data))
 			}
 		})
 		.catch((error) => {
-			console.log("critiqueArticleAsync", error)
+			dispatch(failCall(error))
 		})
 	}
 }
@@ -325,7 +335,7 @@ const createAccount = (data, email) =>{
 	}
 }
 
-export const createAccountAsync = (settings, email, password, history) => {
+export const createAccountAsync = (email, password) => {
 	return function(dispatch){
 		return biasCheckerService.createAccount(email, password)
 		.then((data) => {

@@ -481,4 +481,122 @@ describe('Article actions', () => {
 			})
 		})			
 	})
+	describe('critiqueArticleAsync', ()=>{
+		it('should emit the correct event when successful', (done)=>{
+			let articleWithCritique = { id: 1 }
+			let articleId = 1
+			let errorType = "not-a-real-error"
+			let analysis = "something, something, about the article"
+			let quotation = "some quote which backs this up"
+			let paragraphIndex = 42
+			let sentenceIndex = 7
+			let relativeUrl = "/articles/" + articleId + "/critique"
+			let body = {}
+			body.paragraph = paragraphIndex
+			body.sentence = sentenceIndex
+			body.critiqueDate = new Date()
+			body.quote = quotation
+			body.analysis = analysis
+			body.errorType = errorType
+
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(articleWithCritique)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test", relativeUrl, body)
+			let f = actions.critiqueArticleAsync(articleId, errorType, analysis, quotation, paragraphIndex, sentenceIndex, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'ADD_ARTICLE_CRITIQUE', 
+					id: 14,
+					article: articleWithCritique
+				}
+				expect(actual).to.eql(expected)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let articleWithCritique = { id: 1 }
+			let articleId = 1
+			let errorType = "not-a-real-error"
+			let analysis = "something, something, about the article"
+			let quotation = "some quote which backs this up"
+			let paragraphIndex = 42
+			let sentenceIndex = 7
+			let relativeUrl = "/articles/" + articleId + "/critique"
+			let body = {}
+			body.paragraph = paragraphIndex
+			body.sentence = sentenceIndex
+			body.critiqueDate = new Date()
+			body.quote = quotation
+			body.analysis = analysis
+			body.errorType = errorType
+
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test", relativeUrl, body)
+			let f = actions.critiqueArticleAsync(articleId, errorType, analysis, quotation, paragraphIndex, sentenceIndex, mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})	
+	})
+	describe('changePasswordAsync', () => {
+		it('should emit the correct event when successful', (done)=>{
+			let passwordInfo = { id: 1 }
+			let relativeUrl = "/my/password"
+			let newPassword = "notapassword"
+			let body = { "password" : newPassword }
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(passwordInfo)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  relativeUrl, body)
+			let f = actions.changePasswordAsync(newPassword, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'CHANGE_PASSWORD', 
+					id: 15, 
+					result: passwordInfo
+				}
+				expect(actual).to.eql(expected)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let passwordInfo = { id: 1 }
+			let relativeUrl = "/my/password"
+			let newPassword = "notapassword"
+			let body = { "password" : newPassword }
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  relativeUrl, body)
+			let f = actions.changePasswordAsync(newPassword, mockBiasChecker)
+			f((event)=>{
+				//console.log(event)
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})
+	})
+
 })	
