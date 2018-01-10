@@ -712,5 +712,55 @@ describe('Account Management actions', () => {
 				done()
 			})
 		})
-	})	
+	})
+	describe('denyRoleAsync', () => {
+		it('should emit the correct event when successful', (done)=>{
+			let payload = { id: 1 }
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(payload)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let targetMemberId = 1
+			let targetRole = "fakerole"
+			let relativeUrl = "/roles/" + targetRole + "/requests/" + targetMemberId
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  relativeUrl)
+			let f = actions.denyRoleAsync(targetMemberId, targetRole, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'DENY_ROLE_REQUEST', 
+					id: 19, 
+					grantInfo: payload
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let payload = { id: 1 }
+			let targetMemberId = 1
+			let targetRole = "fakerole"
+			let relativeUrl = "/roles/" + targetRole + "/requests/" + targetMemberId
+			let body ={}
+			body.targetMemberId = targetMemberId
+			body.roleName = targetRole
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  relativeUrl)
+			let f = actions.denyRoleAsync(targetMemberId, targetRole, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		})
+	})		
 })	

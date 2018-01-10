@@ -383,15 +383,18 @@ export const requestRoleAsync = (targetMemberId, roleName, biasService) => {
 
 const denyRole = (grantInfo) => {
 	return {
-		type: actionTypes.DENY_PROMOTION_REQUEST,
+		type: actionTypes.DENY_ROLE_REQUEST,
 		id: 19,
 		grantInfo: grantInfo
 	}
 }
 
-export const denyRoleAsync = (targetMemberId, targetRoleId, settings) => {
+export const denyRoleAsync = (targetMemberId, targetRoleId, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}	
 	return function(dispatch){
-		return biasCheckerService.denyRole(targetMemberId, targetRoleId)
+		return biasService.denyRole(targetMemberId, targetRoleId)
 		.then((data) => {
 			if(data.error === undefined){
 				dispatch(denyRole(data))
