@@ -362,14 +362,17 @@ const requestRole = (data) => {
 	}
 }
 
-export const requestRoleAsync = (settings, targetMemberId, roleName) => {
+export const requestRoleAsync = (targetMemberId, roleName, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}	
 	return function(dispatch){
-		return biasCheckerService.requestRole(targetMemberId, roleName)
+		return biasService.requestRole(targetMemberId, roleName)
 		.then((data) => {
 			if(data.error === undefined){
 				dispatch(requestRole(data))
 			}else{
-				dispatch(failCall(data))
+				dispatch(failCall(data.error))
 			}
 		})
 		.catch((error) => {

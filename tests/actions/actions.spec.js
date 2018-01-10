@@ -659,4 +659,58 @@ describe('Account Management actions', () => {
 			})
 		})
 	})
+
+	describe('requestRoleAsync', () => {
+		it('should emit the correct event when successful', (done)=>{
+			let payload = { id: 1 }
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(payload)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let relativeUrl = "/my/roles"
+			let memberId = 1
+			let targetRole = "fakerole"
+			let body ={}
+			body.targetMemberId = memberId
+			body.roleName = targetRole
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  relativeUrl, body)
+			let f = actions.requestRoleAsync(memberId, targetRole, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'REQUEST_ROLE', 
+					id: 18, 
+					result: payload
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let payload = { id: 1 }
+			let relativeUrl = "/my/roles"
+			let memberId = 1
+			let targetRole = "fakerole"
+			let body ={}
+			body.targetMemberId = memberId
+			body.roleName = targetRole
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  relativeUrl, body)
+			let f = actions.requestRoleAsync(memberId, targetRole, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		})
+	})	
 })	
