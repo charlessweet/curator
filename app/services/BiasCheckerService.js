@@ -139,10 +139,7 @@ export default class BiasCheckerService {
 	changePassword(newPassword){
 		let relativeUrl = "/my/password"
 		let body = { "password" : newPassword }
-		return this.callBiasChecker(relativeUrl, "POST", body)
-		.then(function(result){
-			return result
-		})
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 	}
 
 	analyzeArticle(label, link){

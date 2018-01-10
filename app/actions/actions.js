@@ -335,9 +335,12 @@ const createAccount = (data, email) =>{
 	}
 }
 
-export const createAccountAsync = (email, password) => {
+export const createAccountAsync = (email, password, biasService) => {
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}	
 	return function(dispatch){
-		return biasCheckerService.createAccount(email, password)
+		return biasService.createAccount(email, password)
 		.then((data) => {
 			if(data.error === undefined){
 				dispatch(createAccount(data, email))

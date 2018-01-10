@@ -106,60 +106,20 @@ describe('Navigation actions', ()=>{
 
 
 describe('Login actions', ()=>{
-	it('loginJwt should fail on an invalid jwt', ()=>{
-		let fakeJwt = guid()
-		expect(actions.loginJwt(fakeJwt)).to.eql({
-			type: actionTypes.LOGIN_FAILED,
-			id: 16,
-			error: {
-				message: "Invalid client-side JWT"
-			}
-		})
-	}),
-	it('loginJwt should parse a valid JWT correctly', ()=>{
-		let realJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJndWFyZGlhbiIsInBoaWxvc29waGVyLXJ1bGVyIl0sIm5hbWUiOiJjaHVjay5zd2VldEBnbWFpbC5jb20iLCJtZW1iZXJJZCI6IlpPTUNqVVpxNFdobng2VUpRWnV0NHV4WEpKOW9lWjZnWHozcEF1ekh2bUxuUU5uSjhWa2NhYVJwOVBwdTdMdTIiLCJ1c2VySWQiOiIwZjFlNTMzMDBjYTQ5ZWZmYTkwZDRlNDI3MjhjMmY2OWE4MzYzOWM4YWM5YWU0YzE3OTZiZjg2OTliM2E1OGExIiwiaWF0IjoxNTEwMTE4ODkwLCJleHAiOjE1MTAxMjk0NDUsImlzcyI6InVybjpjdXJhdG9yLmJpYXNjaGVrZXIub3JnIn0.OTBfY14wbw3FUc9civ0Cu1k7Tyha62-fs8VC72RkgF8"
-		expect(actions.loginJwt(realJwt)).to.eql({
-			"id": 15,
-			"memberId": "ZOMCjUZq4Whnx6UJQZut4uxXJJ9oeZ6gXz3pAuzHvmLnQNnJ8VkcaaRp9Ppu7Lu2",
-			"roles": [
-				"guardian",
-				"philosopher-ruler"],
-			"type": "LOGIN",
-			"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
-			"userName": "chuck.sweet@gmail.com"
-      	})		
-	}),
-	it('loginBasicAsync should emit the correct event when fails', (done)=>{
-		let email = "chuck.sweet@gmail.com"
-		let password = "fail-nopassword"
-		let alwaysFails = new Promise((resolve, reject) =>{
-			reject({"message":"failed the promise"})
-		})
-		let mockBiasChecker = createMockBiasChecker(alwaysFails, "login_basic_async_fail", "/authenticate/basic")
-		let f = actions.loginBasicAsync(email, password, mockBiasChecker)
-		f((actual)=>{
-			let expected = {
-				type: 'FAIL', 
-				id: 16, 
-				error: { message: 'failed the promise' }
-			}
-			expect(actual).to.eql(expected)
-			done()
-		})
-	}),
-	it('loginBasicAsync should emit the correct event when successful', (done)=>{
-		let email = "chuck.sweet@gmail.com"
-		let password = "nopassword"
-		let realJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJndWFyZGlhbiIsInBoaWxvc29waGVyLXJ1bGVyIl0sIm5hbWUiOiJjaHVjay5zd2VldEBnbWFpbC5jb20iLCJtZW1iZXJJZCI6IlpPTUNqVVpxNFdobng2VUpRWnV0NHV4WEpKOW9lWjZnWHozcEF1ekh2bUxuUU5uSjhWa2NhYVJwOVBwdTdMdTIiLCJ1c2VySWQiOiIwZjFlNTMzMDBjYTQ5ZWZmYTkwZDRlNDI3MjhjMmY2OWE4MzYzOWM4YWM5YWU0YzE3OTZiZjg2OTliM2E1OGExIiwiaWF0IjoxNTEwMTE4ODkwLCJleHAiOjE1MTAxMjk0NDUsImlzcyI6InVybjpjdXJhdG9yLmJpYXNjaGVrZXIub3JnIn0.OTBfY14wbw3FUc9civ0Cu1k7Tyha62-fs8VC72RkgF8"		
-		let alwaysSucceeds = new Promise((resolve, reject) =>{
-			let ret = {}
-			ret.json = () => { return realJwt }
-			resolve(ret)
-		})
-		let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "login_basic_async", "/authenticate/basic")
-		let f = actions.loginBasicAsync(email, password, mockBiasChecker)
-		f((actual) => {
-			let expected = {
+	describe('loginJwt', () => {	
+		it('loginJwt should fail on an invalid jwt', ()=>{
+			let fakeJwt = guid()
+			expect(actions.loginJwt(fakeJwt)).to.eql({
+				type: actionTypes.LOGIN_FAILED,
+				id: 16,
+				error: {
+					message: "Invalid client-side JWT"
+				}
+			})
+		}),
+		it('loginJwt should parse a valid JWT correctly', ()=>{
+			let realJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJndWFyZGlhbiIsInBoaWxvc29waGVyLXJ1bGVyIl0sIm5hbWUiOiJjaHVjay5zd2VldEBnbWFpbC5jb20iLCJtZW1iZXJJZCI6IlpPTUNqVVpxNFdobng2VUpRWnV0NHV4WEpKOW9lWjZnWHozcEF1ekh2bUxuUU5uSjhWa2NhYVJwOVBwdTdMdTIiLCJ1c2VySWQiOiIwZjFlNTMzMDBjYTQ5ZWZmYTkwZDRlNDI3MjhjMmY2OWE4MzYzOWM4YWM5YWU0YzE3OTZiZjg2OTliM2E1OGExIiwiaWF0IjoxNTEwMTE4ODkwLCJleHAiOjE1MTAxMjk0NDUsImlzcyI6InVybjpjdXJhdG9yLmJpYXNjaGVrZXIub3JnIn0.OTBfY14wbw3FUc9civ0Cu1k7Tyha62-fs8VC72RkgF8"
+			expect(actions.loginJwt(realJwt)).to.eql({
 				"id": 15,
 				"memberId": "ZOMCjUZq4Whnx6UJQZut4uxXJJ9oeZ6gXz3pAuzHvmLnQNnJ8VkcaaRp9Ppu7Lu2",
 				"roles": [
@@ -168,9 +128,54 @@ describe('Login actions', ()=>{
 				"type": "LOGIN",
 				"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
 				"userName": "chuck.sweet@gmail.com"
-	      	}
-			expect(actual).to.eql(expected)
-			done()
+	      	})		
+		})
+	})
+
+	describe('loginBasicAsync', () => {	
+		it('loginBasicAsync should emit the correct event when fails', (done)=>{
+			let email = "chuck.sweet@gmail.com"
+			let password = "fail-nopassword"
+			let alwaysFails = new Promise((resolve, reject) =>{
+				reject({"message":"failed the promise"})
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "login_basic_async_fail", "/authenticate/basic")
+			let f = actions.loginBasicAsync(email, password, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'FAIL', 
+					id: 16, 
+					error: { message: 'failed the promise' }
+				}
+				expect(actual).to.eql(expected)
+				done()
+			})
+		}),
+		it('loginBasicAsync should emit the correct event when successful', (done)=>{
+			let email = "chuck.sweet@gmail.com"
+			let password = "nopassword"
+			let realJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJndWFyZGlhbiIsInBoaWxvc29waGVyLXJ1bGVyIl0sIm5hbWUiOiJjaHVjay5zd2VldEBnbWFpbC5jb20iLCJtZW1iZXJJZCI6IlpPTUNqVVpxNFdobng2VUpRWnV0NHV4WEpKOW9lWjZnWHozcEF1ekh2bUxuUU5uSjhWa2NhYVJwOVBwdTdMdTIiLCJ1c2VySWQiOiIwZjFlNTMzMDBjYTQ5ZWZmYTkwZDRlNDI3MjhjMmY2OWE4MzYzOWM4YWM5YWU0YzE3OTZiZjg2OTliM2E1OGExIiwiaWF0IjoxNTEwMTE4ODkwLCJleHAiOjE1MTAxMjk0NDUsImlzcyI6InVybjpjdXJhdG9yLmJpYXNjaGVrZXIub3JnIn0.OTBfY14wbw3FUc9civ0Cu1k7Tyha62-fs8VC72RkgF8"		
+			let alwaysSucceeds = new Promise((resolve, reject) =>{
+				let ret = {}
+				ret.json = () => { return realJwt }
+				resolve(ret)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "login_basic_async", "/authenticate/basic")
+			let f = actions.loginBasicAsync(email, password, mockBiasChecker)
+			f((actual) => {
+				let expected = {
+					"id": 15,
+					"memberId": "ZOMCjUZq4Whnx6UJQZut4uxXJJ9oeZ6gXz3pAuzHvmLnQNnJ8VkcaaRp9Ppu7Lu2",
+					"roles": [
+						"guardian",
+						"philosopher-ruler"],
+					"type": "LOGIN",
+					"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
+					"userName": "chuck.sweet@gmail.com"
+		      	}
+				expect(actual).to.eql(expected)
+				done()
+			})
 		})
 	})
 })
@@ -551,6 +556,9 @@ describe('Article actions', () => {
 			})
 		})	
 	})
+})
+
+describe('Account Management actions', () => {	
 	describe('changePasswordAsync', () => {
 		it('should emit the correct event when successful', (done)=>{
 			let passwordInfo = { id: 1 }
@@ -599,4 +607,56 @@ describe('Article actions', () => {
 		})
 	})
 
+	describe('createAccountAsync', () => {
+		it('should emit the correct event when successful', (done)=>{
+			let passwordInfo = { id: 1 }
+			let email = "nosuchaccount@biaschecker.org"
+			let relativeUrl = "/register"
+			let password = "notapassword"
+			let body = {}
+			body.email = email
+			body.password = password
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(passwordInfo)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  relativeUrl, body)
+			let f = actions.createAccountAsync(email, password, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'CREATE_MEMBER', 
+					id: 17, 
+					result: passwordInfo
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let error = {"message":"failed the promise"}
+			let relativeUrl = "/register"
+			let password = "notapassword"
+			let email = "nosuchaccount@biaschecker.org"
+			let body = {}
+			body.email = email
+			body.password = password
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  relativeUrl, body)
+			let f = actions.createAccountAsync(email, password, mockBiasChecker)
+			f((event)=>{
+				//console.log(event)
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})
+	})
 })	
