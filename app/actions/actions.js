@@ -399,7 +399,7 @@ export const denyRoleAsync = (targetMemberId, targetRoleId, biasService) => {
 			if(data.error === undefined){
 				dispatch(denyRole(data))
 			}else{
-				dispatch(failCall(data))
+				dispatch(failCall(data.error))
 			}
 		})
 		.catch((error) => {
@@ -433,10 +433,12 @@ const linkToFacebook = (data) => {
 	}
 }
 
-export const linkToFacebookAsync = (facebookToken) =>{
-	//log user in to biaschecker and retrieve biasToken, keep details
+export const linkToFacebookAsync = (facebookToken, biasService) =>{
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
 	return function(dispatch) {
-		return biasCheckerService.linkToFacebook(facebookToken)
+		return biasService.linkToFacebook(facebookToken)
 		.then((data) => {
 			if(data.error === undefined){
 				dispatch(linkToFacebook(data))

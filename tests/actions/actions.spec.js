@@ -723,7 +723,8 @@ describe('Account Management actions', () => {
 			})
 		})
 	})
-			describe('loadRoleRequestsAsync', ()=>{
+	
+	describe('loadRoleRequestsAsync', ()=>{
 		it('should emit the correct event when successful', (done)=>{
 			let members = [{ id: 1 }]
 			let alwaysSucceeds = new Promise((resolve, reject) => {
@@ -761,4 +762,94 @@ describe('Account Management actions', () => {
 			})
 		})
 	})
-})	
+})
+
+describe("notification actions", ()=>{
+	describe("notifyUser", ()=>{
+		it('should emit the correct event', ()=>{
+			let message = "this is a test"
+			let expected = {
+				type: "NOTIFY_USER",
+				id: 20,
+				message: message
+			}	
+			let actual = actions.notifyUser(message)
+			expect(expected).to.eql(actual)			
+		})
+	})
+	describe("notifyUser", ()=>{
+		it('should emit the correct event', ()=>{
+			let triggerGroup = "triggerGroup"
+			let triggerState = "triggerState"
+			let expected = {
+				type: "CLEAR_NOTIFY_USER",
+				id: 21,
+				triggerGroup: triggerGroup,
+				triggerState: triggerState
+			}
+			let actual = actions.clearUserNotification(triggerGroup, triggerState)
+			expect(expected).to.eql(actual)
+		})
+	}),
+	describe("clearError", ()=>{
+		it('should emit the correct event', ()=>{
+			let expected = {
+				type: "CLEAR_ERROR",
+				id: 23,
+			}
+			let actual = actions.clearError()
+			expect(expected).to.eql(actual)
+		})
+	})
+})
+
+describe("facebook actions", ()=>{
+	describe("linkToFacebookAsync", ()=>{
+		it('should emit the correct event when successful', (done)=>{			
+			let data = [{ id: 1 }]
+			let facebookUserId = "this is my token"
+			let relativeUrl = "/my/facebook"
+			let body = {}
+			body.facebookUserId = facebookUserId
+			let alwaysSucceeds = new Promise((resolve, reject) => {
+				try{
+					resolve(data)
+				}catch(e){
+					reject(e)
+				}
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "test",  relativeUrl, body)
+			let f = actions.linkToFacebookAsync(facebookUserId, mockBiasChecker)
+			f((actual)=>{
+				let expected = {
+					type: 'LINK_TO_FACEBOOK', 
+					id: 22, 
+					data: data
+				}
+				expect(expected).to.eql(actual)
+				done()
+			})
+		}),
+		it('should emit the correct event when fails', (done)=>{
+			let data = [{ id: 1 }]
+			let facebookUserId = "this is my token"
+			let relativeUrl = "/my/facebook"
+			let body = {}
+			body.facebookUserId = facebookUserId
+			let error = {"message":"failed the promise"}
+			let alwaysFails = new Promise((resolve, reject) => {
+				reject(error)
+			})
+			let mockBiasChecker = createMockBiasChecker(alwaysFails, "test",  relativeUrl, body)
+			let f = actions.linkToFacebookAsync(facebookUserId, mockBiasChecker)
+			f((event)=>{
+				expect(event).to.eql({
+					type: 'FAIL', 
+					id: 16, 
+					error: error
+				})
+				done()
+			})
+		})		
+	})
+})

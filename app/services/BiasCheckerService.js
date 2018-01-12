@@ -130,10 +130,7 @@ export default class BiasCheckerService {
 
 	denyRole(targetMemberId, targetRole){
 		let relativeUrl = "/roles/" + targetRole + "/requests/" + targetMemberId
-		return this.callBiasChecker(relativeUrl, "DELETE", undefined)
-		.then(function(result){
-			return result
-		})		
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "DELETE", undefined))
 	}
 
 	changePassword(newPassword){
