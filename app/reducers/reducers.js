@@ -6,7 +6,11 @@ import Article from '../model/Article'
 import MemberList from '../model/MemberList'
 import actionTypes from '../actionTypes'
 
-const articleList = (state = { "articles":new ArticleList([]), "stream": new ArticleList([])}, action) => {
+export const articleList = (state = { "articles":new ArticleList([]), "stream": new ArticleList([])}, action) => {
+  //console.log(state, action)
+  if(action == undefined){
+    return state
+  }
   let article = {}
   switch (action.type) {
     case actionTypes.SHOW_ARTICLES:
@@ -14,14 +18,10 @@ const articleList = (state = { "articles":new ArticleList([]), "stream": new Art
         articles:  new ArticleList(action.articles)
       })
       return ns
-    case actionTypes.CREATE_BOOKMARK:
-      return Object.assign({}, state, {
-        bookmark: action.bookmark
-      })
     case actionTypes.ANALYZE_ARTICLE:
       article = action.article
       return Object.assign({}, state, {
-        articles: new ArticleList(state.articles.articles).addIfNotExists(new Article(article.id, article.title, article.description, article.link, article.keywords, 0, article.biasScore, 0, article.critiques, article.outOfContextScore, article.factualErrorScore, article.logicalErrorScore))
+        articles: new ArticleList(state.articles.articles).addIfNotExists(new Article(article.id, article.title, article.description, article.link, article.keywords, article.personalScore, article.biasScore, article.consensusScore, article.critiques, article.outOfContextScore, article.factualErrorScore, article.logicalErrorScore))
       })
     case actionTypes.MY_ARTICLE_KEYWORD_SEARCH:
       let unfilteredList = (state.unfiltered === undefined ? new ArticleList(state.articles.articles) : state.unfiltered)

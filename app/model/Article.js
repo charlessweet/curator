@@ -13,9 +13,6 @@ class Article{
 		this.outOfContextScore = outOfContextScore
 		this.factualErrorScore = factualErrorScore
 		this.logicalErrorScore = logicalErrorScore
-		
-		//reputation
-		this.karma = new Karma(5);
 	}
 }
 export default Article;
