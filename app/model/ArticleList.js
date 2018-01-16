@@ -67,8 +67,9 @@ export default class ArticleList{
 	overwriteIfExists(article){
 		let existingIndex = this.articles.findIndex((a) => a.id == article.id)
 		if(existingIndex > -1){
-			this.articles[existingIndex] = article
+			this.articles[existingIndex] = Object.assign({}, article)
 		}
+		this.length = this.articles.length
 		return this
 	}
 

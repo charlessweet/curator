@@ -383,7 +383,7 @@ export const requestRoleAsync = (targetMemberId, roleName, biasService) => {
 
 const denyRole = (grantInfo) => {
 	return {
-		type: actionTypes.DENY_ROLE_REQUEST,
+		type: actionTypes.DENY_PROMOTION_REQUEST,
 		id: 19,
 		grantInfo: grantInfo
 	}

@@ -43,7 +43,7 @@ export const articleList = (state = { "articles":new ArticleList([]), "stream": 
     case actionTypes.ADD_ARTICLE_CRITIQUE:
       article = action.article
       return Object.assign({}, state, {
-        articles: new ArticleList(state.articles.articles).overwriteIfExists(new Article(article.id, article.title, article.description, article.link, article.keywords, 0, article.biasScore, 0, article.critiques, article.outOfContextScore, article.factualErrorScore, article.logicalErrorScore)),
+        articles: new ArticleList(state.articles.articles).overwriteIfExists(new Article(article.id, article.title, article.summary, article.link, article.keywords, article.personalScore, article.algorithmScore, article.consensusScore, article.critiques, article.outOfContextScore, article.factualErrorScore, article.logicalErrorScore)),
         currentArticle: article
       })
     default:
@@ -52,14 +52,14 @@ export const articleList = (state = { "articles":new ArticleList([]), "stream": 
 }
 
 const settingInitial = new Settings()
-const settings = (state = settingInitial, action) => {
+export const settings = (state = settingInitial, action) => {
   switch(action.type){
     default:
       return state;    
   }
 }
 
-const identity = (state = {}, action) => {
+export const identity = (state = {}, action) => {
   switch(action.type){
     case actionTypes.LOGIN:
       let userIdentity = new UserIdentity(action.userId, action.userName, action.memberId, action.roles);
@@ -72,7 +72,7 @@ const identity = (state = {}, action) => {
   }
 }
 
-const memberList = (state = {"members":new MemberList([])}, action) => {
+export const memberList = (state = {"members":new MemberList([])}, action) => {
   switch(action.type)  {
     case actionTypes.LOAD_ROLE_REQUESTS:
       if(action.members.length > 0){
