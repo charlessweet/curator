@@ -327,4 +327,79 @@ describe('Reducers', () => {
 			expect(actual).to.eql(expected)
 		})		
 	})
+
+	describe('Page reducers', ()=>{
+		it(actionTypes.SET_PAGE + " action should add current page to state", ()=>{
+			let action = { type: actionTypes.SET_PAGE, currentPage: "myFakePage"}
+			let actual = reducers.page(undefined, action)
+			let expected = { current: "myFakePage"}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.CHANGE_PAGE + " action should add to and from page to state", ()=>{
+			let action = { type: actionTypes.CHANGE_PAGE, fromPage: "myFakeFromPage", toPage: "myFakeToPage"}
+			let actual = reducers.page(undefined, action)
+			let expected = { current:"myFakeToPage", transitioningFrom: "myFakeFromPage", transitioningTo: "myFakeToPage"}
+			expect(actual).to.eql(expected)
+		})		
+	})
+
+	describe('Failure reducers', ()=>{
+		it(actionTypes.FAILED + " action should add failure to state", ()=>{
+			let action = { type: actionTypes.FAILED, error: "myError"}
+			let actual = reducers.failure(undefined, action)
+			let expected = { error: "myError"}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.CLEAR_ERROR + " action should clear the preceding error", ()=>{
+			let action = { type: actionTypes.CLEAR_ERROR }
+			let actual = reducers.failure({error:"myError"}, action)
+			let expected = {}
+			expect(actual).to.eql(expected)
+		})
+	})
+	describe('Notification reducers', ()=>{
+		it(actionTypes.CREATE_MEMBER + " action should add newAccountCreated state", ()=>{
+			let action = { type: actionTypes.CREATE_MEMBER }
+			let actual = reducers.notify(undefined, action)
+			let expected = { newAccountCreated: true}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.LOGIN_FAILED + " action should add loginFailed state", ()=>{
+			let action = { type: actionTypes.LOGIN_FAILED }
+			let actual = reducers.notify(undefined, action)
+			let expected = { loginFailed: true}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.LINK_TO_FACEBOOK + " action should add existingLinksImported state", ()=>{
+			let action = { type: actionTypes.LINK_TO_FACEBOOK }
+			let actual = reducers.notify(undefined, action)
+			let expected = { existingLinksImported: true}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.REQUEST_ROLE + " action should add roleRequested state", ()=>{
+			let action = { type: actionTypes.REQUEST_ROLE }
+			let actual = reducers.notify(undefined, action)
+			let expected = { roleRequested: true}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.FAILED + " action should add roleRequested state", ()=>{
+			let action = { type: actionTypes.FAILED }
+			let actual = reducers.notify(undefined, action)
+			let expected = { failed: true}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.CHANGE_PASSWORD + " action should add passwordChanged state", ()=>{
+			let action = { type: actionTypes.CHANGE_PASSWORD }
+			let actual = reducers.notify(undefined, action)
+			let expected = { passwordChanged: true}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.CLEAR_NOTIFY_USER + " action should clear passwordChanged state", ()=>{
+			let action = { type: actionTypes.CLEAR_NOTIFY_USER, triggerState:"passwordChanged" }
+			let state = { passwordChanged: true }
+			let actual = reducers.notify(state, action)
+			let expected = { passwordChanged: false}
+			expect(actual).to.eql(expected)
+		})
+	})
 })

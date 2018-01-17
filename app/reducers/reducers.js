@@ -106,18 +106,18 @@ export const memberList = (state = {"members":new MemberList([])}, action) => {
   }
 }
 
-const page = (state = {"current":"LOGIN"}, action) => {
+export const page = (state = {"current":"LOGIN"}, action) => {
   switch(action.type){
     case actionTypes.SET_PAGE:
       return Object.assign({}, state, {"current": action.currentPage})
     case actionTypes.CHANGE_PAGE:
-      return Object.assign({}, state, {"transitioningFrom": action.fromPage, "transitioningTo": action.toPage})
+      return Object.assign({}, state, {"transitioningFrom": action.fromPage, "transitioningTo": action.toPage, "current":action.toPage})
     default:
       return state;
   }
 }
 
-const failure = (state = {}, action) => {
+export const failure = (state = {}, action) => {
   switch(action.type){
     case actionTypes.FAILED:
       let lstate = Object.assign({}, state, {"error": action.error})
@@ -131,7 +131,7 @@ const failure = (state = {}, action) => {
 
 //user notification states only - changing these states doesn't have persistent side
 //effects
-const notify = (state={}, action) => {
+export const notify = (state={}, action) => {
   switch(action.type){
     case actionTypes.CLEAR_NOTIFY_USER:
       let ns2 = Object.assign({}, state)
@@ -145,7 +145,7 @@ const notify = (state={}, action) => {
       return Object.assign({}, state, {"existingLinksImported":true})
     case actionTypes.REQUEST_ROLE:
       return Object.assign({}, state, {"roleRequested":true})
-    case actionTypes.FAIL:
+    case actionTypes.FAILED:
       return Object.assign({}, state, {"failed":true})
     case actionTypes.CHANGE_PASSWORD:
       return Object.assign({}, state, {"passwordChanged":true})
