@@ -37,7 +37,7 @@ class RoleRequest extends React.Component{
 	handleSubmit(event){
 		this.validation = this.validate();
 		if(!this.validation.targetMemberId && !this.validation.roleName){
-			this.requestRole(this.settings, this.state.targetMemberId, this.state.roleName)
+			this.requestRole(this.state.targetMemberId, this.state.roleName)
 		}else{
 			alert("The form is invalid.")
 		}
@@ -78,7 +78,7 @@ class RoleRequest extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    requestRole: (settings, targetMemberId, roleName) => dispatch(requestRoleAsync(settings, targetMemberId, roleName))
+    requestRole: (targetMemberId, roleName) => dispatch(requestRoleAsync(targetMemberId, roleName))
   }
 }
 

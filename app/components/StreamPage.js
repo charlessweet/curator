@@ -94,7 +94,7 @@ class StreamPageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadStream:(settings, userInfo) => dispatch(loadStreamAsync(settings, userInfo)),
+    loadStream:(settings) => dispatch(loadStreamAsync(settings)),
     reviewArticle: (article, history) => dispatch(reviewArticle(article, history)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
     clearError: () => dispatch(clearError())

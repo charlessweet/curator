@@ -36,7 +36,7 @@ class Login extends React.Component{
 		this.validation = this.validate() 
 		if(!this.validation.email && !this.validation.password){
 			let storeState = store.getState() 
-			this.login(storeState.settings, this.state.email, this.state.password, this.history) 			
+			this.login(this.state.email, this.state.password) 			
 		}else{
 			alert("The form is invalid.") 
 		}
@@ -65,6 +65,7 @@ class Login extends React.Component{
 	}
 
 	render(){
+		console.log("login", this.state)
 	    let fullWidth = {
 	    	"width":"100%"
 	    }

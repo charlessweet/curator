@@ -20,6 +20,9 @@ const styles = {
       "backgroundColor":"white",
       "boxShadow":"none",
       "margin":"5em"
+  },
+  headline:{
+      "fontFamily" : "'IM Fell English', serif"
   }
 }
 
@@ -34,7 +37,7 @@ class LandingPageUnwrapped extends React.Component{
           <Grid container>
             <Grid item xs={12}>
               <Paper style={styles.paperContainer} elevation={0}>
-                <Typography type="headline" component="h2">Socializing News Analysis</Typography>
+                <Typography style={styles.headline} type="headline" component="h2">Curator: Socializing News Analysis</Typography>
                 <Button onClick={()=>{this.goToPage('login')}}>Log In</Button>
                 <Button onClick={()=>{this.goToPage('create')}}>Get Started</Button>
               </Paper>

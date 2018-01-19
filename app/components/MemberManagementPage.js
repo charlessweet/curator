@@ -52,13 +52,13 @@ class MemberManagementPageUnwrapped extends React.Component{
     self.setState(state);
     if(self.hasLoaded === undefined && state.members.length == 0){
       self.hasLoaded = true;
-      self.props.loadMembersForApproval(self.settings, self.userInfo);
+      self.props.loadMembersForApproval();
     }
   }
 
   render(){
       let state = this.state;   
-//      console.log("manstate", state)   
+      console.log("manstate", state)   
       return (
       <div id="philosopher-ruler-page">
         <Menu active={"ruler"} />
@@ -85,9 +85,9 @@ class MemberManagementPageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadMembersForApproval: (settings, userInfo) => dispatch(loadRoleRequestsAsync(settings, userInfo)),
-    addRole: (targetMemberId, targetRoleName, settings) =>  { dispatch(addRoleAsync(targetMemberId, targetRoleName, settings)) },
-    denyRole: (targetMemberId, targetRoleName, settings) =>  { dispatch(denyRoleAsync(targetMemberId, targetRoleName, settings)) }
+    loadMembersForApproval: () => dispatch(loadRoleRequestsAsync()),
+    addRole: (targetMemberId, targetRoleName) =>  { dispatch(addRoleAsync(targetMemberId, targetRoleName)) },
+    denyRole: (targetMemberId, targetRoleName) =>  { dispatch(denyRoleAsync(targetMemberId, targetRoleName)) }
   }
 }
 

@@ -24,8 +24,8 @@ const MemberCard = (props) => {
 				</List>
 			</CardText>
 			<CardActions>
-				<Button raised label="Approve" primary={true} onClick={()=>{approveAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
-				<Button raised label="Deny" primary={false} onClick={()=>{denyAction(member.memberId, member.roleName, props.settings, props.userInfo)}} />
+				<Button raised label="Approve" primary={true} onClick={()=>{approveAction(member.memberId, member.roleName)}} />
+				<Button raised label="Deny" primary={false} onClick={()=>{denyAction(member.memberId, member.roleName)}} />
 			</CardActions>
 		</Card>
 	);

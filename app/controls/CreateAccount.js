@@ -35,7 +35,7 @@ class CreateAccount extends React.Component{
 	handleSubmit(event){
 		this.validation = this.validate()
 		if(!this.validation.password && !this.validation.email){
-			this.createAccount(this.settings, this.state.email, this.state.password, this.history)
+			this.createAccount(this.state.email, this.state.password)
 		}else{
 			alert("The form is invalid.")
 		}
@@ -106,7 +106,7 @@ class CreateAccount extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    createAccount: (settings, email, password, history) => dispatch(createAccountAsync(settings, email, password, history)),
+    createAccount: (email, password) => dispatch(createAccountAsync(email, password)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history))
   }
 }

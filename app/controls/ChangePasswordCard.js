@@ -33,7 +33,7 @@ class ChangePassword extends React.Component{
 	handleSubmit(event){
 		this.validation = this.validate();
 		if(!this.validation.password){
-			this.changePassword(this.state.password,this.settings)
+			this.changePassword(this.state.password)
 		}else{
 			alert("The form is invalid.")
 		}
@@ -96,7 +96,7 @@ class ChangePassword extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    changePassword: (newPassword,settings) => dispatch(changePasswordAsync(newPassword,settings))
+    changePassword: (newPassword) => dispatch(changePasswordAsync(newPassword))
   }
 }
 

@@ -64,7 +64,7 @@ class ArticlePageUnwrapped extends React.Component{
       }
     }
     if(state.articles.length == 0 && self.hasLoaded === false){
-      self.props.loadArticles(self.settings, self.userInfo);
+      self.props.loadArticles(self.settings);
       self.hasLoaded = true;  
     }
 
@@ -97,7 +97,7 @@ class ArticlePageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadArticles:(settings, userInfo) => dispatch(loadArticlesAsync(settings, userInfo)),
+    loadArticles:(settings) => dispatch(loadArticlesAsync(settings)),
     analyzeArticle: (label, link, settings, userInfo) => dispatch(analyzeArticleAsync(label, link, settings, userInfo)),
     searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
