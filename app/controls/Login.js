@@ -74,13 +74,16 @@ class Login extends React.Component{
 	      "color": "white"
 	    }
 		return 	<div>
-				<h5>Log In to Curator</h5>
-				<TextField style={fullWidth} id="email" label="Email Address" onChange={this.handleInputChange}/><br/>
-				<TextField style={fullWidth} id="password" type="Password" label="Password"  onChange={this.handleInputChange}/><br/>
-				<br/>
-				<button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Login"}</button>&nbsp;&nbsp;
-				<button id="cancel" type="button" onClick={this.handleCancel} className="btn-large waves-effect waves-light grey lighten-1">{"Cancel"}</button>&nbsp;&nbsp;
-				<UserNotification triggerGroup="notify" triggerState="loginFailed" message="Login failed" />
+				<form className="col s12">
+					<h5>Log In to Curator</h5>
+					<input style={fullWidth} id="email" label="Email Address" onChange={this.handleInputChange}/><br/>
+					<input style={fullWidth} id="password" type="Password" label="Password"  onChange={this.handleInputChange}/><br/>
+					<br/>
+					<Button id="login" type="button" onClick={this.handleSubmit} className="primary">{"Login"}</Button>&nbsp;&nbsp;
+	              	<Button id="create_member" onClick={()=>{this.changePage("login", "create", this.history)}}>Create an Account</Button>&nbsp;&nbsp;
+					<Button id="cancel" type="button" onClick={this.handleCancel} className="secondary">{"Cancel"}</Button>
+					<UserNotification triggerGroup="notify" triggerState="loginFailed" message="Login failed" />
+				</form>
 		  	</div>			
 	}
 }

@@ -8,6 +8,7 @@ import {createAccountAsync, notifyUser, changePage} from '../actions/actions'
 import {connect} from 'react-redux'
 import UserNotification from './UserNotification'
 import Typography from 'material-ui/Typography'
+import Button from 'material-ui/Button'
 
 class CreateAccount extends React.Component{
 	constructor(props){
@@ -67,7 +68,7 @@ class CreateAccount extends React.Component{
 		return  <Card>
 				<CardContent>
 					<Typography type="headline" component="h4">
-		                {"Enter account information"}
+		                {"Create an Account"}
 		            </Typography>
 					<form className="col s12">
 					    <div className="row">
@@ -90,8 +91,8 @@ class CreateAccount extends React.Component{
 					    </div>
 					    <div className="row">
 					        <div className="input-field col s12 white-text">
-					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Join Now"}</button>&nbsp;&nbsp;
-					          <button id="cancel" type="button" onClick={this.handleCancel} className="btn-large waves-effect waves-light grey lighten-1">{"Cancel"}</button>&nbsp&nbsp
+					          <Button id="create_member" type="button" onClick={this.handleSubmit} className="primary">{"Join Now"}</Button>&nbsp;&nbsp;
+					          <Button id="cancel" type="button" onClick={this.handleCancel} className="secondary">{"Cancel"}</Button>&nbsp&nbsp
 					        </div>
 					    </div>
 			  		</form>

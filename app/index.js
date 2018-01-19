@@ -13,6 +13,7 @@ import store from './store'
 import { MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
 import Auth from './model/Auth'
 import BiasCheckerTheme from './theme/BiasCheckerTheme'
+import CuratorTheme from './theme/CuratorTheme'
 import LandingPage from './components/LandingPage'
 
 const Blank = () => (
@@ -43,11 +44,11 @@ const App = () => (
     <Route exact path="/" component={LandingPage} />
   </Switch>
 )
-console.log("Theme", BiasCheckerTheme)
+
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>
-    <MuiThemeProvider theme={BiasCheckerTheme}>
+    <MuiThemeProvider theme={CuratorTheme}>
 		  <App />
     </MuiThemeProvider>
 	</BrowserRouter>

@@ -53,12 +53,12 @@ class Menu extends React.Component {
 	    let iStyle = {
 	      "color":"ivory"
 	    }
-		return(<div>
-          		<AppBar position="static">
+	    let curator = {
+      		"fontFamily" : "'IM Fell English', serif"
+	    }
+		return(<AppBar position="static">
           			<Toolbar>
-          				<Typography type="title" color="inherit">
-            				Curator
-          				</Typography>
+            			<span style={curator}>Curator</span>
           			</Toolbar>
 					<Tabs value={this.state.activeMenu} onChange={this.handleActiveTabChange}>
 						<Tab icon={<Icon className="material-icons">view_stream</Icon>} value="stream" />
@@ -67,7 +67,6 @@ class Menu extends React.Component {
 						<Tab icon={<Icon className="material-icons">supervisor_account</Icon>} value="ruler"/>
 					</Tabs>
           		</AppBar>
-			</div>
 	)}
 }
 

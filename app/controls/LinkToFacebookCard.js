@@ -77,7 +77,9 @@ class LinkToFacebookCard extends React.Component{
 	render(){
 		let loginActionDiv = <div>You are not logged in. You must log in to Facebook to import your articles from biaschecker.org.<br/><br/><button className='btn waves-effect waves-light indigo lighten-1' onClick={this.handleLogin}>Login to Facebook</button></div>
 		if(this.state.loggedInToFacebook){
-			loginActionDiv = <div>Great news! You are logged in. Please click on the button to import your articles.<br/><br/><button className='btn waves-effect waves-light indigo lighten-1' onClick={this.handleSubmit}>Import Articles</button></div>
+			loginActionDiv = <div>Great news! You are logged in. Please click on the button to import your articles.<br/><br/>
+			<button className='btn waves-effect waves-light indigo lighten-1' onClick={this.handleSubmit}>Import Articles</button>
+			</div>
 		}
 		return <Card>
 					<CardContent>

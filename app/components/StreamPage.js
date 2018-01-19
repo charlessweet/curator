@@ -76,7 +76,7 @@ class StreamPageUnwrapped extends React.Component{
 
 	render(){
       return (<Grid container>
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
             <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
             <StreamInfo userInfo={this.userInfo}/>
           </Grid>

@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import LoginButton from '../controls/LoginButton'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -77,7 +76,7 @@ class LoginUnwrapped extends React.Component{
         <Grid item xs={12}>
           <AppBar position="static">
             <Toolbar>
-              <Typography type="title" style={{"color":"#FFFFFF"}}>
+              <Typography type="title" style={{"color":"#FFFFFF","fontFamily" : "'IM Fell English', serif","fontSize":"2em"}}>
                 Curator
               </Typography>
             </Toolbar>
@@ -87,9 +86,6 @@ class LoginUnwrapped extends React.Component{
           <Card style={{"margin":5}}>
             <CardContent>
               <Login target={pageTypes.STREAM} />
-              <br/>
-              <Divider/>
-              <center><Link to="/create">Create an Account</Link></center>
             </CardContent>
           </Card>
         </Grid>

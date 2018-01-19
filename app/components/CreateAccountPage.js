@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import LoginButton from '../controls/LoginButton'
 import CreateAccount from '../controls/CreateAccount'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -13,7 +12,6 @@ import Login from '../controls/Login'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import pageTypes from '../pageTypes'
-import CreateAccountInfo from '../controls/CreateAccountInfo'
 import Grid from 'material-ui/Grid'
 import Typography from 'material-ui/Typography'
 
@@ -90,15 +88,12 @@ class CreateAccountPageUnwrapped extends React.Component{
         <Grid item xs={12}>
           <AppBar position="static">
             <Toolbar>
-              <Typography type="title" color="inherit">
+              <span style={{"fontFamily":"IM Fell English, serif"}}>
                 Curator
-              </Typography>
+              </span>
             </Toolbar>
           </AppBar>
         </Grid>  
-        <Grid item xs={12} md={3}>
-            <CreateAccountInfo />
-        </Grid>
         <Grid item xs={12} md={3}>
           <CreateAccount />
         </Grid>
