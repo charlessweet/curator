@@ -9,6 +9,7 @@ import Typography from 'material-ui/Typography'
 import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary} from 'material-ui/ExpansionPanel'
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 import Grid from 'material-ui/Grid'
+import Button from 'material-ui/Button'
 
 const ArticleCard = (props) => {
 	const article = props.article;
@@ -44,7 +45,7 @@ const ArticleCard = (props) => {
 		createBookmark={props.createBookmark} />] }
 	return (
 		<Grid item xs={12} md={4}>
-		  <Card style={{"margin":2, "height":393}}>
+		  <Card style={{"minHeight":393}}>
             <CardContent>
               <ExpansionPanel elevation={0}>
               	<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -53,11 +54,11 @@ const ArticleCard = (props) => {
 		              </Typography>
               	</ExpansionPanelSummary>
               	<ExpansionPanelDetails style={prevenBreakout}>
-              		{article.summary}
+              		{(article.summary !== undefined ? article.summary : "Processing...")}
               	</ExpansionPanelDetails>
               </ExpansionPanel>
               <div>
-              	<span><a className="grey-text" target="_blank" href={article.link}>Link to Article</a></span>
+				<Button id="reviewArticle" type="button" onClick={()=>{window.open(article.link)}} className="primary">{"View Article at Source"}</Button>
               </div>
               <div>
               	<BoxScore article={article} reviewArticle={reviewArticle}/>

@@ -86,7 +86,7 @@ class ResetPasswordPageUnwrapped extends React.Component{
     return (
       <Grid container>
         <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
-        <Grid item xs={12}>
+        <Grid item xs={12}  style={{"padding":"0px"}}>
           <AppBar position="static">
             <Toolbar>
               <Typography type="title" style={{"color":"#FFFFFF","fontFamily" : "'IM Fell English', serif","fontSize":"2em"}}>

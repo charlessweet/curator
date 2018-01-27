@@ -23,9 +23,9 @@ class ProfilePageUnwrapped extends React.Component{
 	render(){
       return (<div id="profile-page">
         <AuthController />
-        <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
         <Grid container>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
+            <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
             <ProfileInfo userInfo={this.userInfo}/>
           </Grid>
           <Grid item xs={12} md={3}>

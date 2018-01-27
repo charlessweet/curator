@@ -62,7 +62,7 @@ class RoleRequest extends React.Component{
 						<MenuItem value="guardian">Guardian</MenuItem>
 					</Select>
 					<div>
-						<button className='btn waves-effect waves-light indigo lighten-1' label="Request Role" onClick={this.handleSubmit}>Request Role</button>
+						<Button className='primary' label="Request Role" onClick={this.handleSubmit}>Request Role</Button>
 					</div>
 					<Typography component="p">
 					A Guardian is a critically-minded person who can distinguish between logical and illogical arguments, and 

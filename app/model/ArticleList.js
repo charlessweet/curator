@@ -20,8 +20,8 @@ export default class ArticleList{
 	}
 
 	createArticle(a){
-		if(a.description !== undefined && a.summary === undefined){
-			if(a.description.length > 0){
+		if((a.description !== undefined || a.data !== undefined) && a.summary === undefined){
+			if(a.description !== undefined && a.description.length > 0){
 				a.summary = a.description
 			}else{
 				a.summary = a.data

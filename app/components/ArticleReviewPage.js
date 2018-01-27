@@ -74,7 +74,7 @@ class ArticleReviewPageUnwrapped extends React.Component{
     if(this.state.article !== undefined){
       return (
         <Grid container>
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
             <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
             <Link to="/stream"><i className="material-icons">arrow_back</i></Link>
           </Grid>

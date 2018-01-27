@@ -8,6 +8,7 @@ import {changePasswordAsync} from '../actions/actions'
 import {connect} from 'react-redux'
 import Typography from 'material-ui/Typography'
 import UserNotification from './UserNotification'
+import Button from 'material-ui/Button'
 
 class ChangePassword extends React.Component{
 	constructor(props){
@@ -84,7 +85,7 @@ class ChangePassword extends React.Component{
 						    </div>
 						    <div className="row">
 						        <div className="input-field col s12 white-text">
-						          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Save Changes"}</button>&nbsp;&nbsp;
+						          <Button id="create_member" type="button" onClick={this.handleSubmit} className="primary">{"Save Changes"}</Button>&nbsp;&nbsp;
 						        </div>	  	
 						    </div>
 				  		</form>

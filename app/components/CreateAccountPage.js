@@ -88,9 +88,9 @@ class CreateAccountPageUnwrapped extends React.Component{
         <Grid item xs={12}>
           <AppBar position="static">
             <Toolbar>
-              <span style={{"fontFamily":"IM Fell English, serif"}}>
+              <Typography type="title" style={{"color":"#FFFFFF","fontFamily" : "'IM Fell English', serif","fontSize":"2em"}}>
                 Curator
-              </span>
+              </Typography>
             </Toolbar>
           </AppBar>
         </Grid>  

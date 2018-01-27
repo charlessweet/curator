@@ -56,9 +56,11 @@ class Menu extends React.Component {
 	    let curator = {
       		"fontFamily" : "'IM Fell English', serif"
 	    }
-		return(<AppBar position="static">
+		return(<AppBar position="static" style={{"width":"100%"}}>
           			<Toolbar>
-            			<span style={curator}>Curator</span>
+			          <Typography type="title" style={{"color":"#FFFFFF","fontFamily" : "'IM Fell English', serif","fontSize":"2em"}}>
+			            Curator
+			          </Typography>
           			</Toolbar>
 					<Tabs value={this.state.activeMenu} onChange={this.handleActiveTabChange}>
 						<Tab icon={<Icon className="material-icons">view_stream</Icon>} value="stream" />

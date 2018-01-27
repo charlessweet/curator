@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {withRouter} from 'react-router'
+import Button from 'material-ui/Button'
+import Card,{CardContent} from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
 
 class ArticlePost  extends React.Component{	
 	constructor(props){
@@ -23,7 +26,7 @@ class ArticlePost  extends React.Component{
 	handleSubmit(event){
 		let data = this.validate()
 		if(data.url !== undefined){
-			this.analyzeArticle("None", data.url, this.settings, this.userInfo)			
+			this.analyzeArticle("None", data.url)			
 		}
 	}
 
@@ -32,13 +35,15 @@ class ArticlePost  extends React.Component{
 	}
 	render() {
 		return <div className="container">
-			<div className="card">
-				<div className="card-content">
-					<span className="card-title">{this.userInfo.userName}, what article would you like analyzed?</span>
+			<Card>
+				<CardContent>
+	                <Typography type="headline" component="h4">
+	                  {this.userInfo.userName}, what article would you like analyzed?
+	                </Typography>
 					<input type="url" name="url" placeholder="http://www.biaschecker.org" onChange={this.handleInputChange}></input>
-					<button title="Analyze article" className='btn waves-effect waves-light indigo lighten-1' onClick={this.handleSubmit}>Analyze Article</button>
-				</div>
-			</div>
+					<Button title="Analyze article" className='primary' onClick={this.handleSubmit}>Analyze Article</Button>
+				</CardContent>
+			</Card>
 		</div>
 	}
 }

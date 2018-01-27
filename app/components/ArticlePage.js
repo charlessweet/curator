@@ -78,8 +78,9 @@ class ArticlePageUnwrapped extends React.Component{
   }
 
 	render(){
-    return (<Grid container>
-          <Grid item xs={12} md={12}>
+    return (
+      <Grid container>
+          <Grid item xs={12} md={12}  style={{"padding":"0px"}}>
             <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
             <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
           </Grid>
@@ -98,7 +99,7 @@ class ArticlePageUnwrapped extends React.Component{
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadArticles:(settings) => dispatch(loadArticlesAsync(settings)),
-    analyzeArticle: (label, link, settings, userInfo) => dispatch(analyzeArticleAsync(label, link, settings, userInfo)),
+    analyzeArticle: (label, link) => dispatch(analyzeArticleAsync(label, link)),
     searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
     clearError: () => dispatch(clearError())
