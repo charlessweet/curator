@@ -11,6 +11,7 @@ import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
 import Grid from 'material-ui/Grid'
 import Card, {CardContent} from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
 
 class MemberManagementPageUnwrapped extends React.Component{
 	constructor(props){
