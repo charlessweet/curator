@@ -241,7 +241,7 @@ describe('Reducers', () => {
 				"biasCheckerAppId": "0909367047e24c43956ae4511cb28f00",
 				"biasCheckerJwtKey": "JWT_882cbdece34b456580decc7a88b3caa1",
 				"biasCheckerSecret": "0e4f843becb044e496a317f3befc5105",
-				"biasServiceUrl": "http://localhost:3000",
+				"biasServiceUrl": "http://devserver:3000",
 				"fbAppId": "382449245425765"
 			}
 			expect(actual).to.eql(expected)
@@ -265,6 +265,18 @@ describe('Reducers', () => {
 		      		"userId": "USER_ID",
 		      		"userName": "USER_NAME"
 	      		}
+			}
+			expect(actual).to.eql(expected)
+		}),
+		it(actionTypes.RESET_PASSWORD_REQUEST + " action should add passwordResetRequestId to state", ()=>{
+			let action = {
+				type: actionTypes.RESET_PASSWORD_REQUEST,
+				id: 24,
+				passwordResetRequestId: "PASSWORD_RESET_REQUEST_ID"
+			}
+			let actual = reducers.identity(undefined,action)
+			let expected = {
+				"passwordResetRequestId": "PASSWORD_RESET_REQUEST_ID"
 			}
 			expect(actual).to.eql(expected)
 		})
@@ -394,11 +406,17 @@ describe('Reducers', () => {
 			let expected = { passwordChanged: true}
 			expect(actual).to.eql(expected)
 		}),
+		it(actionTypes.RESET_PASSWORD_REQUEST + " action should resetRequestSucceeded state", ()=>{
+			let action = { type: actionTypes.RESET_PASSWORD_REQUEST }
+			let actual = reducers.notify(undefined, action)
+			let expected = { resetRequestSucceeded: true}
+			expect(actual).to.eql(expected)
+		}),
 		it(actionTypes.CLEAR_NOTIFY_USER + " action should clear passwordChanged state", ()=>{
 			let action = { type: actionTypes.CLEAR_NOTIFY_USER, triggerState:"passwordChanged" }
 			let state = { passwordChanged: true }
 			let actual = reducers.notify(state, action)
-			let expected = { passwordChanged: false}
+			let expected = {}
 			expect(actual).to.eql(expected)
 		})
 	})

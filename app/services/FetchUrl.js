@@ -46,6 +46,7 @@ export class FetchUrlInstance{
 
 	makeCall(serviceCallId){
 		let call = this.serviceCalls[serviceCallId]
+		delete this.serviceCalls[serviceCallId]
 		return call //must be a promise
 	}	
 }

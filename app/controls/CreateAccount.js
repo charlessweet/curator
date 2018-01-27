@@ -99,7 +99,7 @@ class CreateAccount extends React.Component{
 		  		</CardContent>
 		  		<CardContent>
 			  		<UserNotification 
-			  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created" closeAction={this.sendToRoot}/>		  		
+			  			triggerGroup="notify" triggerState="newAccountCreated" message="Activation sent. Please confirm your email address." closeAction={this.sendToRoot}/>		  		
 		  		</CardContent>
 		  	</Card>	
 	}

@@ -458,3 +458,56 @@ export const clearError = () => {
 		id: 23
 	}
 }
+const requestPasswordReset = (data)=>{
+	return {
+		type: actionTypes.RESET_PASSWORD_REQUEST,
+		id: 24,
+		passwordReset:true
+	}
+}
+
+export const requestPasswordResetAsync = (email, biasService)=>{
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
+	return function(dispatch) {
+		return biasService.requestPasswordReset(email)
+		.then((data) => {
+			if(data.error === undefined){
+				dispatch(requestPasswordReset(data))
+			}else{
+				dispatch(failCall(data.error))
+			}
+		})
+		.catch((error) => {
+			dispatch(failCall(error))
+		})
+	}
+}
+
+const resetPassword = (data)=>{
+	return {
+		type: actionTypes.PASSWORD_RESET,
+		id: 25,
+		passwordReset:true
+	}
+}
+
+export const resetPasswordAsync = (passwordResetRequestId, password, biasService)=>{
+	if(biasService === undefined){
+		biasService = biasCheckerService
+	}
+	return function(dispatch) {
+		return biasService.resetPassword(passwordResetRequestId, password)
+		.then((data) => {
+			if(data.error !== undefined){
+				dispatch(failCall(data.error))
+			}else{
+				dispatch(resetPassword(data))
+			}
+		})
+		.catch((error) => {
+			dispatch(failCall(error))
+		})
+	}
+}

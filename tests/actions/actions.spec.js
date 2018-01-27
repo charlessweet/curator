@@ -18,7 +18,7 @@ let  createMockBiasChecker = (method, rootUrl, url, payload) => {
 before(function(done){
 	global.fetch = (url,req) => {
 		return new Promise((resolve, reject) => {
-			reject({"error": "default fetch called - usually means your matching url is not consistent with what the BiasCheckerService method calls"})
+			reject({"error": "default fetch called - usually means your matching url is not consistent with what the BiasCheckerService method calls", "url":url, "req":req})
 			done()
 		})
 	}
@@ -130,6 +130,48 @@ describe('Actions', ()=>{
 					"userId": "0f1e53300ca49effa90d4e42728c2f69a83639c8ac9ae4c1796bf8699b3a58a1",
 					"userName": "chuck.sweet@gmail.com"
 		      	})		
+			})
+		})
+
+		describe('resetPassword', ()=>{
+			it('resetPasswordAsync should emit the correct event when fails', (done)=>{
+				let email = "chuck.sweet@gmail.com"
+				let alwaysFails = new Promise((resove, reject)=>{
+					reject({"message":"failed the promise"})
+				})
+				let body = {}
+				body.password = "this is a password"
+				let pwdRequestId = 12345
+				let mockBiasChecker = createMockBiasChecker(alwaysFails, "reset_password", "/password-reset/" + pwdRequestId, body)
+				let f = actions.resetPasswordAsync(pwdRequestId, body.password, mockBiasChecker)
+				f((actual)=>{
+					let expected = {
+						type: 'FAIL',
+						id: 16,
+						error:{"message":"failed the promise"}
+					}
+					expect(actual).to.eql(expected)
+					done()
+				})
+			}),
+			it('resetPasswordAsync should emit the correct event when succeeds', (done)=>{
+				let email = 'chuck.sweet@gmail.com'
+				let alwaysSucceeds = new Promise((resolve, reject)=>{
+					resolve({ "passwordReset" : true})
+				})
+				let body = {}
+				body.email = email
+				let mockBiasChecker = createMockBiasChecker(alwaysSucceeds, "reset_password", "/password-reset", body)
+				let f = actions.resetPasswordAsync(email, mockBiasChecker)
+				f((actual)=>{
+					let expected = {
+						type: 'PASSWORD_RESET',
+						id: 25,
+						passwordReset: true
+					}
+					expect(actual).to.eql(expected)
+					done()
+				})
 			})
 		})
 

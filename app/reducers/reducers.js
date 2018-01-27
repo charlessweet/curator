@@ -67,6 +67,11 @@ export const identity = (state = {}, action) => {
         userInfo: userIdentity
       })
       return newState;
+    case actionTypes.RESET_PASSWORD_REQUEST:
+      const ns = Object.assign({}, state, {
+        passwordResetRequestId: action.passwordResetRequestId
+      })
+      return ns
     default:
       return state;
   }
@@ -135,7 +140,7 @@ export const notify = (state={}, action) => {
   switch(action.type){
     case actionTypes.CLEAR_NOTIFY_USER:
       let ns2 = Object.assign({}, state)
-      ns2[action.triggerState] = false
+      delete ns2[action.triggerState]
       return ns2
     case actionTypes.CREATE_MEMBER:
       return Object.assign({}, state, { newAccountCreated: true })
@@ -149,6 +154,10 @@ export const notify = (state={}, action) => {
       return Object.assign({}, state, {"failed":true})
     case actionTypes.CHANGE_PASSWORD:
       return Object.assign({}, state, {"passwordChanged":true})
+    case actionTypes.RESET_PASSWORD_REQUEST:
+      return Object.assign({}, state, {"resetRequestSucceeded":true})
+    case actionTypes.PASSWORD_RESET:
+      return Object.assign({}, state, {"resetSucceeded":true})
     default:
       return state
   }  

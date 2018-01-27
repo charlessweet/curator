@@ -15,6 +15,8 @@ import Auth from './model/Auth'
 import BiasCheckerTheme from './theme/BiasCheckerTheme'
 import CuratorTheme from './theme/CuratorTheme'
 import LandingPage from './components/LandingPage'
+import ResetPasswordPage from './components/ResetPasswordPage'
+import RequestPasswordResetPage from './components/RequestPasswordResetPage'
 
 const Blank = () => (
 	<div>
@@ -41,6 +43,8 @@ const App = () => (
     <Route exact path="/stream" component={n2(StreamPage)} />
     <Route exact path="/profile" component={n2(ProfilePage)} />
     <Route exact path="/create" component={CreateAccountPage} />
+    <Route path="/reset/:resetPasswordRequestId" component={ResetPasswordPage} />
+    <Route exact path="/password" component={RequestPasswordResetPage} />
     <Route exact path="/" component={LandingPage} />
   </Switch>
 )

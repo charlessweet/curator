@@ -9,7 +9,7 @@ export default class BiasCheckerService {
 		this.biasServiceAppId = biasServiceAppId
 		this.fetchUrl = fetchUrl
 	}
-	callBiasChecker(relativeUrl, method, data, basicAuth){
+	callBiasChecker(relativeUrl, method, data, basicAuth, debug){
 		var url  = this.biasServiceUrl + relativeUrl
 		//console.log(url)
 		var req = {
@@ -28,6 +28,9 @@ export default class BiasCheckerService {
 
 		if(data !== undefined){
 			req.body = JSON.stringify(data)
+		}
+		if(debug !== undefined && debug){
+			console.log("debug", url, data)
 		}
 		return this.fetchUrl.executeFetch(url, data, req)
 	}
@@ -180,5 +183,19 @@ export default class BiasCheckerService {
 	loadArticle(articleId){
 		let relativeUrl = "/articles/" + articleId
 		return this.callBiasChecker(relativeUrl, "GET")
+	}
+
+	requestPasswordReset(email){
+		let relativeUrl = "/password-reset"
+		let body = {}
+		body.email = email
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
+	}
+
+	resetPassword(passwordResetRequestId, newPassword){
+		let relativeUrl = "/password-reset/" + passwordResetRequestId
+		let body = {}
+		body.password = newPassword
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "POST", body))
 	}
 }
