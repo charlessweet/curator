@@ -42,6 +42,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "sinon": "^4.1.1",
+    "js-sha256": "^0.8.0",
     "webpack": "^2.7.0"
   },
   "devDependencies": {
