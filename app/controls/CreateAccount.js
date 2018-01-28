@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom'
 import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
+import Card, {CardHeader, CardContent} from 'material-ui/Card'
 import {createAccountAsync, notifyUser, changePage} from '../actions/actions'
 import {connect} from 'react-redux'
 import UserNotification from './UserNotification'
+import Typography from 'material-ui/Typography'
+import Button from 'material-ui/Button'
 
 class CreateAccount extends React.Component{
 	constructor(props){
@@ -14,6 +16,7 @@ class CreateAccount extends React.Component{
 		this.state = {}
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
+		this.handleCancel = this.handleCancel.bind(this)
 		this.sendToRoot = this.sendToRoot.bind(this)
 		this.history = props.history
 		this.validation = {}
@@ -33,12 +36,15 @@ class CreateAccount extends React.Component{
 	handleSubmit(event){
 		this.validation = this.validate()
 		if(!this.validation.password && !this.validation.email){
-			this.createAccount(this.settings, this.state.email, this.state.password, this.history)
+			this.createAccount(this.state.email, this.state.password)
 		}else{
 			alert("The form is invalid.")
 		}
 	}
 
+	handleCancel(event){
+		this.changePage("create", "/", this.history)
+	}
 	componentWillMount(){
 		if(this.hasMounted === undefined){
 	    	let state = store.getState()
@@ -60,10 +66,10 @@ class CreateAccount extends React.Component{
 
 	render(){
 		return  <Card>
-					<CardHeader
-						title={"Enter account information"}
-					/>
-				<CardText>
+				<CardContent>
+					<Typography type="headline" component="h4">
+		                {"Create an Account"}
+		            </Typography>
 					<form className="col s12">
 					    <div className="row">
 					        <div className="input-field col s12">
@@ -85,20 +91,23 @@ class CreateAccount extends React.Component{
 					    </div>
 					    <div className="row">
 					        <div className="input-field col s12 white-text">
-					          <button id="create_member" type="button" onClick={this.handleSubmit} className="btn-large waves-effect waves-light indigo lighten-1">{"Create!"}</button>&nbsp&nbsp
+					          <Button id="create_member" type="button" onClick={this.handleSubmit} className="primary">{"Join Now"}</Button>&nbsp;&nbsp;
+					          <Button id="cancel" type="button" onClick={this.handleCancel} className="secondary">{"Cancel"}</Button>&nbsp&nbsp
 					        </div>
 					    </div>
 			  		</form>
-		  		</CardText>
-		  		<UserNotification 
-		  			triggerGroup="notify" triggerState="newAccountCreated" message="A new account was created" closeAction={this.sendToRoot}/>
+		  		</CardContent>
+		  		<CardContent>
+			  		<UserNotification 
+			  			triggerGroup="notify" triggerState="newAccountCreated" message="Account created! You may now log into Curator." closeAction={this.sendToRoot}/>		  		
+		  		</CardContent>
 		  	</Card>	
 	}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    createAccount: (settings, email, password, history) => dispatch(createAccountAsync(settings, email, password, history)),
+    createAccount: (email, password) => dispatch(createAccountAsync(email, password)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history))
   }
 }

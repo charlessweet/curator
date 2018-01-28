@@ -9,6 +9,9 @@ import {loadRoleRequestsAsync, addRoleAsync, denyRoleAsync} from '../actions/act
 import StoreObserver from '../services/StoreObserver'
 import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
+import Grid from 'material-ui/Grid'
+import Card, {CardContent} from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
 
 class MemberManagementPageUnwrapped extends React.Component{
 	constructor(props){
@@ -52,42 +55,53 @@ class MemberManagementPageUnwrapped extends React.Component{
     self.setState(state);
     if(self.hasLoaded === undefined && state.members.length == 0){
       self.hasLoaded = true;
-      self.props.loadMembersForApproval(self.settings, self.userInfo);
+      self.props.loadMembersForApproval();
     }
   }
 
   render(){
       let state = this.state;   
-//      console.log("manstate", state)   
+      //console.log("manstate", state)   
       return (
-      <div id="philosopher-ruler-page">
-        <Menu active={"ruler"} />
-        <div className="container">
-            <div className="card">
-                <div className="card-content">
-                    <span className="card-title">Member Management</span>
-                    <p>
+      <Grid container>
+          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
+            <Menu active="ruler" settings={this.settings} userInfo={this.userInfo}/>
+          </Grid>
+          <Grid item xs={12}>
+          <div className="container">
+            <Card>
+              <CardContent>
+                  <Typography type="headline" component="h4">
+                    Member Management
+                  </Typography>
+                  <Typography component="p">
                     Approve or disapprove of user requests.
-                    </p>
+                  </Typography>
+              </CardContent>
+            </Card>
+          </div>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <CardContent>
+                {(this.userInfo.roles !== undefined && this.userInfo.roles.indexOf("philosopher-ruler") > -1 ? 
+                <div>
+                  <MemberCardList members={state.members} approve={this.addRole} deny={this.denyRole} settings={this.settings} userInfo={state.identity}/>
                 </div>
-            </div>
-        </div>
-        {(this.userInfo.roles !== undefined && this.userInfo.roles.indexOf("philosopher-ruler") > -1 ? 
-        <div>
-          <MemberCardList members={state.members} approve={this.addRole} deny={this.denyRole} settings={this.settings} userInfo={state.identity}/>
-        </div>
-        : <div className="container">If you were an Administrator, you would see a list  of people to approve. But, you're not. Soon, we will allow  people to do that
-        so check back!</div>)}
-      </div>
-      );
+                : <div className="container">If you were an Administrator, you would see a list  of people to approve. But, you're not. Soon, we will allow  people to do that
+                so check back!</div>)}
+              </CardContent>
+            </Card>
+          </Grid>
+      </Grid>)
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadMembersForApproval: (settings, userInfo) => dispatch(loadRoleRequestsAsync(settings, userInfo)),
-    addRole: (targetMemberId, targetRoleName, settings) =>  { dispatch(addRoleAsync(targetMemberId, targetRoleName, settings)) },
-    denyRole: (targetMemberId, targetRoleName, settings) =>  { dispatch(denyRoleAsync(targetMemberId, targetRoleName, settings)) }
+    loadMembersForApproval: () => dispatch(loadRoleRequestsAsync()),
+    addRole: (targetMemberId, targetRoleName) =>  { dispatch(addRoleAsync(targetMemberId, targetRoleName)) },
+    denyRole: (targetMemberId, targetRoleName) =>  { dispatch(denyRoleAsync(targetMemberId, targetRoleName)) }
   }
 }
 

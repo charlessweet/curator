@@ -6,23 +6,23 @@ import ArticlePage from './components/ArticlePage'
 import MemberManagementPage from './components/MemberManagementPage'
 import ArticleReviewPage from './components/ArticleReviewPage'
 import StreamPage from './components/StreamPage'
-import AboutPage from './components/AboutPage'
 import ProfilePage from './components/ProfilePage'
 import CreateAccountPage from './components/CreateAccountPage'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import store from './store'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
 import Auth from './model/Auth'
 import BiasCheckerTheme from './theme/BiasCheckerTheme'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import CuratorTheme from './theme/CuratorTheme'
+import LandingPage from './components/LandingPage'
+import ResetPasswordPage from './components/ResetPasswordPage'
+import RequestPasswordResetPage from './components/RequestPasswordResetPage'
 
 const Blank = () => (
 	<div>
 		this is Blank
 	</div>
 );
-
-const theme = getMuiTheme(BiasCheckerTheme)
 
 /**
  * If a user is logged in, then displays 'component', othrwise,
@@ -36,21 +36,23 @@ const n2 = (component) => {
 
 const App = () => (
   <Switch>
-    <Route exact path="/" component={LoginPage} />
+    <Route exact path="/login" component={LoginPage} />
     <Route exact path="/ruler" component={n2(MemberManagementPage)} />
     <Route exact path="/articles" component={n2(ArticlePage)} />
     <Route path="/stream/:articleId" component={n2(ArticleReviewPage)} />
     <Route exact path="/stream" component={n2(StreamPage)} />
-    <Route exact path="/about" component={n2(AboutPage)} />
     <Route exact path="/profile" component={n2(ProfilePage)} />
     <Route exact path="/create" component={CreateAccountPage} />
+    <Route path="/reset/:resetPasswordRequestId" component={ResetPasswordPage} />
+    <Route exact path="/password" component={RequestPasswordResetPage} />
+    <Route exact path="/" component={LandingPage} />
   </Switch>
 )
 
 ReactDOM.render(
 <Provider store ={ store }>
 	<BrowserRouter>
-    <MuiThemeProvider muiTheme={theme}>
+    <MuiThemeProvider theme={CuratorTheme}>
 		  <App />
     </MuiThemeProvider>
 	</BrowserRouter>

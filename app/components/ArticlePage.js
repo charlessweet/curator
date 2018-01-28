@@ -6,10 +6,11 @@ import store from '../store'
 import Menu from '../controls/Menu'
 import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
-import {loadArticlesAsync,createBookmarkAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, clearError} from '../actions/actions'
+import {loadArticlesAsync,analyzeArticleAsync,searchForMyArticleAsync,changePage, clearError} from '../actions/actions'
 import StoreObserver from '../services/StoreObserver'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
+import Grid from 'material-ui/Grid'
 
 class ArticlePageUnwrapped extends React.Component{
 	constructor(props){
@@ -21,6 +22,7 @@ class ArticlePageUnwrapped extends React.Component{
     this.changePage = props.changePage
     this.history = props.history
     this.clearError = props.clearError
+    this.hasLoaded = false
 	}
   
   selectState(superState){
@@ -55,15 +57,14 @@ class ArticlePageUnwrapped extends React.Component{
 
   loadComponent(self, state){
     self.setState(state);
-//    console.log("loadComponent", state)
     if(state.error !== undefined){
       if(state.error.httpCode === 401){
         self.clearError()
         self.changePage("article", "", self.history)
       }
     }
-    if(self.userInfo !== undefined && state.articles.length == 0 && self.hasLoaded === undefined){
-      self.props.loadArticles(self.settings, self.userInfo);
+    if(state.articles.length == 0 && self.hasLoaded === false){
+      self.props.loadArticles(self.settings);
       self.hasLoaded = true;  
     }
 
@@ -77,28 +78,28 @@ class ArticlePageUnwrapped extends React.Component{
   }
 
 	render(){
-    if(this.state.articles.length == 0){
-      return (<div id="bookmark-page">
-        <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
-        <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
-      </div>
-      );
-    }else{
     return (
-      <div id="bookmark-page">
-        <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
-        <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
-        <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo}/>
-      </div>
-    );}
+      <Grid container>
+          <Grid item xs={12} md={12}  style={{"padding":"0px"}}>
+            <Menu active="articles" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+            <ArticlePost settings={this.settings} userInfo={this.userInfo} analyzeArticle={this.analyzeArticle}/>
+          </Grid>
+          <Grid item xs={12}>
+          {
+            this.state.articles.length == 0 && !this.hasLoaded
+            ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
+            : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} />
+          }
+          </Grid>
+        </Grid>
+    );
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadArticles:(settings, userInfo) => dispatch(loadArticlesAsync(settings, userInfo)),
-    createBookmark: (settings, article, userInfo) => dispatch(createBookmarkAsync(settings, article, userInfo)),
-    analyzeArticle: (label, link, settings, userInfo) => dispatch(analyzeArticleAsync(label, link, settings, userInfo)),
+    loadArticles:(settings) => dispatch(loadArticlesAsync(settings)),
+    analyzeArticle: (label, link) => dispatch(analyzeArticleAsync(label, link)),
     searchForArticle: (keyword, settings, userInfo) => dispatch(searchForMyArticleAsync(keyword, settings, userInfo)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
     clearError: () => dispatch(clearError())

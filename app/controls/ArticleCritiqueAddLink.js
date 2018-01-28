@@ -6,7 +6,8 @@ import store from '../store'
 import {critiqueArticleAsync} from '../actions/actions'
 import {connect} from 'react-redux'
 import TextField from 'material-ui/TextField'
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Radio, {RadioGroup} from 'material-ui/Radio'
+import { FormControlLabel } from 'material-ui/Form'
 import Critique from '../model/Critique'
 import Divider from 'material-ui/Divider'
 import SnackBar from 'material-ui/Snackbar'
@@ -52,9 +53,8 @@ class ArticleCritiqueAddLink extends React.Component{
 	handleSubmit(event){
 		this.validation = this.validate()
 		if(!this.validation.analysis){
-			let cr = new Critique(this.state.paragraph_number, this.state.sentence_number, this.state.quote, this.state.analysis, this.state.error_type, this.userInfo.memberId, this.userInfo.userName)
-			console.log("handleSubmit", cr, this.userInfo)
-			this.critiqueArticle(this.articleId, cr, this.settings)
+			//articleId, errorType, analysis, quotation, paragraphIndex, sentenceIndex
+			this.critiqueArticle(this.articleId, this.state.error_type, this.state.analysis, this.state.quote, this.state.paragraph_number, this.state.sentence_number)
 			this.setState({showCritiqueEntryForm:false, showConfirmation:true})
 		}else{
 			alert("Please add a critiqueto display.")
@@ -79,15 +79,15 @@ class ArticleCritiqueAddLink extends React.Component{
 		if(this.state.showCritiqueEntryForm){
 			return <div>
 					<Divider />
-					<TextField name="analysis" fullWidth={true} multiLine={true} rows={5} rowsMax={5} placeholder="Enter objective critique information that will help others determine the validity of this article." onChange={this.handleInputChange}/>
+					<TextField name="analysis" fullWidth={true} multiline rows={5} rowsMax={5} placeholder="Enter objective critique information that will help others determine the validity of this article." onChange={this.handleInputChange}/>
 					<br/>
                 	<TextField name="paragraph_number" fullWidth={true} onInput={this.handleInputChange} type="number" placeholder="approximate paragraph number, 0 if general" />
                 	<TextField name="sentence_number" fullWidth={true} onInput={this.handleInputChange} type="number" placeholder="approximate sentence number, 0 if general" />
-					<TextField name="quote" fullWidth={true} multiLine={true} rows={3} rowsMax={3} placeholder="Enter an example quotation from the article." onChange={this.handleInputChange}/>
-					<RadioButtonGroup name="error_type">
-						<RadioButton id="factual-error" name="factual-error" onClick={this.handleInputChange} label="Factual Error" value="factual-error"/>
-						<RadioButton id="logical-error" name="logical-error" onClick={this.handleInputChange} label="Logical Error" value="logical-error"/>
-					</RadioButtonGroup>
+					<TextField name="quote" fullWidth={true} multiline rows={3} rowsMax={3} placeholder="Enter an example quotation from the article." onChange={this.handleInputChange}/>
+					<RadioGroup name="error_type">
+						<FormControlLabel control={<Radio/>} id="factual-error" name="factual-error" onClick={this.handleInputChange} label="Factual Error" value="factual-error"/>
+						<FormControlLabel control={<Radio/>} id="logical-error" name="logical-error" onClick={this.handleInputChange} label="Logical Error" value="logical-error"/>
+					</RadioGroup>
 					<a onClick={this.handleSubmit}>save</a>&nbsp;&nbsp;<a onClick={this.handleCancel}>cancel</a>
 				</div>
 		}else{
@@ -95,7 +95,7 @@ class ArticleCritiqueAddLink extends React.Component{
 				return <div>
 					<Divider />
 					<a onClick={this.handleCritiqueClick}>add critique</a>
-					<SnackBar open={this.state.showConfirmation} message="Analysis saved" autoHideDuration={400} onRequestClose={this.handleConfirmationClosed} />
+					<SnackBar open={this.state.showConfirmation} message="Analysis saved" autoHideDuration={400} onClose={this.handleConfirmationClosed} />
 				</div>
 			}else{
 				return null
@@ -106,7 +106,7 @@ class ArticleCritiqueAddLink extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    critiqueArticle: (articleId, critique, settings, userInfo) => dispatch(critiqueArticleAsync(articleId, critique, settings, userInfo))
+    critiqueArticle: (articleId, errorType, analysis, quotation, paragraphIndex, sentenceIndex) => dispatch(critiqueArticleAsync(articleId, errorType, analysis, quotation, paragraphIndex, sentenceIndex))
   }
 }
 

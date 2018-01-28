@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import CreateAccount from '../controls/CreateAccount'
+import ResetPassword from '../controls/ResetPassword'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -15,7 +15,8 @@ import pageTypes from '../pageTypes'
 import Grid from 'material-ui/Grid'
 import Typography from 'material-ui/Typography'
 
-class CreateAccountPageUnwrapped extends React.Component{
+class ResetPasswordPageUnwrapped extends React.Component{
+  //TODO: clean this up
   constructor(props){
     super(props);
     this.login = props.login;
@@ -85,7 +86,7 @@ class CreateAccountPageUnwrapped extends React.Component{
     return (
       <Grid container>
         <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet"/>
-        <Grid item xs={12}>
+        <Grid item xs={12}  style={{"padding":"0px"}}>
           <AppBar position="static">
             <Toolbar>
               <Typography type="title" style={{"color":"#FFFFFF","fontFamily" : "'IM Fell English', serif","fontSize":"2em"}}>
@@ -94,8 +95,8 @@ class CreateAccountPageUnwrapped extends React.Component{
             </Toolbar>
           </AppBar>
         </Grid>  
-        <Grid item xs={12} md={3}>
-          <CreateAccount />
+        <Grid item xs={12} md={6}>
+          <ResetPassword />
         </Grid>
       </Grid>      
     );
@@ -123,4 +124,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateAccountPageUnwrapped))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResetPasswordPageUnwrapped))

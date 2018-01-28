@@ -8,7 +8,7 @@ class Member{
 		this.roleName = roleName
 		this.email = email
 		//reputation
-		this.karma = new Karma(5);
+//		this.karma = new Karma(5);
 	}
 }
 export default Member;

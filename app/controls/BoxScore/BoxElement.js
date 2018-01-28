@@ -70,7 +70,7 @@ const BoxElement = (props) => {
 	}
 	let handleClick = (event) => {
 		if(reviewArticle !== undefined){
-			reviewArticle(props.article, props.history)
+			reviewArticle(props.article.id, props.history)
 		}
 	}
 	return(
