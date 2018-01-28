@@ -267,6 +267,7 @@ export const reviewArticleAsync = (articleId, history, biasService) => {
 			}
 		})
 		.catch((error) => {
+			console.log(error)
 			dispatch(failCall(error))
 		})
 	}	

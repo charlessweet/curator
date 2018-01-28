@@ -63,6 +63,7 @@ const ArticleCard = (props) => {
               <div>
               	<BoxScore article={article} reviewArticle={reviewArticle}/>
               </div>
+              <div className="container">Submitted on {article.created}</div>
             </CardContent>
           </Card>
         </Grid>

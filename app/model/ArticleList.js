@@ -24,7 +24,7 @@ export default class ArticleList{
 			if(a.description !== undefined && a.description.length > 0){
 				a.summary = a.description
 			}else{
-				a.summary = a.data
+				a.summary = a.data.substring(0, 500) + "..."
 			}
 		}
 		if(a.summary === undefined){
@@ -39,7 +39,9 @@ export default class ArticleList{
 		if(a.personalScore === undefined){
 			a.personalScore = 0
 		}
-		return new Article(a.id, a.title, a.summary, a.link, a.keywords, a.personalScore, a.algorithmScore, a.consensusScore, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore)
+		let articleCreated = new Article(a.id, a.title, a.summary, a.link, a.keywords, a.personalScore, a.algorithmScore, a.consensusScore, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore)
+		articleCreated.created = a.created
+		return articleCreated
 	}
 
 	equals(otherList){

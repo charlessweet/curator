@@ -14,6 +14,9 @@ import ReviewResultsInfo from '../controls/ReviewResultsInfo'
 import ReviewDetailsCard from '../controls/ReviewDetailsCard'
 import {reviewArticleAsync, changePage} from '../actions/actions'
 import Grid from 'material-ui/Grid'
+import Typography from 'material-ui/Typography'
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
 
 class ArticleReviewPageUnwrapped extends React.Component{
 	constructor(props){
@@ -74,10 +77,16 @@ class ArticleReviewPageUnwrapped extends React.Component{
     if(this.state.article !== undefined){
       return (
         <Grid container>
-          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
-            <Menu showNav={false} settings={this.settings} userInfo={this.userInfo}/>
-            <Link to="/stream"><i className="material-icons">arrow_back</i></Link>
-          </Grid>
+          <Grid item xs={12}  style={{"padding":"0px"}}>
+            <AppBar position="static">
+              <Toolbar>
+                <Typography type="title" style={{"color":"#FFFFFF","fontFamily" : "'IM Fell English', serif","fontSize":"2em"}}>
+                  Curator
+                </Typography>
+              </Toolbar>
+              <div className="container"><Link to="/stream">Article Stream</Link> &gt; {this.state.article.title.substring(0,25) + "..."}</div>
+            </AppBar>
+          </Grid>        
           <Grid item xs={12}>          
             <ReviewResultsInfo />
           </Grid>

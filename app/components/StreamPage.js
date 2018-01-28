@@ -8,7 +8,7 @@ import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import {loadStreamAsync, reviewArticle, changePage, clearError} from '../actions/actions'
+import {loadStreamAsync, reviewArticleAsync, changePage, clearError} from '../actions/actions'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
 import Grid from 'material-ui/Grid';
@@ -95,7 +95,7 @@ class StreamPageUnwrapped extends React.Component{
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadStream:(settings) => dispatch(loadStreamAsync(settings)),
-    reviewArticle: (article, history) => dispatch(reviewArticle(article, history)),
+    reviewArticle: (article, history) => dispatch(reviewArticleAsync(article, history)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
     clearError: () => dispatch(clearError())
   }

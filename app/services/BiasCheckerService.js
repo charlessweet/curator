@@ -182,7 +182,7 @@ export default class BiasCheckerService {
 
 	loadArticle(articleId){
 		let relativeUrl = "/articles/" + articleId
-		return this.callBiasChecker(relativeUrl, "GET")
+		return this.jsonPromise(this.callBiasChecker(relativeUrl, "GET"))
 	}
 
 	requestPasswordReset(email){
