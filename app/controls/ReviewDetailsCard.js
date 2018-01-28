@@ -38,7 +38,7 @@ const ReviewDetailsCard = (props) => {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={prevenBreakout}>
-            {(article.summary !== undefined ? article.summary : "No summary provided.")}
+            {(article.data !== undefined ? article.data : "No summary provided.")}
           </ExpansionPanelDetails>
         </ExpansionPanel>
         </CardContent>
