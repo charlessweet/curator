@@ -21,7 +21,6 @@ class UserNotification extends React.Component{
 	}
 
 	selectState(superState){
-		//console.log(superState)
 		return { 
 		  open:(superState[this.triggerGroup] !== undefined && superState[this.triggerGroup][this.triggerState] !== undefined && superState[this.triggerGroup][this.triggerState])
 		}
@@ -62,7 +61,7 @@ class UserNotification extends React.Component{
           open={this.state.open}
           message={this.message}
           autoHideDuration={4000}
-          onRequestClose={this.handleRequestClose}
+          onClose={this.handleRequestClose}
         />
 	}
 }

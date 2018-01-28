@@ -11,16 +11,39 @@ export default class ArticleList{
 			return
 		}
 		let art = articles[0];
-		//this is a little weird.  i use the same constructor for an array of formal Articles as an array of objects from the 
-		//server.  eventually, I'll want to change this, but this works for now.
-		if(art === undefined || art.biasScore !== undefined){
-			this.articles = articles.map((a) => new Article(a.id, a.title, (a.description !== undefined && a.description.length > 0 ? a.description : a.data), a.link, a.keywords, 0, a.biasScore, 0, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore));
-		}else{
-			this.articles = articles.map((a) => new Article(a.id, a.title, a.summary, a.link, a.keywords, 0, a.algorithmScore, 0, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore));
-		}
-		this.length = articles.length;
+		this.articles = articles.filter(a => this.isValidArticle(a)).map((a) => this.createArticle(a))
+		this.length = this.articles.length
 	}
 	
+	isValidArticle(a){
+		return (a.id !== undefined && a.title !== undefined && a.link !== undefined)
+	}
+
+	createArticle(a){
+		if((a.description !== undefined || a.data !== undefined) && a.summary === undefined){
+			if(a.description !== undefined && a.description.length > 0){
+				a.summary = a.description
+			}else{
+				a.summary = a.data.substring(0, 500) + "..."
+			}
+		}
+		if(a.summary === undefined){
+			a.summary = "No summary available for article."
+		}
+		if(a.algorithmScore === undefined){
+			a.algorithmScore = a.biasScore
+		}
+		if(a.consensusScore === undefined){
+			a.consensusScore = 0
+		}
+		if(a.personalScore === undefined){
+			a.personalScore = 0
+		}
+		let articleCreated = new Article(a.id, a.title, a.summary, a.link, a.keywords, a.personalScore, a.algorithmScore, a.consensusScore, a.critiques, a.outOfContextScore, a.factualErrorScore, a.logicalErrorScore)
+		articleCreated.created = a.created
+		return articleCreated
+	}
+
 	equals(otherList){
 		if(otherList.length !== this.length){
 			return false;
@@ -39,14 +62,16 @@ export default class ArticleList{
 		if(this.articles.find((a) => a.id == article.id) === undefined){
 			this.articles.unshift(article)
 		}
+		this.length = this.articles.length
 		return this;//so we can chain calls
 	}
 
 	overwriteIfExists(article){
 		let existingIndex = this.articles.findIndex((a) => a.id == article.id)
 		if(existingIndex > -1){
-			this.articles[existingIndex] = article
+			this.articles[existingIndex] = Object.assign({}, article)
 		}
+		this.length = this.articles.length
 		return this
 	}
 

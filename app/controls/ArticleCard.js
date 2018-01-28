@@ -1,16 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import BiasGraph from './BiasGraph';
-import TruthLink from './TruthLink';
-import ShareLink from './ShareLink';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import BiasGraph from './BiasGraph'
+import TruthLink from './TruthLink'
+import ShareLink from './ShareLink'
 import BoxScore from './BoxScore/BoxScore'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import Card, {CardContent} from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
+import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary} from 'material-ui/ExpansionPanel'
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
+import Grid from 'material-ui/Grid'
+import Button from 'material-ui/Button'
 
 const ArticleCard = (props) => {
 	const article = props.article;
 	const fbAppId = props.fbAppId;
 	const biasToken = props.biasToken;
 	const reviewArticle = props.reviewArticle
+
 	let htmlDecode = (encoded) => {
 		var elem = document.createElement('textarea')
 		elem.innerHTML = encoded
@@ -38,26 +44,29 @@ const ArticleCard = (props) => {
 		biasToken={biasToken} settings={props.settings} article={article} 
 		createBookmark={props.createBookmark} />] }
 	return (
-		<Card>
-			<CardHeader
-				title={htmlDecode(article.title)}
-				actAsExpander={true}
-      			showExpandableButton={true}
-      			style={prevenBreakout}
-			/>
-			<CardText expandable={true}> 
-				<div style={prevenBreakout}>{article.summary}</div>
-				<p><span><a className="grey-text" target="_blank" href={article.link}>Link to Article</a></span></p>
-				<div>
-					<span className="grey-text darken-5" >KEYWORDS: </span><i className="grey-text">{keywords}</i>
-				</div>
-			</CardText>
-			<CardText>
-				<div>
-					<BoxScore article={article} reviewArticle={reviewArticle}/>
-				</div>
-			</CardText>
-		</Card>
+		<Grid item xs={12} md={4}>
+		  <Card style={{"minHeight":393}}>
+            <CardContent>
+              <ExpansionPanel elevation={0}>
+              	<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+		              <Typography type="headline" component="h4">
+		                {htmlDecode(article.title)}
+		              </Typography>
+              	</ExpansionPanelSummary>
+              	<ExpansionPanelDetails style={prevenBreakout}>
+              		{(article.summary !== undefined ? article.summary : "Processing...")}
+              	</ExpansionPanelDetails>
+              </ExpansionPanel>
+              <div>
+				<Button id="reviewArticle" type="button" onClick={()=>{window.open(article.link)}} className="primary">{"View Article at Source"}</Button>
+              </div>
+              <div>
+              	<BoxScore article={article} reviewArticle={reviewArticle}/>
+              </div>
+              <div className="container">Submitted on {article.created}</div>
+            </CardContent>
+          </Card>
+        </Grid>
 	);
 };
 export default ArticleCard;

@@ -4,24 +4,24 @@ import {withRouter} from 'react-router'
 import {PropTypes} from 'prop-types'
 import store from '../store'
 import Card, {CardContent} from 'material-ui/Card'
-import {changePasswordAsync} from '../actions/actions'
+import {resetPasswordAsync,changePage} from '../actions/actions'
 import {connect} from 'react-redux'
 import Typography from 'material-ui/Typography'
-import UserNotification from './UserNotification'
 import Button from 'material-ui/Button'
+import UserNotification from './UserNotification'
 
-class ChangePassword extends React.Component{
+class ResetPassword extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {};
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.history = props.history;
-		this.emailRegex = /^\S+@\S+\.\S+$/;
 		this.validation = {};
 		this.changePassword = props.changePassword
 		this.settings = props.settings
-		this.userInfo = props.userInfo
+		this.passwordResetRequestId = props.match.params.resetPasswordRequestId
+		this.changePage = props.changePage
 	}
 
 	handleInputChange(event){
@@ -34,24 +34,9 @@ class ChangePassword extends React.Component{
 	handleSubmit(event){
 		this.validation = this.validate();
 		if(!this.validation.password){
-			this.changePassword(this.state.password)
+			this.changePassword(this.passwordResetRequestId, this.state.password)
 		}else{
 			alert("The form is invalid.")
-		}
-	}
-
-	componentWillMount(){
-		if(this.hasMounted === undefined){
-	    	let state = store.getState();
-			this.setState({["isMember"]:this.userInfo.memberId !== undefined})
-			if(this.userInfo.roles !== undefined){
-				this.setState({["isGuardian"]:this.userInfo.roles.filter((x) => x === "guardian") !== undefined })
-				this.setState({["guardian"]:this.userInfo.roles.filter((x) => x === "guardian") !== undefined })				
-			}
-			if(this.userInfo.email !== undefined){
-				this.setState({["email"]:this.userInfo.email})			
-			}
-			this.hasMounted = true		
 		}
 	}
 
@@ -66,7 +51,10 @@ class ChangePassword extends React.Component{
 		return  <Card>
 					<CardContent>
 		              <Typography type="headline" component="h4">
-		                Change my password
+		                Reset my password
+		              </Typography>
+		              <Typography component="p">
+		               Enter your new password and click the 
 		              </Typography>
 		            </CardContent>
 					<CardContent>
@@ -85,11 +73,13 @@ class ChangePassword extends React.Component{
 						    </div>
 						    <div className="row">
 						        <div className="input-field col s12 white-text">
-						          <Button id="create_member" type="button" onClick={this.handleSubmit} className="primary">{"Save Changes"}</Button>&nbsp;&nbsp;
+						          <Button id="update_password" type="button" onClick={this.handleSubmit} className="primary">{"Reset Now"}</Button>&nbsp;&nbsp;
+						          <Button id="cancel" type="button" onClick={()=>{this.changePage('reset', '/', this.history)}} className="secondary">{"Cancel"}</Button>&nbsp;&nbsp;
 						        </div>	  	
 						    </div>
 				  		</form>
-						<UserNotification triggerGroup="notify" triggerState="passwordChanged" message="Password successfully changed" />				  		
+						<UserNotification triggerGroup="notify" triggerState="resetSucceeded" message="Password successfully changed" />
+						<UserNotification triggerGroup="notify" triggerState="failed" message="Password change attempt failed." />
 		  			</CardContent>
 		  		</Card>	
 	}
@@ -97,7 +87,8 @@ class ChangePassword extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    changePassword: (newPassword) => dispatch(changePasswordAsync(newPassword))
+    changePassword: (passwordResetRequestId, newPassword) => dispatch(resetPasswordAsync(passwordResetRequestId, newPassword)),
+    changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history))
   }
 }
 
@@ -107,4 +98,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChangePassword));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResetPassword));

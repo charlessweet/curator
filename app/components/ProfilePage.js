@@ -11,6 +11,7 @@ import UserIdentity from '../model/UserIdentity'
 import LinkToFacebookCard from '../controls/LinkToFacebookCard'
 import AuthController from '../controls/AuthController'
 import Settings from '../model/Settings'
+import Grid from 'material-ui/Grid'
 
 class ProfilePageUnwrapped extends React.Component{
 	constructor(props){
@@ -22,18 +23,22 @@ class ProfilePageUnwrapped extends React.Component{
 	render(){
       return (<div id="profile-page">
         <AuthController />
-        <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
-        <ProfileInfo userInfo={this.userInfo}/>
-        <div className="container">
-          <RoleRequest userInfo={this.userInfo}/>
+        <Grid container>
+          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
+            <Menu active="profile" settings={this.settings} userInfo={this.userInfo}/>
+            <ProfileInfo userInfo={this.userInfo}/>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <ChangePasswordCard userInfo={this.userInfo}/>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <LinkToFacebookCard />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <RoleRequest userInfo={this.userInfo}/>
+          </Grid>
+        </Grid>
         </div>
-        <div className="container">
-          <ChangePasswordCard userInfo={this.userInfo}/>
-        </div>
-        <div className = "container">
-          <LinkToFacebookCard />
-        </div>
-      </div>
       )
   }
 };

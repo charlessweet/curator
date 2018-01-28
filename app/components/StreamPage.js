@@ -8,9 +8,10 @@ import ArticleCardList from '../controls/ArticleCardList'
 import ArticlePost from '../controls/Articles/ArticlePost'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import {loadStreamAsync, reviewArticle, changePage, clearError} from '../actions/actions'
+import {loadStreamAsync, reviewArticleAsync, changePage, clearError} from '../actions/actions'
 import Auth from '../model/Auth'
 import UserIdentity from '../model/UserIdentity'
+import Grid from 'material-ui/Grid';
 
 class StreamPageUnwrapped extends React.Component{
 	constructor(props){
@@ -74,23 +75,27 @@ class StreamPageUnwrapped extends React.Component{
   }
 
 	render(){
-      return (<div id="bookmark-page">
-        <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
-        <StreamInfo userInfo={this.userInfo}/>
-        {
-          this.state.articles.length == 0
-          ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
-          : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} reviewArticle={this.reviewArticle}/>
-        }
-        </div>
+      return (<Grid container>
+          <Grid item xs={12} md={12} style={{"padding":"0px"}}>
+            <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
+            <StreamInfo userInfo={this.userInfo}/>
+          </Grid>
+          <Grid item xs={12}>
+          {
+            this.state.articles.length == 0
+            ? <div className="container"><div className="progress"><div className="indeterminate"></div></div></div>
+            : <ArticleCardList articles={this.state.articles} settings={this.settings} userInfo={this.userInfo} reviewArticle={this.reviewArticle}/>
+          }
+          </Grid>
+        </Grid>
       );
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadStream:(settings, userInfo) => dispatch(loadStreamAsync(settings, userInfo)),
-    reviewArticle: (article, history) => dispatch(reviewArticle(article, history)),
+    loadStream:(settings) => dispatch(loadStreamAsync(settings)),
+    reviewArticle: (article, history) => dispatch(reviewArticleAsync(article, history)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
     clearError: () => dispatch(clearError())
   }
