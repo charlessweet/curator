@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Member from '../../model/Member'
-import {List, ListItem} from 'material-ui/List';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import List, {ListItem, ListItemText} from 'material-ui/List';
+import Card, {CardContent} from 'material-ui/Card';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Button from 'material-ui/Button'
-
+import Typography from 'material-ui/Typography'
 const MemberCard = (props) => {
 	let member = props.member
 	let approveAction = props.approve
@@ -13,20 +13,26 @@ const MemberCard = (props) => {
 //	console.log("MemberCard", member, approveAction);
 	return (
 		<Card>
-			<CardHeader
-				title={member.email}
-				avatar={<AccountCircle/>}
-			/>
-			<CardText> 
+			<CardContent>
+				<Typography component="h4">
+					{member.email}
+					{<AccountCircle/>}
+				</Typography>
+			</CardContent>
+			<CardContent> 
 				<List>
-					<ListItem primaryText="Member Id:" secondaryText={member.memberId} style={{wordWrap: "break-word"}} />
-					<ListItem primaryText="Requested Role:" secondaryText={member.roleName} />
+					<ListItem >
+						<ListItemText primary="Member Id:" secondary={member.memberId} style={{wordWrap: "break-word"}}/>
+					</ListItem>
+					<ListItem>
+						<ListItemText primary="Requested Role:" secondary={member.roleName} />
+					</ListItem>
 				</List>
-			</CardText>
-			<CardActions>
-				<Button raised label="Approve" primary={true} onClick={()=>{approveAction(member.memberId, member.roleName)}} />
-				<Button raised label="Deny" primary={false} onClick={()=>{denyAction(member.memberId, member.roleName)}} />
-			</CardActions>
+			</CardContent>
+			<CardContent>
+				<Button raised className="primary" onClick={()=>{approveAction(member.memberId, member.roleName)}}>Approve</Button>
+				<Button raised className="secondary" onClick={()=>{denyAction(member.memberId, member.roleName)}} >Deny</Button>
+			</CardContent>
 		</Card>
 	);
 };

@@ -21,6 +21,7 @@ class MemberManagementPageUnwrapped extends React.Component{
     this.addRole = props.addRole;
     this.denyRole = props.denyRole
     this.userInfo = new UserIdentity(Auth.getDecodedJwt())
+    console.log("userInfo", this.userInfo)
   }
 
   selectState(superState){
@@ -30,7 +31,6 @@ class MemberManagementPageUnwrapped extends React.Component{
   compareState(subStateA, subStateB){
     let evaluated = subStateA.identity !== undefined
       && subStateB.identity !== undefined
-      && subStateA.identity.biasToken !== subStateB.identity.biasToken
       && subStateA.members !== undefined
       && subStateB.members !== undefined
       && subStateA.members.equals(subStateB.members);
