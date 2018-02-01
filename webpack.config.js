@@ -54,10 +54,10 @@ module.exports = {
 	plugins: [HTMLWebpackPluginConfig,
         new webpack.DefinePlugin({
             'process.env': {
-                BIAS_SERVER_URL: JSON.stringify(process.env.BIAS_SERVER_URL || "http://localhost:3000"),
-                FB_APP_ID: JSON.stringify(process.env.FB_APP_ID || "382449245425765"),
-                BC_APP_ID: JSON.stringify(process.env.BC_APP_ID || "0909367047e24c43956ae4511cb28f00"),
-                BC_APP_SECRET: JSON.stringify(process.env.BC_APP_SECRET || "0e4f843becb044e496a317f3befc5105")
+                BIAS_SERVER_URL: JSON.stringify(process.env.BIAS_SERVER_URL),
+                FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
+                BC_APP_ID: JSON.stringify(process.env.BC_APP_ID),
+                BC_APP_SECRET: JSON.stringify(process.env.BC_APP_SECRET)
             }
         })
     ]  
