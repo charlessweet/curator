@@ -6,14 +6,13 @@ import ShareLink from './ShareLink';
 import BoxScore from './BoxScore/BoxScore'
 import Card, {CardContent} from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
-import ArticleReviewModal from './ArticleReviewModal'
 import Divider from 'material-ui/Divider'
 import ArticleCritiqueAddLink from './ArticleCritiqueAddLink'
 import ArticleCritiqueList from './ArticleCritiqueList'
 import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary} from 'material-ui/ExpansionPanel'
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 
-const ReviewDetailsCard = (props) => {
+const ReviewDetailsCard = (props) => { 
 	const article = props.article;
 	let id = 0
   let htmlDecode = (encoded) => {
