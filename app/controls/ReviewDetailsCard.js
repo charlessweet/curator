@@ -12,7 +12,7 @@ import ArticleCritiqueList from './ArticleCritiqueList'
 import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary} from 'material-ui/ExpansionPanel'
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 
-const ReviewDetailsCard = (props) => {
+const ReviewDetailsCard = (props) => { 
 	const article = props.article;
 	let id = 0
   let htmlDecode = (encoded) => {
