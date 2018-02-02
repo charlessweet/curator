@@ -6,7 +6,6 @@ import ShareLink from './ShareLink';
 import BoxScore from './BoxScore/BoxScore'
 import Card, {CardContent} from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
-import ArticleReviewModal from './ArticleReviewModal'
 import Divider from 'material-ui/Divider'
 import ArticleCritiqueAddLink from './ArticleCritiqueAddLink'
 import ArticleCritiqueList from './ArticleCritiqueList'
