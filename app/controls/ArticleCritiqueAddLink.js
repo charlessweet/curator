@@ -6,13 +6,16 @@ import store from '../store'
 import {critiqueArticleAsync} from '../actions/actions'
 import {connect} from 'react-redux'
 import TextField from 'material-ui/TextField'
-import Radio, {RadioGroup} from 'material-ui/Radio'
+import { MenuItem } from 'material-ui/Menu';
+import { FormControl, FormHelperText } from 'material-ui/Form';
+import Select from 'material-ui/Select';
 import { FormControlLabel } from 'material-ui/Form'
 import Critique from '../model/Critique'
 import Divider from 'material-ui/Divider'
 import SnackBar from 'material-ui/Snackbar'
 import UserIdentity from '../model/UserIdentity'
 import Auth from '../model/Auth'
+import Input, { InputLabel } from 'material-ui/Input';
 
 class ArticleCritiqueAddLink extends React.Component{
 	constructor(props){
@@ -38,7 +41,7 @@ class ArticleCritiqueAddLink extends React.Component{
 
 	handleInputChange(event){
 		const target = event.target
-		const value = target.type === 'checkbox' ? target.checked : target.value
+		const value = target.value
 		const name = target.name
 		this.setState({[name]: value})
 	}
@@ -79,15 +82,19 @@ class ArticleCritiqueAddLink extends React.Component{
 		if(this.state.showCritiqueEntryForm){
 			return <div>
 					<Divider />
+					<FormControl>
+						<InputLabel htmlFor="error-type">Error Type</InputLabel>
+						<Select onChange={this.handleInputChange} value="factual-error" name="error_type">
+							<MenuItem value="factual-error">Factual Error</MenuItem>
+							<MenuItem value="logical-error">Logical Error</MenuItem>
+						</Select>
+					</FormControl>
+					<br/><br/>
 					<TextField name="analysis" fullWidth={true} multiline rows={5} rowsMax={5} placeholder="Enter objective critique information that will help others determine the validity of this article." onChange={this.handleInputChange}/>
 					<br/>
                 	<TextField name="paragraph_number" fullWidth={true} onInput={this.handleInputChange} type="number" placeholder="approximate paragraph number, 0 if general" />
                 	<TextField name="sentence_number" fullWidth={true} onInput={this.handleInputChange} type="number" placeholder="approximate sentence number, 0 if general" />
 					<TextField name="quote" fullWidth={true} multiline rows={3} rowsMax={3} placeholder="Enter an example quotation from the article." onChange={this.handleInputChange}/>
-					<RadioGroup name="error_type">
-						<FormControlLabel control={<Radio/>} id="factual-error" name="factual-error" onClick={this.handleInputChange} label="Factual Error" value="factual-error"/>
-						<FormControlLabel control={<Radio/>} id="logical-error" name="logical-error" onClick={this.handleInputChange} label="Logical Error" value="logical-error"/>
-					</RadioGroup>
 					<a onClick={this.handleSubmit}>save</a>&nbsp;&nbsp;<a onClick={this.handleCancel}>cancel</a>
 				</div>
 		}else{
