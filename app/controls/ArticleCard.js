@@ -10,6 +10,7 @@ import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary} from 'mat
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 import Grid from 'material-ui/Grid'
 import Button from 'material-ui/Button'
+import Chip from 'material-ui/Chip'
 
 const ArticleCard = (props) => {
 	const article = props.article;
@@ -25,14 +26,13 @@ const ArticleCard = (props) => {
 	}
 	let keywords = []
 	if(article.keywords !== undefined){
+		let i = 0
 		if(!Array.isArray(article.keywords)){
 			keywords.push(article.keywords)
-		}else{
-			keywords = article.keywords
 		}
-		keywords = keywords.join(", ")
+		keywords = <div className="container">{article.keywords.map(k => <Chip key={article.id + i++} label={k} />)}</div>
 	}else{
-		keywords = "No keywords assigned."
+		keywords = <div>"No keywords assigned."</div>
 	}
 	let prevenBreakout = {
 		overflowWrap: "break-word",
@@ -49,14 +49,15 @@ const ArticleCard = (props) => {
             <CardContent>
               <ExpansionPanel elevation={0}>
               	<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-		              <Typography type="headline" component="h4">
+			<Typography type="headline" component="h4">
 		                {htmlDecode(article.title)}
-		              </Typography>
+		        </Typography>
               	</ExpansionPanelSummary>
               	<ExpansionPanelDetails style={prevenBreakout}>
               		{(article.summary !== undefined ? article.summary : "Processing...")}
               	</ExpansionPanelDetails>
               </ExpansionPanel>
+	      {keywords}
               <div>
 				<Button id="reviewArticle" type="button" onClick={()=>{window.open(article.link)}} className="primary">{"View Article at Source"}</Button>
               </div>
