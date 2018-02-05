@@ -30,9 +30,9 @@ const ArticleCard = (props) => {
 		if(!Array.isArray(article.keywords)){
 			keywords.push(article.keywords)
 		}
-		keywords = <div className="container">{article.keywords.map(k => <Chip key={article.id + i++} label={k} />)}</div>
+		keywords = <div className="container">{article.keywords.map(k => <span key={article.id + i++}>{k} </span>)}</div>
 	}else{
-		keywords = <div>"No keywords assigned."</div>
+		keywords = <div>No keywords assigned.</div>
 	}
 	let prevenBreakout = {
 		overflowWrap: "break-word",
