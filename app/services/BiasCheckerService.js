@@ -72,8 +72,14 @@ export default class BiasCheckerService {
 		return this.jsonPromise(this.callBiasChecker(relativeUrl, "GET"))
 	}
 
-	loadStream(){
-		var relativeUrl = "/articles"
+	loadStream(count, offset){
+		if(count === undefined || parseInt(count) === 0){
+			count = 40
+		}
+		if(offset === undefined){
+			offset = 0
+		}
+		var relativeUrl = "/articles?count=" + count + "&offset=" + offset
 		return this.jsonPromise(this.callBiasChecker(relativeUrl, "GET"))
 	}
 

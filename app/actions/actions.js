@@ -225,12 +225,12 @@ const loadStream = (articles) => {
 	}
 }
 
-export const loadStreamAsync = (settings, biasService) => {
+export const loadStreamAsync = (count, offset, biasService) => {
 	if(biasService === undefined){
 		biasService = biasCheckerService
 	}
 	return function(dispatch){
-		return biasService.loadStream()
+		return biasService.loadStream(count, offset)
 		.then((data) =>{
 			if(data.error !== undefined){
 				dispatch(failCall(data.error))
