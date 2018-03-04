@@ -34,7 +34,8 @@ export const articleList = (state = { "articles":new ArticleList([]), "stream": 
       return ms
     case actionTypes.SHOW_STREAM:
       let stream = state.stream.clone()
-      stream.append(action.articles)
+      let added = new ArticleList(action.articles)
+      stream.append(added.articles)
       //return all of the articles
       return Object.assign({}, state, {
         stream:  stream
