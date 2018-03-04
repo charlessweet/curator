@@ -14,15 +14,18 @@ import UserIdentity from '../model/UserIdentity'
 import Grid from 'material-ui/Grid';
 
 class StreamPageUnwrapped extends React.Component{
-	constructor(props){
-		super(props);
+  constructor(props){
+    super(props);
     this.settings = props.settings
     this.userInfo = new UserIdentity(Auth.getDecodedJwt())
     this.reviewArticle = props.reviewArticle
     this.changePage = props.changePage
     this.history = props.history 
-    this.clearError = props.clearError  
-	}
+    this.clearError = props.clearError 
+    this.offset = 0
+    this.count = 40
+    this.loadStream = props.loadStream
+  }
   
   selectState(superState){
     return { 
@@ -46,10 +49,32 @@ class StreamPageUnwrapped extends React.Component{
 
   componentDidMount(){
     this.observer = new StoreObserver(this, store, this.selectState, this.loadComponent, this.areEqual)
+    window.addEventListener("scroll", ()=>{this.handleScroll(this)}) 
+  }
+
+  handleScroll(self) {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+    //load more when 
+    if(self.loading !== undefined && self.loading){
+        if ((windowBottom + (0.1 * docHeight) < docHeight)){
+            self.loading = false
+        }
+    }
+    if ((windowBottom + (0.1 * docHeight) >= docHeight) && (self.loading === undefined || !self.loading)){
+      self.loading = true
+      self.offset += self.count
+      self.hasLoaded = undefined
+      self.loadStream(self.count, self.offset)
+    }
   }
 
   componentWillUnmount(){
     this.observer.unsubscribe();
+    window.removeEventListener("scroll", ()=>{this.handleScroll(this)})
   }
 
   loadComponent(self, state){
@@ -61,9 +86,12 @@ class StreamPageUnwrapped extends React.Component{
       }
     }    
     if(self.hasLoaded === undefined){
-      self.props.loadStream(self.settings);
+      if(self.loading === undefined || !self.loading){
+        self.props.loadStream(self.count, self.offset)
+      }
       self.hasLoaded = true;  
     }
+    
 
     if(state.articles.length > 0 && state.articles.bookmark !== undefined){
       var url = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '')+ "/bookmark/" + state.bookmark.bookmarkId;
@@ -74,7 +102,7 @@ class StreamPageUnwrapped extends React.Component{
     }
   }
 
-	render(){
+  render(){
       return (<Grid container>
           <Grid item xs={12} md={12} style={{"padding":"0px"}}>
             <Menu active="stream" settings={this.settings} userInfo={this.userInfo} pageSearch={this.searchForArticle}/>
@@ -94,7 +122,7 @@ class StreamPageUnwrapped extends React.Component{
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadStream:(settings) => dispatch(loadStreamAsync(settings)),
+    loadStream:(count,offset) => dispatch(loadStreamAsync(count,offset)),
     reviewArticle: (article, history) => dispatch(reviewArticleAsync(article, history)),
     changePage: (fromPage, toPage, history) => dispatch(changePage(fromPage, toPage, history)),
     clearError: () => dispatch(clearError())

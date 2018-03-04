@@ -14,7 +14,13 @@ export default class ArticleList{
 		this.articles = articles.filter(a => this.isValidArticle(a)).map((a) => this.createArticle(a))
 		this.length = this.articles.length
 	}
-	
+
+       append(articleArray){
+              this.articles = this.articles.concat(articleArray)
+              this.length = this.articles.length
+              return this
+       }
+
 	isValidArticle(a){
 		return (a.id !== undefined && a.title !== undefined && a.link !== undefined)
 	}
@@ -84,4 +90,8 @@ export default class ArticleList{
 		}
 		return this//if nothing matches or changes
 	}
+
+       clone(){
+              return new ArticleList(this.articles)
+       }
 }
